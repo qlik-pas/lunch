@@ -71,10 +71,12 @@ offline, loads instantly, and stays correct. Read
 - **Today-first.** On load, select the current weekday; on weekends show Monday
   with a "Helg" note. Mon–Fri only.
 - **Swedish UI.** All visible strings in Swedish. Keep `<html lang="sv">`.
-- **Five restaurants, per-weekday menus.** A dish line starting `Vegetariskt:`
-  (Kantin's weekly veg option) renders with a distinct "Veg" marker. Restaurants
-  with no menu, or the identical menu every day, are demoted out of the main
-  view — keep that distinction, however you style it.
+- **Five restaurants, per-weekday menus.** Two kinds of line get their own
+  marker, kept separate from the pick-one lunch options: `Vegetariskt:` (Kantin's
+  weekly veg option) and `På huset:` (a free weekday extra — Bricks' Thursday
+  äppelpaj, Eatery's pancakes). Restaurants with no menu, or the identical menu
+  every day, are demoted out of the main view — keep that distinction, however
+  you style it.
 - **Light and dark.** Both must be deliberate, not an afterthought. Update the
   two `<meta name="theme-color">` tags to match the new backgrounds.
 - **Mobile-first and fast.** Most visits are on a phone at 08:30. No layout
@@ -111,7 +113,8 @@ python -m http.server 4173   # then open http://localhost:4173/
 Check, and tell the user you checked:
 
 - Today's weekday is selected on load; clicking through all five days works.
-- All five restaurants render; Kantin's `Vegetariskt:` line has its marker;
+- All five restaurants render; the `Vegetariskt:` and `På huset:` lines each
+  have their own marker;
   demoted places (no menu / same daily) appear in their lesser slot.
 - Light and dark both look intentional (toggle your OS or DevTools).
 - Narrow viewport (~320–375px): no horizontal scroll, nothing clipped.

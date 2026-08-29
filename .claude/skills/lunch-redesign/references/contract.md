@@ -42,7 +42,13 @@ Everything the redesign must keep working. The visual layer is free; this is not
   `"Gongbao kyckling (宫保鸡丁)"`. Some strings have stray double spaces.
 - Kantin includes one line per day starting `Vegetariskt: ` — its weekly
   vegetarian option, repeated on every weekday. Render it visually distinct
-  (currently a "Veg" chip). Match case-insensitively: `/^vegetarisk[t]?\s*:\s*/i`.
+  (currently a "Grönt" chip). Match case-insensitively: `/^vegetarisk[t]?\s*:\s*/i`.
+- Some days carry a line starting `På huset: ` — a free weekday extra the
+  restaurant throws in (Bricks' Thursday äppelpaj, Eatery's Tuesday sweet /
+  Thursday pancakes). Also a magic-prefixed entry in the day's list, rendered
+  with its own marker (currently a "På huset" chip). Match `/^på huset\s*:\s*/i`.
+  Keep it visually separate from the pick-one lunch options — it's a bonus, not
+  a choice.
 
 ## Weekday handling
 
@@ -95,7 +101,7 @@ a failed fetch sees a plausible current-ish menu.
 - [ ] Today-first; weekend → Monday + "Helg" note
 - [ ] All visible text in Swedish; `<html lang="sv">`
 - [ ] Five restaurants, correct order, per-day menus
-- [ ] `Vegetariskt:` lines visually distinct
+- [ ] `Vegetariskt:` and `På huset:` lines visually distinct from lunch options
 - [ ] Two-tier restaurant classification (card vs demoted) preserved
 - [ ] Deliberate light AND dark themes; `<meta name="theme-color">` updated
 - [ ] Reads well 320px → desktop; no layout shift after fetch

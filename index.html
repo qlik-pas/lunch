@@ -16,6 +16,7 @@
     --ink:#1C1B19; --ink-soft:#3B3A35; --muted:#6C6A63; --faint:#9A978D;
     --hair:#E9E6DF; --hair-strong:#DAD6CC;
     --veg:#3F7A4B; --veg-soft:#E7F0E7;
+    --treat:#9A6A16; --treat-soft:#F3E7CF;
     --sel:#1C1B19; --on-sel:#FCFBF9;
     --radius:18px; --radius-sm:10px;
     --shadow-rail:0 1px 0 var(--hair), 0 8px 24px -16px rgba(28,27,25,.28);
@@ -29,6 +30,7 @@
       --ink:#ECEBE7; --ink-soft:#CDCBC4; --muted:#9B9A93; --faint:#6E6D66;
       --hair:#2A2A2E; --hair-strong:#38383D;
       --veg:#8FBF97; --veg-soft:#1F2A20;
+      --treat:#D8A24E; --treat-soft:#332819;
       --sel:#ECEBE7; --on-sel:#141416;
       --shadow-rail:0 1px 0 var(--hair), 0 10px 28px -18px rgba(0,0,0,.7);
     }
@@ -173,11 +175,15 @@
   }
   .dishes li.veg{color:var(--ink)}
   .dishes li.veg::before{background:var(--veg)}
-  .veg-chip{
+  .dishes li.treat{color:var(--ink)}
+  .dishes li.treat::before{background:var(--treat); rotate:45deg; border-radius:1px}
+  .veg-chip, .treat-chip{
     display:inline-block; margin-right:7px; padding:1px 6px 0; border-radius:5px;
     font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
-    background:var(--veg-soft); color:var(--veg); vertical-align:2px;
+    vertical-align:2px;
   }
+  .veg-chip{background:var(--veg-soft); color:var(--veg)}
+  .treat-chip{background:var(--treat-soft); color:var(--treat)}
   .empty-today{
     margin:2px 0 0; color:var(--faint); font-size:14px; font-style:italic;
     font-family:var(--serif);
@@ -268,7 +274,7 @@ const hueFor = name => HUES[name] ??
 let WEEK = {
   "week": 35,
   "range": "24–28 aug",
-  "dates": ["2026-08-24","2026-08-25","2026-08-26","2026-08-27","2026-08-28"],
+  "dates": ["2026-08-24", "2026-08-25", "2026-08-26", "2026-08-27", "2026-08-28"],
   "restaurants": [
     {
       "name": "Restaurang Edison",
@@ -317,7 +323,13 @@ let WEEK = {
     {
       "name": "Eatery",
       "url": "https://www.eatery.se/lund/lunchmeny",
-      "menus": {"Måndag":[],"Tisdag":[],"Onsdag":[],"Torsdag":[],"Fredag":[]}
+      "menus": {
+        "Måndag": ["Oxbringa med senapssky, krossade rotfrukter, rostad potatis med persilja och bakad lök,  citronmarinerad morot","Stekt kummel, zucchini och spenatpuré, skagensås och kokt potatis","Marockans kikärtsgryta med aubergine, tomat och picklad rödkål och kryddigt ris"],
+        "Tisdag": ["Citron och rosmarin bakad kyckling med krämig västerbotten risoni och rostad tomatsås","Pecorino & spenat gratinerad sej med vitvinssås, krossad potatis & citron","Ricotta & spenatfylld canneloni med aubergineragu, pesto och fänkål","På huset: något sött till kaffet"],
+        "Onsdag": ["BBQ revben med rostad majssalsa, chipotlemajo och spicy kålsallad, klyftpotatis","Thai fishcakes med ingefära, chili och citrongräs med sojabakad broccoli, sojasås med honung,","chili och ingefära, jasminris med lime","Mapo tofu med svart bönpasta, chiliolja och krispig lök, picklad lök och jasminris"],
+        "Torsdag": ["Salsicciaragu med tryffeldoftande svamp, gremolata, lagrad ost","Bakad kungsfisk med dillhollandaise, rotselleri och fänkålssallad, potatismos","Krämig potatis- och purjolökssoppa med vitlöksbröd & örtolja, krispig potatis","På huset: pannkakor, lättvispad grädde och hemmagjord sylt"],
+        "Fredag": ["Örtbakad pluma med chimmi churri, friterad klyftpotatis, rostad vitlöksaioli","Bakad sej med pesto, tomat och ruccola, vit bönpuré med rostad vitlök och citron, rostad potatis","Rödbetsrisotto med chevré, rostade valnötter, spenat och ruccola sallad"]
+      }
     }
   ]
 };
@@ -342,8 +354,10 @@ const fmtDate = iso => { try { return new Date(iso + "T00:00:00").toLocaleDateSt
 
 function dishItem(raw){
   const s = String(raw).trim().replace(/\s{2,}/g, " ");
-  const m = s.match(/^vegetarisk[t]?\s*:\s*(.+)/i);
+  let m = s.match(/^vegetarisk[t]?\s*:\s*(.+)/i);
   if (m) return `<li class="veg"><span class="veg-chip">Grönt</span>${esc(m[1])}</li>`;
+  m = s.match(/^på huset\s*:\s*(.+)/i);
+  if (m) return `<li class="treat"><span class="treat-chip">På huset</span>${esc(m[1])}</li>`;
   return `<li>${esc(s)}</li>`;
 }
 
