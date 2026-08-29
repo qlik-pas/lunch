@@ -4,36 +4,35 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#FBFAF6" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#14140F" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FCFBF9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F0F11" media="(prefers-color-scheme: dark)">
 <title>Dagens lunch</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..48,500;12..48,600;12..48,700;12..48,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#FBFAF6; --surface:#FFFFFF; --surface-2:#F5F3EC;
-    --ink:#1A1913; --muted:#6B6A5E; --faint:#97968B;
-    --accent:#B76C12; --accent-soft:#F4E4CD; --on-accent:#FFFFFF;
-    --veg:#4C7A3F; --veg-soft:#E5EEDE;
-    --hair:#E8E5DB;
-    --shadow-sm:0 1px 2px rgba(26,22,10,.05);
-    --shadow-md:0 1px 2px rgba(26,22,10,.04), 0 10px 30px -8px rgba(26,22,10,.10);
-    --shadow-lg:0 1px 2px rgba(26,22,10,.05), 0 22px 46px -14px rgba(26,22,10,.17);
-    --radius:16px; --radius-sm:11px;
-    --display:"Bricolage Grotesque", system-ui, sans-serif;
-    --body:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --bg:#FCFBF9; --surface:#FFFFFF; --surface-2:#F4F2EC;
+    --ink:#1C1B19; --ink-soft:#3B3A35; --muted:#6C6A63; --faint:#9A978D;
+    --hair:#E9E6DF; --hair-strong:#DAD6CC;
+    --veg:#3F7A4B; --veg-soft:#E7F0E7;
+    --treat:#9A6A16; --treat-soft:#F3E7CF;
+    --sel:#1C1B19; --on-sel:#FCFBF9;
+    --radius:18px; --radius-sm:10px;
+    --shadow-rail:0 1px 0 var(--hair), 0 8px 24px -16px rgba(28,27,25,.28);
+    --serif:"Fraunces", Georgia, "Times New Roman", serif;
+    --sans:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --step:clamp(20px, 4vw, 30px);
   }
   @media (prefers-color-scheme: dark){
     :root{
-      --bg:#14140F; --surface:#1E1E18; --surface-2:#26251E;
-      --ink:#F0EEE4; --muted:#A3A195; --faint:#74736A;
-      --accent:#E9A94F; --accent-soft:#3A2E1B; --on-accent:#1A1913;
-      --veg:#9BC489; --veg-soft:#2A3423;
-      --hair:#33322B;
-      --shadow-sm:0 1px 2px rgba(0,0,0,.35);
-      --shadow-md:0 2px 6px rgba(0,0,0,.35), 0 14px 34px -10px rgba(0,0,0,.5);
-      --shadow-lg:0 2px 6px rgba(0,0,0,.4), 0 26px 52px -14px rgba(0,0,0,.6);
+      --bg:#0F0F11; --surface:#171719; --surface-2:#1E1E21;
+      --ink:#ECEBE7; --ink-soft:#CDCBC4; --muted:#9B9A93; --faint:#6E6D66;
+      --hair:#2A2A2E; --hair-strong:#38383D;
+      --veg:#8FBF97; --veg-soft:#1F2A20;
+      --treat:#D8A24E; --treat-soft:#332819;
+      --sel:#ECEBE7; --on-sel:#141416;
+      --shadow-rail:0 1px 0 var(--hair), 0 10px 28px -18px rgba(0,0,0,.7);
     }
   }
 
@@ -41,152 +40,191 @@
   html,body{margin:0}
   body{
     background:var(--bg); color:var(--ink);
-    font-family:var(--body); line-height:1.5; -webkit-font-smoothing:antialiased;
-    max-width:600px; margin-inline:auto;
-    padding:22px 18px calc(46px + env(safe-area-inset-bottom));
+    font-family:var(--sans); line-height:1.55; -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    max-width:640px; margin-inline:auto;
+    padding:26px 22px calc(60px + env(safe-area-inset-bottom));
   }
   a{color:inherit}
 
-  /* ---- eyebrow ---------------------------------------------------------- */
-  .eyebrow{
-    display:flex; align-items:center; gap:10px 14px; flex-wrap:wrap;
-    font-family:var(--display); font-weight:700; font-size:12.5px;
-    letter-spacing:.06em; text-transform:uppercase; color:var(--muted);
+  /* ---- masthead -------------------------------------------------------- */
+  .masthead{
+    display:flex; align-items:baseline; gap:10px 16px; flex-wrap:wrap;
+    padding-bottom:16px; border-bottom:1px solid var(--hair);
   }
-  .eyebrow .status{
-    margin-left:auto; display:inline-flex; align-items:center; gap:6px;
-    font-weight:600; letter-spacing:.04em;
+  .masthead .wk{
+    font-family:var(--serif); font-weight:500; font-size:15px;
+    letter-spacing:.005em; color:var(--ink-soft);
   }
-  .status .dot{width:7px; height:7px; border-radius:50%; background:var(--faint); flex:none}
-  .status.live{color:var(--veg)}     .status.live .dot{background:var(--veg); box-shadow:0 0 0 3px color-mix(in srgb,var(--veg) 22%,transparent)}
-  .status.stale{color:var(--accent)} .status.stale .dot{background:var(--accent)}
+  .masthead .status{
+    margin-left:auto; display:inline-flex; align-items:center; gap:7px;
+    font-size:11.5px; font-weight:500; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--faint);
+  }
+  .status .dot{width:6px; height:6px; border-radius:50%; background:var(--faint); flex:none}
+  .status.live{color:var(--veg)}
+  .status.live .dot{background:var(--veg); box-shadow:0 0 0 3px color-mix(in srgb,var(--veg) 20%,transparent)}
+  .status.stale .dot{background:var(--faint)}
 
-  /* ---- day rail (sticky) ---------------------------------------------------- */
+  /* ---- day rail (sticky) --------------------------------------------------- */
   .railwrap{
     position:sticky; top:0; z-index:5;
-    margin:16px -18px 2px; padding:10px 18px 8px;
-    background:color-mix(in srgb,var(--bg) 82%,transparent);
-    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    margin:14px -22px 0; padding:12px 22px 12px;
+    background:color-mix(in srgb,var(--bg) 86%,transparent);
+    backdrop-filter:blur(12px) saturate(1.4); -webkit-backdrop-filter:blur(12px) saturate(1.4);
   }
   .rail{
-    display:grid; grid-template-columns:repeat(5,1fr); gap:4px;
+    display:grid; grid-template-columns:repeat(5,1fr); gap:2px;
     background:var(--surface-2); border:1px solid var(--hair);
-    border-radius:14px; padding:4px;
+    border-radius:13px; padding:3px;
   }
   .day{
     appearance:none; border:0; background:transparent; cursor:pointer;
-    border-radius:10px; padding:8px 2px 7px; color:var(--muted);
-    font-family:var(--display); display:flex; flex-direction:column; align-items:center; gap:3px;
-    transition:background .15s ease, color .15s ease, transform .15s ease;
+    border-radius:10px; padding:9px 2px 8px; color:var(--muted);
+    font-family:var(--sans);
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+    transition:background .18s ease, color .18s ease;
   }
-  .day .dow{font-weight:700; font-size:14px; letter-spacing:.01em}
-  .day .dnum{font-size:11px; font-weight:600; color:var(--faint); min-height:1em}
-  .day:hover{color:var(--ink); background:color-mix(in srgb,var(--accent) 9%,transparent)}
-  .day[aria-selected="true"]{background:var(--accent); color:var(--on-accent); box-shadow:var(--shadow-sm)}
-  .day[aria-selected="true"] .dnum{color:color-mix(in srgb,var(--on-accent) 78%,transparent)}
-  .day[aria-selected="true"]:hover{color:var(--on-accent)}
-  .day .today-dot{width:4px; height:4px; border-radius:50%; background:currentColor; opacity:0; transition:opacity .15s}
-  .day.is-today .today-dot{opacity:.55}
+  .day .dow{font-weight:600; font-size:13px; letter-spacing:.02em}
+  .day .dnum{font-size:10.5px; font-weight:500; color:var(--faint); min-height:1em; font-variant-numeric:tabular-nums}
+  .day:hover{color:var(--ink)}
+  .day[aria-selected="true"]{background:var(--sel); color:var(--on-sel)}
+  .day[aria-selected="true"] .dnum{color:color-mix(in srgb,var(--on-sel) 72%,transparent)}
+  .day .today-dot{width:3px; height:3px; border-radius:50%; background:currentColor; opacity:0; transition:opacity .18s}
+  .day.is-today .today-dot{opacity:.45}
   .day.is-today[aria-selected="true"] .today-dot{opacity:.9}
-  .day:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+  .day:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
 
-  /* ---- day heading ---------------------------------------------------------- */
+  /* ---- day heading ------------------------------------------------------- */
+  .dayhead{margin:var(--step) 0 calc(var(--step) - 4px)}
   .heading{
-    font-family:var(--display); font-weight:800; letter-spacing:-.015em;
-    font-size:clamp(1.7rem, 3vw + 1.1rem, 2.15rem);
-    margin:13px 0 3px; text-transform:capitalize;
+    font-family:var(--serif); font-weight:400; letter-spacing:-.01em;
+    font-size:clamp(2.1rem, 6vw + .6rem, 2.9rem); line-height:1.05;
+    margin:0; text-transform:capitalize; color:var(--ink);
   }
-  .subnote{display:flex; align-items:center; gap:8px; color:var(--muted); font-size:13px; margin:0 0 18px}
-  .subnote .pill{
-    font-family:var(--display); font-weight:700; font-size:11px; letter-spacing:.05em; text-transform:uppercase;
-    padding:3px 8px; border-radius:7px; background:var(--accent-soft); color:var(--accent);
+  .subnote{
+    display:flex; align-items:center; gap:9px; margin:11px 0 0;
+    color:var(--muted); font-size:13px;
   }
-  .subnote.today .pill{background:color-mix(in srgb,var(--veg) 20%,transparent); color:var(--veg)}
+  .subnote .tag{
+    font-weight:600; font-size:10.5px; letter-spacing:.07em; text-transform:uppercase;
+    padding:3px 7px 2px; border-radius:5px;
+    background:var(--surface-2); color:var(--muted); border:1px solid var(--hair);
+  }
+  .subnote.today .tag{
+    background:color-mix(in srgb,var(--veg) 16%,transparent);
+    color:var(--veg); border-color:color-mix(in srgb,var(--veg) 28%,transparent);
+  }
+  .subnote .date{font-variant-numeric:tabular-nums}
 
-  /* ---- cards -------------------------------------------------------------- */
-  .cards{display:flex; flex-direction:column; gap:12px}
-  .card{
-    background:var(--surface); border:1px solid var(--hair); border-radius:var(--radius);
-    box-shadow:var(--shadow-md); padding:15px 16px 16px;
-    transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+  /* ---- places --------------------------------------------------------- */
+  .places{display:flex; flex-direction:column}
+  .place{
+    --tint:color-mix(in srgb, hsl(var(--hue) 62% 45%) 100%, transparent);
+    padding:var(--step) 0;
+    border-top:1px solid var(--hair);
+    animation:rise .3s cubic-bezier(.2,.7,.3,1) both;
   }
-  @media (hover:hover){
-    .card:hover{transform:translateY(-2px); box-shadow:var(--shadow-lg); border-color:color-mix(in srgb,var(--accent) 35%,var(--hair))}
-  }
-  .card-head{display:flex; align-items:center; gap:10px; margin-bottom:11px}
-  .badge{
+  .place:first-child{border-top:0; padding-top:6px}
+  .place:nth-child(2){animation-delay:.05s}
+  .place:nth-child(3){animation-delay:.10s}
+  .place:nth-child(4){animation-delay:.15s}
+  .place:nth-child(5){animation-delay:.20s}
+
+  .place-head{display:flex; align-items:center; gap:11px; margin-bottom:14px}
+  .shield{
     flex:none; width:30px; height:30px; border-radius:9px;
-    display:grid; place-items:center; font-family:var(--display); font-weight:700; font-size:14px;
-    background:hsl(var(--hue) 42% 92%); color:hsl(var(--hue) 45% 32%);
-    border:1px solid hsl(var(--hue) 38% 82%);
+    display:grid; place-items:center;
+    font-family:var(--serif); font-weight:500; font-size:15px; line-height:1;
+    background:color-mix(in srgb, hsl(var(--hue) 58% 46%) 15%, var(--surface));
+    color:hsl(var(--hue) 55% 34%);
+    box-shadow:inset 0 0 0 1px color-mix(in srgb, hsl(var(--hue) 55% 45%) 30%, transparent);
   }
   @media (prefers-color-scheme: dark){
-    .badge{background:hsl(var(--hue) 26% 22%); color:hsl(var(--hue) 55% 76%); border-color:hsl(var(--hue) 24% 32%)}
+    .shield{
+      background:color-mix(in srgb, hsl(var(--hue) 55% 55%) 16%, var(--surface));
+      color:hsl(var(--hue) 60% 72%);
+      box-shadow:inset 0 0 0 1px color-mix(in srgb, hsl(var(--hue) 55% 60%) 26%, transparent);
+    }
   }
-  .card-head h2{font-family:var(--display); font-weight:700; font-size:17px; margin:0; line-height:1.2}
-  .card-head h2 a{text-decoration:none; display:inline-flex; align-items:center; gap:5px}
-  .card-head h2 a::after{content:"↗"; font-size:12px; color:var(--faint); transition:color .15s}
-  .card-head h2 a:hover, .card-head h2 a:hover::after{color:var(--accent)}
+  .place-head h2{
+    font-family:var(--serif); font-weight:500; font-size:1.28rem; letter-spacing:-.005em;
+    margin:0; line-height:1.15; flex:1; min-width:0;
+  }
+  .place-head h2 a{
+    text-decoration:none; display:inline; background-image:linear-gradient(var(--hair-strong),var(--hair-strong));
+    background-size:100% 1px; background-repeat:no-repeat; background-position:0 100%;
+    transition:background-size .2s ease;
+  }
+  .place-head h2 a:hover{
+    background-image:linear-gradient(hsl(var(--hue) 55% 45%),hsl(var(--hue) 55% 45%));
+  }
+  .place-head .go{flex:none; color:var(--faint); font-size:13px; transition:color .15s}
+  .place:hover .place-head .go{color:hsl(var(--hue) 55% 45%)}
 
-  .dishes{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px}
-  .dishes li{position:relative; padding-left:17px; font-size:14.5px; color:var(--ink)}
+  .dishes{margin:0; padding:0; list-style:none; display:flex; flex-direction:column}
+  .dishes li{
+    padding:9px 0 9px 20px; position:relative;
+    font-size:15.5px; line-height:1.5; color:var(--ink-soft);
+    border-top:1px solid color-mix(in srgb,var(--hair) 60%,transparent);
+  }
+  .dishes li:first-child{border-top:0}
   .dishes li::before{
-    content:""; position:absolute; left:2px; top:8px; width:6px; height:6px;
-    border-radius:2px; background:color-mix(in srgb,var(--accent) 55%,var(--hair)); rotate:45deg;
+    content:""; position:absolute; left:3px; top:16px; width:5px; height:5px;
+    border-radius:50%; background:hsl(var(--hue) 45% 55%);
   }
   .dishes li.veg{color:var(--ink)}
-  .dishes li.veg::before{background:var(--veg); border-radius:50%; rotate:none}
-  .veg-chip{
-    display:inline-block; margin-right:6px; padding:1px 6px; border-radius:6px;
-    font-family:var(--display); font-weight:700; font-size:10.5px; letter-spacing:.05em; text-transform:uppercase;
-    background:var(--veg-soft); color:var(--veg); vertical-align:1px;
+  .dishes li.veg::before{background:var(--veg)}
+  .dishes li.treat{color:var(--ink)}
+  .dishes li.treat::before{background:var(--treat); rotate:45deg; border-radius:1px}
+  .veg-chip, .treat-chip{
+    display:inline-block; margin-right:7px; padding:1px 6px 0; border-radius:5px;
+    font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    vertical-align:2px;
   }
-  .empty-today{color:var(--muted); font-size:13.5px; font-style:italic; margin:0}
+  .veg-chip{background:var(--veg-soft); color:var(--veg)}
+  .treat-chip{background:var(--treat-soft); color:var(--treat)}
+  .empty-today{
+    margin:2px 0 0; color:var(--faint); font-size:14px; font-style:italic;
+    font-family:var(--serif);
+  }
 
-  /* ---- others ------------------------------------------------------------ */
-  .others{margin-top:24px}
+  /* ---- also open (demoted) ------------------------------------------------ */
+  .others{margin-top:var(--step); border-top:1px solid var(--hair); padding-top:20px}
   .others summary{
-    cursor:pointer; list-style:none; display:flex; align-items:center; gap:9px;
-    font-family:var(--display); font-weight:700; font-size:12px; letter-spacing:.05em;
-    text-transform:uppercase; color:var(--muted);
+    cursor:pointer; list-style:none; display:flex; align-items:center; gap:8px;
+    font-size:11.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--faint);
   }
   .others summary::-webkit-details-marker{display:none}
-  .others summary::before{content:"›"; font-size:15px; transition:transform .16s; color:var(--faint)}
-  .others[open] summary::before{transform:rotate(90deg)}
-  .others summary .rule{flex:1; height:1px; background:var(--hair)}
-  .others ul{list-style:none; margin:13px 0 0; padding:0; display:flex; flex-direction:column; gap:10px}
-  .others li{display:flex; gap:9px; align-items:baseline; font-size:13.5px}
-  .others .rname{font-weight:600}
+  .others summary::after{content:"+"; margin-left:auto; font-size:14px; transition:transform .18s}
+  .others[open] summary::after{transform:rotate(45deg)}
+  .others ul{list-style:none; margin:14px 0 0; padding:0; display:flex; flex-direction:column; gap:12px}
+  .others li{font-size:13.5px; line-height:1.5}
+  .others .rname{font-family:var(--serif); font-weight:500; font-size:15px}
   .others .rname a{text-decoration:none}
-  .others .rname a:hover{color:var(--accent)}
-  .others .static-text{color:var(--muted); font-size:12.5px; margin-left:auto; text-align:right; max-width:56%}
-  .tag{
-    font-size:10px; font-family:var(--display); font-weight:700; text-transform:uppercase; letter-spacing:.05em;
-    padding:2px 7px; border-radius:6px; border:1px solid var(--hair); color:var(--faint); white-space:nowrap;
-  }
+  .others .note{color:var(--faint); margin-left:8px}
+  .others .static-text{display:block; color:var(--muted); margin-top:3px}
 
-  /* ---- footer ----------------------------------------------------------- */
+  /* ---- footer --------------------------------------------------------- */
   footer{
-    margin-top:32px; padding-top:16px; border-top:1px solid var(--hair);
-    color:var(--faint); font-size:12px; text-align:center;
+    margin-top:calc(var(--step) + 8px); padding-top:18px; border-top:1px solid var(--hair);
+    color:var(--faint); font-size:11.5px; text-align:center;
     display:flex; flex-direction:column; gap:5px;
   }
   footer a{color:var(--muted); text-decoration:none; border-bottom:1px solid var(--hair)}
-  footer a:hover{color:var(--accent)}
+  footer a:hover{color:var(--ink)}
 
-  @media (prefers-reduced-motion: no-preference){
-    .card{animation:rise .26s cubic-bezier(.2,.7,.3,1) both}
-    .card:nth-child(2){animation-delay:.04s}
-    .card:nth-child(3){animation-delay:.08s}
-    .card:nth-child(4){animation-delay:.12s}
-    .card:nth-child(5){animation-delay:.16s}
-    @keyframes rise{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+  @keyframes rise{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
+  @media (prefers-reduced-motion: reduce){
+    .place{animation:none}
+    *{transition-duration:.01ms !important}
   }
 </style>
 </head>
 <body>
-  <header class="eyebrow">
-    <span id="weeklabel">Dagens lunch</span>
+  <header class="masthead">
+    <span class="wk" id="weeklabel">Dagens lunch</span>
     <span class="status stale" id="status"><span class="dot"></span><span id="statusText">Laddar…</span></span>
   </header>
 
@@ -194,13 +232,15 @@
     <div class="rail" id="rail" role="tablist" aria-label="Välj dag"></div>
   </div>
 
-  <h1 class="heading" id="dayHeading">—</h1>
-  <p class="subnote" id="daySub"></p>
+  <div class="dayhead">
+    <h1 class="heading" id="dayHeading">—</h1>
+    <p class="subnote" id="daySub"></p>
+  </div>
 
-  <div class="cards" id="cards"></div>
+  <div class="places" id="places"></div>
 
   <details class="others" id="others" hidden>
-    <summary><span id="othersLabel">Övriga ställen</span><span class="rule"></span></summary>
+    <summary><span id="othersLabel">Även öppet</span></summary>
     <ul id="othersList"></ul>
   </details>
 
@@ -222,10 +262,10 @@
 const DAYS  = ["Måndag","Tisdag","Onsdag","Torsdag","Fredag"];
 const SHORT = ["Mån","Tis","Ons","Tor","Fre"];
 
-/* per-restaurant badge hue (falls back to a hash for unknown names) */
+/* per-restaurant accent hue (falls back to a hash for unknown names) */
 const HUES = {
-  "Restaurang Edison": 28, "Bricks Eatery": 8, "Smaka på Kina": 352,
-  "Kantin": 150, "Eatery": 205,
+  "Restaurang Edison": 32, "Bricks Eatery": 350, "Smaka på Kina": 292,
+  "Kantin": 155, "Eatery": 210,
 };
 const hueFor = name => HUES[name] ??
   ([...name].reduce((h,c)=>(h*31 + c.charCodeAt(0))>>>0, 7) % 360);
@@ -234,7 +274,7 @@ const hueFor = name => HUES[name] ??
 let WEEK = {
   "week": 35,
   "range": "24–28 aug",
-  "dates": ["2026-08-24","2026-08-25","2026-08-26","2026-08-27","2026-08-28"],
+  "dates": ["2026-08-24", "2026-08-25", "2026-08-26", "2026-08-27", "2026-08-28"],
   "restaurants": [
     {
       "name": "Restaurang Edison",
@@ -283,21 +323,27 @@ let WEEK = {
     {
       "name": "Eatery",
       "url": "https://www.eatery.se/lund/lunchmeny",
-      "menus": {"Måndag":[],"Tisdag":[],"Onsdag":[],"Torsdag":[],"Fredag":[]}
+      "menus": {
+        "Måndag": ["Oxbringa med senapssky, krossade rotfrukter, rostad potatis med persilja och bakad lök,  citronmarinerad morot","Stekt kummel, zucchini och spenatpuré, skagensås och kokt potatis","Marockans kikärtsgryta med aubergine, tomat och picklad rödkål och kryddigt ris"],
+        "Tisdag": ["Citron och rosmarin bakad kyckling med krämig västerbotten risoni och rostad tomatsås","Pecorino & spenat gratinerad sej med vitvinssås, krossad potatis & citron","Ricotta & spenatfylld canneloni med aubergineragu, pesto och fänkål","Bonus: något sött till kaffet"],
+        "Onsdag": ["BBQ revben med rostad majssalsa, chipotlemajo och spicy kålsallad, klyftpotatis","Thai fishcakes med ingefära, chili och citrongräs med sojabakad broccoli, sojasås med honung,","chili och ingefära, jasminris med lime","Mapo tofu med svart bönpasta, chiliolja och krispig lök, picklad lök och jasminris"],
+        "Torsdag": ["Salsicciaragu med tryffeldoftande svamp, gremolata, lagrad ost","Bakad kungsfisk med dillhollandaise, rotselleri och fänkålssallad, potatismos","Krämig potatis- och purjolökssoppa med vitlöksbröd & örtolja, krispig potatis","Bonus: pannkakor, lättvispad grädde och hemmagjord sylt"],
+        "Fredag": ["Örtbakad pluma med chimmi churri, friterad klyftpotatis, rostad vitlöksaioli","Bakad sej med pesto, tomat och ruccola, vit bönpuré med rostad vitlök och citron, rostad potatis","Rödbetsrisotto med chevré, rostade valnötter, spenat och ruccola sallad"]
+      }
     }
   ]
 };
 
-/* ---- classification: card vs demoted to "others" --------------------- */
+/* ---- classification: full block vs demoted to "also open" ------------- */
 const isBlank = v => !Array.isArray(v) || v.filter(x => String(x).trim()).length === 0;
 
 function classify(r){
   const filled = DAYS.map(d => r.menus?.[d]).filter(v => !isBlank(v));
-  if (filled.length === 0) return { cat:"other", why:"ingen meny" };
+  if (filled.length === 0) return { cat:"other", why:"ingen meny publicerad" };
   const flat = filled.map(v => v.join(" | "));
   if (new Set(flat).size === 1 && filled.length >= 4)
-    return { cat:"other", why:"samma varje dag", text: filled[0].join(" · ") };
-  return { cat:"card" };
+    return { cat:"other", why:"samma meny varje dag", text: filled[0].join(" · ") };
+  return { cat:"place" };
 }
 
 /* ---- render --------------------------------------------------------------- */
@@ -307,9 +353,11 @@ const todayIndex = () => { const g = new Date().getDay(); return (g >= 1 && g <=
 const fmtDate = iso => { try { return new Date(iso + "T00:00:00").toLocaleDateString("sv-SE",{day:"numeric",month:"short"}); } catch { return ""; } };
 
 function dishItem(raw){
-  const s = String(raw).trim();
-  const m = s.match(/^vegetarisk[t]?\s*:\s*(.+)/i);
-  if (m) return `<li class="veg"><span class="veg-chip">Veg</span>${esc(m[1])}</li>`;
+  const s = String(raw).trim().replace(/\s{2,}/g, " ");
+  let m = s.match(/^vegetarisk[t]?\s*:\s*(.+)/i);
+  if (m) return `<li class="veg"><span class="veg-chip">Grönt</span>${esc(m[1])}</li>`;
+  m = s.match(/^bonus\s*:\s*(.+)/i);
+  if (m) return `<li class="treat"><span class="treat-chip">Bonus</span>${esc(m[1])}</li>`;
   return `<li>${esc(s)}</li>`;
 }
 
@@ -342,21 +390,22 @@ function render(){
 
   document.getElementById("dayHeading").textContent = day;
   const sub = document.getElementById("daySub");
+  const dateStr = WEEK.dates?.[selected] ? fmtDate(WEEK.dates[selected]) : "";
   if (ti === null && selected === 0){
-    sub.className = "subnote"; sub.innerHTML = `<span class="pill">Helg</span> visar måndag`;
+    sub.className = "subnote"; sub.innerHTML = `<span class="tag">Helg</span><span class="date">visar måndag</span>`;
   } else if (ti === selected){
-    sub.className = "subnote today"; sub.innerHTML = `<span class="pill">Idag</span> ${WEEK.dates?.[selected] ? fmtDate(WEEK.dates[selected]) : ""}`;
+    sub.className = "subnote today"; sub.innerHTML = `<span class="tag">Idag</span><span class="date">${dateStr}</span>`;
   } else {
-    sub.className = "subnote"; sub.textContent = WEEK.dates?.[selected] ? fmtDate(WEEK.dates[selected]) : "";
+    sub.className = "subnote"; sub.innerHTML = `<span class="date">${dateStr}</span>`;
   }
 
-  const cards = document.getElementById("cards");
+  const wrap = document.getElementById("places");
   const others = [];
-  cards.innerHTML = "";
+  wrap.innerHTML = "";
 
   WEEK.restaurants.forEach(r => {
     const info = classify(r);
-    if (info.cat !== "card"){ others.push({ r, info }); return; }
+    if (info.cat !== "place"){ others.push({ r, info }); return; }
 
     const dishes = Array.isArray(r.menus[day]) ? r.menus[day].filter(x => String(x).trim()) : [];
     const body = dishes.length
@@ -364,25 +413,26 @@ function render(){
       : `<p class="empty-today">Ingen dagsmeny idag</p>`;
     const initial = esc([...r.name][0] || "•");
 
-    const card = document.createElement("article");
-    card.className = "card";
-    card.style.setProperty("--hue", hueFor(r.name));
-    card.innerHTML =
-      `<div class="card-head">` +
-        `<span class="badge" aria-hidden="true">${initial}</span>` +
+    const el = document.createElement("article");
+    el.className = "place";
+    el.style.setProperty("--hue", hueFor(r.name));
+    el.innerHTML =
+      `<div class="place-head">` +
+        `<span class="shield" aria-hidden="true">${initial}</span>` +
         `<h2><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a></h2>` +
+        `<span class="go" aria-hidden="true">↗</span>` +
       `</div>${body}`;
-    cards.appendChild(card);
+    wrap.appendChild(el);
   });
 
   const list = document.getElementById("othersList");
   list.innerHTML = others.map(({r,info}) =>
     `<li><span class="rname"><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a></span>` +
-    `<span class="tag">${esc(info.why)}</span>` +
+    `<span class="note">${esc(info.why)}</span>` +
     (info.text ? `<span class="static-text">${esc(info.text)}</span>` : ``) + `</li>`
   ).join("");
   document.getElementById("others").hidden = others.length === 0;
-  document.getElementById("othersLabel").textContent = `Övriga ställen (${others.length})`;
+  document.getElementById("othersLabel").textContent = `Även öppet (${others.length})`;
 }
 
 function setStatus(live, note){
