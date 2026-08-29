@@ -8,7 +8,7 @@
     "2026-08-27",
     "2026-08-28"
   ],
-  "generated": "2026-08-29T12:38:23+02:00",
+  "generated": "2026-08-29T10:38:52+00:00",
   "restaurants": [
     {
       "name": "Restaurang Edison",
@@ -163,5 +163,9 @@
         ]
       }
     }
+  ],
+  "errors": [
+    "Restaurang Edison: parsed 0 dishes (kept previous)",
+    "Bricks Eatery: parsed 0 dishes (kept previous)"
   ]
 }
