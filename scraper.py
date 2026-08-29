@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Scrapes the four Lund lunch sources and writes lt.json in the shape lunch.html
+Scrapes the five Lund lunch sources and writes lt.json in the shape index.html
 expects: { week, range, dates[5], generated, restaurants:[{name,url,menus:{Day:[...]}}] }
 
 Sources:
