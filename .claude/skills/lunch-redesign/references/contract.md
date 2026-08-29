@@ -29,8 +29,9 @@ Everything the redesign must keep working. The visual layer is free; this is not
         "Fredag":  [ … ]
       }
     }
-    // exactly these five, in this order:
-    // "Restaurang Edison", "Bricks Eatery", "Smaka på Kina", "Kantin", "Eatery"
+    // exactly these five, in the order scraper.py's SOURCES list defines:
+    // "Bricks Eatery", "Eatery", "Smaka på Kina", "Restaurang Edison", "Kantin"
+    // (render them in the order they arrive — don't re-sort)
   ],
   "errors": ["Eatery: …"]              // optional; present when a source failed
 }

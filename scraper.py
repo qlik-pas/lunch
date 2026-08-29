@@ -280,12 +280,12 @@ def week_info(today=None):
 
 
 SOURCES = [
-    # name, public url, parser, fetch-kind
-    ("Restaurang Edison", "https://restaurangedison.se/lunch/", parse_elementor, "html"),
+    # name, public url, parser, fetch-kind   —   order here drives the page order
     ("Bricks Eatery",     "https://brickseatery.se/lunch",      parse_elementor, "html"),
-    ("Smaka på Kina",     "https://www.smakapakina.se/meny",    parse_kina,      "html"),
-    ("Kantin",            "https://www.kantinlund.se/",         parse_kantin,    "html"),
     ("Eatery",            "https://www.eatery.se/lund/lunchmeny", parse_eatery,  "pdf"),
+    ("Smaka på Kina",     "https://www.smakapakina.se/meny",    parse_kina,      "html"),
+    ("Restaurang Edison", "https://restaurangedison.se/lunch/", parse_elementor, "html"),
+    ("Kantin",            "https://www.kantinlund.se/",         parse_kantin,    "html"),
 ]
 
 
