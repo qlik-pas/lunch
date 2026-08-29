@@ -7,7 +7,7 @@ Sources:
   Restaurang Edison  https://restaurangedison.se/lunch/   (Elementor HTML)
   Bricks Eatery      https://brickseatery.se/lunch         (Elementor HTML, same template)
   Smaka på Kina      https://www.smakapakina.se/meny       (Wix HTML)
-  Eatery             weekly PDF on static.thatsup.website
+  Eatery             weekly PDF linked from eatery.se/anlaggningar/lund
 
 Network libs (requests, beautifulsoup4, pdfminer.six) are imported lazily inside
 the fetchers so the parsers can be unit-tested with no dependencies installed.
@@ -192,10 +192,44 @@ def fetch_pdf_text(url):
     return extract_text(io.BytesIO(r.content))
 
 
+EATERY_MENU_PAGE = "https://www.eatery.se/anlaggningar/lund"
+
 def eatery_pdf_url(week):
-    # FRAGILE: path + weekly filename. Override with EATERY_PDF_URL when it breaks.
-    return os.environ.get("EATERY_PDF_URL") or \
-        f"https://static.thatsup.website/462/96942/Lund_sv_V{week}.pdf"
+    """Discover the current Swedish lunch PDF by scraping Eatery's Lund page.
+
+    Both the directory and the weekly filename are unpredictable (the file for
+    week 35 was 'Lund_sv_V35indd.pdf'), so the URL is never constructed. Set
+    EATERY_PDF_URL to override when the scrape can't find it."""
+    override = os.environ.get("EATERY_PDF_URL")
+    if override:
+        return override
+
+    import requests
+    r = requests.get(EATERY_MENU_PAGE, headers=UA, timeout=30)
+    r.raise_for_status()
+    urls = re.findall(r'https?://[^"\'\s]+?\.pdf', r.text, re.I)
+    seen, cands = set(), []
+    for u in urls:
+        u = u.split("?")[0]
+        if u not in seen:
+            seen.add(u)
+            cands.append(u)
+
+    def score(u):
+        low = u.lower()
+        s = 0
+        if "lund_sv" in low:
+            s += 10
+        if re.search(rf"v0*{week}(?!\d)", low):
+            s += 5
+        if "_eng" in low or "cafe" in low or "café" in low or "catering" in low:
+            s -= 20
+        return s
+
+    best = max(cands, key=score, default=None)
+    if best is None or score(best) < 10:
+        raise ValueError(f"no Swedish lunch PDF link on {EATERY_MENU_PAGE}")
+    return best
 
 
 # --------------------------------------------------------------------------- #
