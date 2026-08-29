@@ -8,69 +8,28 @@
     "2026-08-27",
     "2026-08-28"
   ],
-  "generated": "2026-08-29T12:35:50+02:00",
+  "generated": "2026-08-29T10:37:01+00:00",
   "restaurants": [
     {
       "name": "Restaurang Edison",
       "url": "https://restaurangedison.se/lunch/",
       "menus": {
-        "Måndag": [
-          "Pumpagryta med halloumi serveras med ris, äpple & spenat",
-          "Panerad torsk med remoulad, kokt potatis, fänkål & ärtor",
-          "Kabanoss med surkål, potatismos, bakat äpple & persilja"
-        ],
-        "Tisdag": [
-          "Veg pytt med senapscreme, persilja & ägg 64",
-          "Panerad schnitzel med kryddsmör, stekt potatis & rostad broccoli",
-          "Kalkonfärslimpa med bakad purjo, äpple, rostad potatis & cidersenapssky"
-        ],
-        "Onsdag": [
-          "Röda linsplättar med citronkeso, krassesallad & bränd kål",
-          "Stekt sill med potatispuré, lingon, dill, lök & smör",
-          "Pasta med \"salsiccia\", vitt vin, zucchini & friterad salvia"
-        ],
-        "Torsdag": [
-          "Ärtwallenbergare med citronsmör, potatispuré & bakad morot",
-          "Fläskestek med sockerstekt potatis, äpplekompott, rödkål & sky",
-          "Persisk kyckling med libabröd, saffran, tomatsallad & sesamyoghurt"
-        ],
-        "Fredag": [
-          "Tomatsoppa med risonisallad, bakad rödlök, basilikacreme & ostscones",
-          "Nattabakad oxe med dragonmajo, rostad potatis & tomatsallad",
-          "Thailändsk laab på fläsk med rostat ris, koriander, böngroddar & ingefärsmajo"
-        ]
+        "Måndag": [],
+        "Tisdag": [],
+        "Onsdag": [],
+        "Torsdag": [],
+        "Fredag": []
       }
     },
     {
       "name": "Bricks Eatery",
       "url": "https://brickseatery.se/lunch",
       "menus": {
-        "Måndag": [
-          "Majs och halloumifritter med ris, chilimajonnäs, pickles och purjolök",
-          "Isterband med gräddstuvad potatis, rödbetor, picklade senapsfrön och persilja",
-          "Chilirostad kycklinglårfilé med ris, gurka, böngroddar och rostad sesammajonnäs"
-        ],
-        "Tisdag": [
-          "Spenat och ricotta tortellini med tomatsås, lagrad ost, aubergine och ruccola",
-          "Orange chicken - apelsinsås, ingefära, chili, ostronsås, böngroddar, vårlök och sesam",
-          "Mozzarella, creme- fraiche, kantarell, italiensk hårdost och gräslök"
-        ],
-        "Onsdag": [
-          "Bondomelett med krämig waldorfsallad, valnötter, romansallad, rädisa och gurka",
-          "Stekt sill med klassiska tillbehör",
-          "Bibimbap med blandat kött, ostronsås, pickles, kimchisallad, ris och stekt ägg",
-          "Mozzarella, creme- fraiche, kantarell, italiensk hårdost och gräslök"
-        ],
-        "Torsdag": [
-          "Grönsakswok med soja, chili, hoisinsås, böngroddar, ris och stekt ägg",
-          "Pannbiff med stekt lök, potatismos, lingon, timjansky, morot och persilja",
-          "Mozzarella, creme- fraiche, kantarell, italiensk hårdost och gräslök"
-        ],
-        "Fredag": [
-          "Ost och lökpaj med coleslaw, rostad blomkål, bladspenat och picklad rödlök",
-          "Schnitzel med kryddsmör, rostad potatis, ärtor, spetskål, citron och skysås",
-          "Oxbringa med gnocchi, citrongrädde, bakad purjolök, lagrad ost och ruccola"
-        ]
+        "Måndag": [],
+        "Tisdag": [],
+        "Onsdag": [],
+        "Torsdag": [],
+        "Fredag": []
       }
     },
     {
@@ -163,5 +122,9 @@
         ]
       }
     }
+  ],
+  "errors": [
+    "Restaurang Edison: parsed 0 dishes",
+    "Bricks Eatery: parsed 0 dishes"
   ]
 }
