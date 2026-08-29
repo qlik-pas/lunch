@@ -116,9 +116,18 @@ def parse_eatery(text):
 
 
 KANTIN_DAY = re.compile(r"^(Måndag|Tisdag|Onsdag|Torsdag|Fredag)\b\s*\d{1,2}[/.]\d{1,2}\.?\s*(.*)$")
+KANTIN_STOP = re.compile(r"^(Veckans vegetariska|Månadens alternativ|Dagens|Hitta till|Öppettider|Kontakt|Boka)", re.I)
+
+def _kantin_clean(dish):
+    dish = re.sub(r"\s*–\s*", " – ", dish)      # normalise spacing around en-dashes
+    return re.sub(r"\s{2,}", " ", dish).strip(" –").strip()
 
 def parse_kantin(text):
-    """Kantin: 'Måndag 24/8 <dish>' per day, plus the weekly vegetarian shown daily."""
+    """Kantin: 'Måndag 24/8 <dish>' per day, plus the weekly vegetarian shown daily.
+
+    The live markup routinely breaks one day's dish across several lines — even
+    mid-word — so everything after a day header is concatenated (no separator)
+    until the next day header or a section label."""
     menus = _empty()
     lines = _lines(text)
 
@@ -128,29 +137,36 @@ def parse_kantin(text):
         if m:
             veg = m.group(1).strip()
             if not veg and i + 1 < len(lines):   # dish sits on the next line
-                veg = lines[i + 1].strip()
+                veg = _kantin_clean(lines[i + 1])
             break
 
     def entry(dish):
-        e = [dish]
+        e = [_kantin_clean(dish)]
         if veg:
             e.append("Vegetariskt: " + veg)
         return e
 
-    pending = None
+    day, buf = None, ""
+
+    def flush():
+        nonlocal day, buf
+        if day and buf.strip():
+            menus[day] = entry(buf)
+        day, buf = None, ""
+
     for line in lines:
         m = KANTIN_DAY.match(line)
         if m:
-            day, dish = m.group(1), m.group(2).strip()
-            if dish:
-                menus[day] = entry(dish)
-                pending = None
-            else:
-                pending = day          # dish sits on the next line (mirror layout)
+            flush()
+            day, buf = m.group(1), m.group(2).strip()
             continue
-        if pending:
-            menus[pending] = entry(line.strip())
-            pending = None
+        if day is None:
+            continue
+        if KANTIN_STOP.match(line):
+            flush()
+            continue
+        buf += line.strip()
+    flush()
     return menus
 
 
