@@ -123,10 +123,12 @@ def parse_kantin(text):
     lines = _lines(text)
 
     veg = None
-    for line in lines:
-        m = re.match(r"Veckans vegetariska:\s*(.+)", line, re.I)
+    for i, line in enumerate(lines):
+        m = re.match(r"Veckans vegetariska:?\s*(.*)$", line, re.I)
         if m:
             veg = m.group(1).strip()
+            if not veg and i + 1 < len(lines):   # dish sits on the next line
+                veg = lines[i + 1].strip()
             break
 
     def entry(dish):
