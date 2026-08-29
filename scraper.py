@@ -40,6 +40,20 @@ def _empty():
     return {d: [] for d in DAYS}
 
 
+# Edison says "Vecka 35", Bricks "Lunchmeny V36", Eatery's PDF "MENY V35".
+# Restaurants publish the coming week mid-week, so the label is the only way to
+# tell "next week, live early" from "this week's menu".
+WEEK_LABEL = re.compile(r"vecka\s*(\d{1,2})\b|meny\s*v\.?\s*(\d{1,2})\b", re.I)
+
+def claimed_week(text):
+    """ISO week the page/PDF claims to be for, or None if it carries no label."""
+    m = WEEK_LABEL.search(text)
+    if not m:
+        return None
+    n = int(m.group(1) or m.group(2))
+    return n if 1 <= n <= 53 else None
+
+
 # --------------------------------------------------------------------------- #
 # parsers (pure: take extracted text, return {Day: [dishes]})
 # --------------------------------------------------------------------------- #
@@ -285,6 +299,9 @@ def build():
             menus = parser(text)
             if not any(menus.values()):
                 raise ValueError("parsed 0 dishes")
+            cw = claimed_week(text)
+            if cw is not None and cw != week:
+                raise ValueError(f"sidan visar vecka {cw}, väntar på vecka {week}")
             restaurants.append({"name": name, "url": url, "menus": menus})
         except Exception as e:                       # one bad source ≠ empty file
             kept = prev.get(name)
