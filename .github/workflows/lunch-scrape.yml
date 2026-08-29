@@ -1,0 +1,47 @@
+# .github/workflows/lunch-scrape.yml
+# Runs scraper.py (Edison, Bricks, Smaka på Kina, Eatery) and commits lt.json.
+# Server-side, so no CORS. Commits only when the menu actually changed.
+name: Scrape lunch menus
+
+on:
+  schedule:
+    - cron: "5 6 * * 1-5"   # 06:05 UTC ~ 08:05 Europe/Stockholm, Mon–Fri
+  workflow_dispatch:         # run manually from the Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: lunch-scrape
+  cancel-in-progress: true
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: pip install requests beautifulsoup4 pdfminer.six
+
+      - name: Scrape
+        # If Eatery ever changes its PDF path, set the current URL here to override:
+        # env:
+        #   EATERY_PDF_URL: https://static.thatsup.website/462/96942/Lund_sv_V34.pdf
+        run: python scraper.py
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "lunch-bot"
+          git config user.email "lunch-bot@users.noreply.github.com"
+          if [ -n "$(git status --porcelain lt.json)" ]; then
+            git add lt.json
+            git commit -m "Update menus $(date -u +%Y-%m-%d)"
+            git push
+          else
+            echo "No change."
+          fi

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dagens lunch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..48,500;12..48,700;12..48,800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAFAF7; --surface:#FFFFFF; --ink:#1B1B17; --muted:#6C6C61;
+    --accent:#DE8A28; --accent-ink:#7A4708; --sage:#5A7D4F; --hair:#E7E5DD;
+    --live:#4F8A5B; --stale:#B06A2C;
+    --shadow:0 1px 2px rgba(20,18,10,.04), 0 6px 20px rgba(20,18,10,.05);
+    --radius:14px;
+    --display:"Bricolage Grotesque", system-ui, sans-serif;
+    --body:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#151513; --surface:#201F1C; --ink:#F1EFE8; --muted:#9A978B;
+      --accent:#E9A24B; --accent-ink:#1B1B17; --sage:#8FB183; --hair:#33322D;
+      --live:#7FB98A; --stale:#D69A57;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--bg); color:var(--ink); font-family:var(--body); line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    padding:22px 16px calc(48px + env(safe-area-inset-bottom));
+    max-width:640px; margin:0 auto;
+  }
+  a{color:inherit}
+
+  .eyebrow{
+    font-family:var(--display); font-weight:700; letter-spacing:.02em; font-size:13px;
+    text-transform:uppercase; color:var(--muted); display:flex; gap:10px;
+    align-items:baseline; flex-wrap:wrap;
+  }
+  .eyebrow .src{margin-left:auto; font-weight:500; letter-spacing:0}
+  .eyebrow .src a{color:var(--muted); text-decoration:none; border-bottom:1px solid var(--hair)}
+  .eyebrow .src a:hover{color:var(--accent)}
+
+  .rail{display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin:14px 0 4px}
+  .day{
+    appearance:none; border:1px solid var(--hair); background:var(--surface); border-radius:12px;
+    padding:10px 4px 8px; cursor:pointer; font-family:var(--display); color:var(--ink);
+    text-align:center; display:flex; flex-direction:column; gap:2px;
+    transition:transform .12s ease, border-color .12s ease;
+  }
+  .day .dow{font-weight:700; font-size:15px}
+  .day .dnum{font-size:12px; color:var(--muted); font-weight:500; min-height:1em}
+  .day:hover{border-color:var(--accent)}
+  .day[aria-selected="true"]{background:var(--accent); border-color:var(--accent); color:var(--accent-ink); box-shadow:var(--shadow)}
+  .day[aria-selected="true"] .dnum{color:var(--accent-ink); opacity:.85}
+  .day.is-today::after{content:""; width:5px; height:5px; border-radius:50%; background:var(--accent); margin:3px auto 0}
+  .day[aria-selected="true"].is-today::after{background:var(--accent-ink)}
+  .day:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+  .heading{font-family:var(--display); font-weight:800; font-size:26px; margin:20px 0 2px; letter-spacing:-.01em; text-transform:capitalize}
+  .subnote{color:var(--muted); font-size:13px; margin:0 0 16px}
+  .subnote.warn{color:var(--accent-ink); background:color-mix(in srgb,var(--accent) 22%, transparent); display:inline-block; padding:3px 8px; border-radius:8px}
+
+  .cards{display:flex; flex-direction:column; gap:12px}
+  .card{background:var(--surface); border:1px solid var(--hair); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px 16px}
+  .card h2{font-family:var(--display); font-weight:700; font-size:18px; margin:0 0 8px}
+  .card h2 a{text-decoration:none; display:inline-flex; align-items:center; gap:5px}
+  .card h2 a::after{content:"↗"; font-size:13px; color:var(--muted)}
+  .card h2 a:hover, .card h2 a:hover::after{color:var(--accent)}
+  .dishes{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:6px}
+  .dishes li{position:relative; padding-left:16px; font-size:15px}
+  .dishes li::before{content:""; position:absolute; left:0; top:9px; width:6px; height:6px; border-radius:50%; background:var(--sage)}
+  .empty-today{color:var(--muted); font-size:14px; font-style:italic}
+
+  .others{margin-top:26px}
+  .others summary{cursor:pointer; font-family:var(--display); font-weight:700; font-size:13px; text-transform:uppercase; letter-spacing:.03em; color:var(--muted); list-style:none; display:flex; align-items:center; gap:8px}
+  .others summary::-webkit-details-marker{display:none}
+  .others summary::before{content:"▸"; font-size:11px; transition:transform .15s}
+  .others[open] summary::before{transform:rotate(90deg)}
+  .others summary .rule{flex:1; height:1px; background:var(--hair)}
+  .others ul{list-style:none; margin:12px 0 0; padding:0; display:flex; flex-direction:column; gap:9px}
+  .others li{display:flex; gap:10px; align-items:baseline; font-size:14px}
+  .others .rname{font-weight:600}
+  .others .rname a{text-decoration:none}
+  .others .rname a:hover{color:var(--accent)}
+  .others .static-text{color:var(--muted); font-size:13px; margin-left:auto; text-align:right; max-width:55%}
+  .tag{font-size:10.5px; font-family:var(--display); font-weight:700; text-transform:uppercase; letter-spacing:.04em; padding:2px 6px; border-radius:6px; border:1px solid var(--hair); color:var(--muted); white-space:nowrap}
+
+  footer{margin-top:34px; color:var(--muted); font-size:12px; text-align:center; display:flex; flex-direction:column; gap:4px}
+  .status{display:inline-flex; align-items:center; gap:6px; justify-content:center; font-weight:600}
+  .dot{width:7px; height:7px; border-radius:50%}
+  .status.live .dot{background:var(--live)} .status.live{color:var(--live)}
+  .status.stale .dot{background:var(--stale)} .status.stale{color:var(--stale)}
+
+  @media (prefers-reduced-motion: no-preference){
+    .cards{animation:rise .22s ease}
+    @keyframes rise{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+  }
+</style>
+</head>
+<body>
+  <div class="eyebrow">
+    <span id="weeklabel">Dagens lunch</span>
+    <span class="src">data: <a href="https://mudhead.se/lt.html" target="_blank" rel="noopener">mudhead.se</a></span>
+  </div>
+
+  <div class="rail" id="rail" role="tablist" aria-label="Välj dag"></div>
+
+  <h1 class="heading" id="dayHeading" aria-live="polite">—</h1>
+  <p class="subnote" id="daySub"></p>
+
+  <div class="cards" id="cards"></div>
+
+  <details class="others" id="others">
+    <summary><span id="othersLabel">Övriga ställen</span><span class="rule"></span></summary>
+    <ul id="othersList"></ul>
+  </details>
+
+  <footer>
+    <span class="status stale" id="status"><span class="dot"></span><span id="statusText">Laddar…</span></span>
+  </footer>
+
+<script>
+/* ===========================================================================
+   Personal lunch view over mudhead.se's public feed.
+
+   Data loading order (first that works wins):
+     1. ./lt.json         — same-origin copy your GitHub Action mirrors (no CORS)
+     2. mudhead.se/lt.json — direct, only works if their server sends CORS headers
+     3. embedded snapshot  — this week, baked in, so the page never renders blank
+
+   If it always shows the embedded snapshot, set up the Action (see lunch-mirror.yml).
+   =========================================================================== */
+
+const DAYS = ["Måndag","Tisdag","Onsdag","Torsdag","Fredag"];
+const SHORT = ["Mån","Tis","Ons","Tor","Fre"];
+
+/* ---- Embedded snapshot (fallback) ---------------------------------------- */
+let WEEK = {
+  "week": 34,
+  "range": "17–21 aug",
+  "dates": [
+    "2026-08-17",
+    "2026-08-18",
+    "2026-08-19",
+    "2026-08-20",
+    "2026-08-21"
+  ],
+  "restaurants": [
+    {
+      "name": "Restaurang Edison",
+      "url": "https://restaurangedison.se/lunch/",
+      "menus": {
+        "Måndag": [
+          "Aloo Gobi med basmati, rostade kikärtor & picklad rabarb",
+          "Köttbullar med gräddsås, lingon, pressgurka & kokt potatis",
+          "Massaman kyckling med jordnöt, groddar, gurksallad & picklad lime"
+        ],
+        "Tisdag": [
+          "Linslasagne med ruccolacreme, tomat & lagrad ost",
+          "Rökt fläskbog med persiljeskum, ljumna rotfrukter & pepparrot",
+          "Biff stroganoff med svamp, paprika, dijon, gräddfil & saltgurka"
+        ],
+        "Onsdag": [
+          "\"Aranccini\" med svamp, lökcreme & rostad zucchini",
+          "Havets wallenberg med potatispuré, ärtor & brynt citronsmör",
+          "5 spice karré med ris, äppleslaw & sesamdressing"
+        ],
+        "Torsdag": [
+          "Ost- & tomatpaj med linssallad, frissé & senapsvinaigrette",
+          "Pulled pork med apelsin, oregano, purjolök & råstekt potatis",
+          "Kalkonstek med mojorojo, sotad gurka, mandel & saltbakad potatis"
+        ],
+        "Fredag": [
+          "Hel bakad blomkål med soyasmör, hasselnöt & bulgur",
+          "Grillad kyckling med chilibea, potatis & rostad kål",
+          "Crispy pork med äggnudlar, broccoli, sesampickles & misomajo"
+        ]
+      }
+    },
+    {
+      "name": "Bricks Eatery",
+      "url": "https://brickseatery.se/lunch",
+      "menus": {
+        "Måndag": [
+          "Frasig aubergine med ris, tomatsallad och citronyoghurt",
+          "Kalvfärsbiff med gräddsås, rostade rotfrukter, svartvinbärsgele och gurka",
+          "Wokad kyckling med chili, vitlök, nudlar, soja och koriander"
+        ],
+        "Tisdag": [
+          "Chili sin carne med bönor,linser, nachos, ris, picklad rödlök och creme- fraiche",
+          "Friterad spätta med hollandaisesås, potatis, dill, fänkål, citron och ångade grönsaker",
+          "Mozzarella, tomatsås, tryffelsalami och ruccola"
+        ],
+        "Onsdag": [
+          "Fylld paprika med cous- cous, tzatziki, krämig ost och ruccola",
+          "Timjanstekt kotlett med potatismos, gröna ärtor, rödlök, lingon och grönpepparsås",
+          "Moule Frites- ångade blåmusslor med chili, vitlök, persilja, aioli och pommes frites",
+          "Mozzarella, tomatsås, tryffelsalami och ruccola"
+        ],
+        "Torsdag": [
+          "Pasta med svampsås, purjolök, lagrad ost, chili/dragonmarinerade brytbönor",
+          "Kycklingenchiladas med salsa, ris, jalapenomajonnäs och nachos",
+          "Mozzarella, tomatsås, pepperoni och ruccola"
+        ],
+        "Fredag": [
+          "Vegetarisk Banh mi- vietnamesisk macka med tofu, stekt ägg, pickles, srirachamajonnäs, koriander och krispig lök",
+          "Oxbringa med tomatsås, kål, champinjoner, buljongkokt ris, krasse och syrad grädde",
+          "Banh mi- vietnamesisk macka med nattbakad fläskkarre, pickles, srirachamajonnäs, koriander och krispig lök"
+        ]
+      }
+    },
+    {
+      "name": "Smaka på Kina",
+      "url": "https://www.smakapakina.se/meny",
+      "menus": {
+        "Måndag": [
+          "Krispig saltade kyckling (盐酥鸡)",
+          "Peking fläskstrimlor (京酱肉丝)",
+          "Yuxiang aubergine (鱼香茄子)"
+        ],
+        "Tisdag": [
+          "Gongbao kyckling (宫保鸡丁)",
+          "Sötsur kamben (糖醋排骨)",
+          "Kinakål med glasnudlar och vitlök sås (蒜蓉粉丝白菜)"
+        ],
+        "Onsdag": [
+          "Dongpo sidfläsk (东坡肉)",
+          "Yuxiang kyckling (鱼香鸡丝)",
+          "Bakad pumpa med saltad ankäggula (咸蛋黄焗南瓜)",
+          "Spenat med tofu (菠菜炒豆腐丝)"
+        ],
+        "Torsdag": [
+          "Bondes stekt fläsk (农家小炒肉)",
+          "Ångkokt fisk (清蒸鱼)",
+          "Snabbstekt pak choi med shitake (香菇油菜)"
+        ],
+        "Fredag": [
+          "Chili kyckling (辣子鸡)",
+          "Biff med ostronsås, gul lök och paprika (蚝油牛肉)",
+          "Snabbstekt champinjon (素炒口蘑)"
+        ]
+      }
+    },
+    {
+      "name": "Kantin",
+      "url": "https://www.kantinlund.se/",
+      "menus": {
+        "Måndag": [
+          "Pluma – gochujang beurre blanć – broccoli – kimchipicklad gurka – ris – frön – koriander",
+          "Vegetariskt: Bakad sötpotatis – fetostkräm – syrad lök – broccoli – jalapeño – fröer – hjärtsallad"
+        ],
+        "Tisdag": [
+          "Kycklinglårfilé – grön curry – bönor – groddar – paprika – hjärtsallad – rökt mandel – ris",
+          "Vegetariskt: Bakad sötpotatis – fetostkräm – syrad lök – broccoli – jalapeño – fröer – hjärtsallad"
+        ],
+        "Onsdag": [
+          "Nattbakad karré – bbqsås – majskräm – rostad lök – pickles – rostad potatis",
+          "Vegetariskt: Bakad sötpotatis – fetostkräm – syrad lök – broccoli – jalapeño – fröer – hjärtsallad"
+        ],
+        "Torsdag": [
+          "Råbiffstorsdag – Oxtartar – srirachamayo – krispig potatis – syrad lök – gröna bönor – ört",
+          "Vegetariskt: Bakad sötpotatis – fetostkräm – syrad lök – broccoli – jalapeño – fröer – hjärtsallad"
+        ],
+        "Fredag": [
+          "Nattbakat högrev – ndujasky – sötpotatisstomp – broccoli – jalapeño – frön – örter",
+          "Vegetariskt: Bakad sötpotatis – fetostkräm – syrad lök – broccoli – jalapeño – fröer – hjärtsallad"
+        ]
+      }
+    },
+    {
+      "name": "Eatery",
+      "url": "https://www.eatery.se/lund/lunchmeny",
+      "menus": {
+        "Måndag": [
+          "Krispig kycklingsandwich med jalapeno majo, ingefärspicklad gurka, klyftpotatis med örtsalt, gochujang glaze",
+          "Bakad sej med gubbröra, rostade betor och potatis med dill och spenat, citron och örtmajo",
+          "Pannoumi gryta med kokos, gulcurry, tomat och spenat, mynta raita och basmatiris"
+        ],
+        "Tisdag": [
+          "Bakad fläsksida med honung, äpple och chiliglaze, potatis och jordärtskockspuré, skysås",
+          "Pankostekt kungsfisk med remouladsås, kokt potatis, ärtor, dill och fänkål",
+          "Pad kra pao på sojafärs med gröna sojabönor, chiligroddar, picklad rödkål, jasminris"
+        ],
+        "Onsdag": [
+          "Kalvfärsbiff med svampsås, picklad senapsgurka, timjanpotatis och rostad palsternacka",
+          "Fisk- och skaldjursgryta med saffransaioli, fänkål och kräftor, dill och chilipotatis",
+          "Avokado- och svamptoast med lagrad ost, tomat och tryffelmajo, rostad klyftpotatis"
+        ],
+        "Torsdag": [
+          "Örtbakad kyckling i peppar, dragon och dijongräddsås, gröna bönor och potatismos med rostad vitlök och gräslök",
+          "Bakad sej med vitvinssås, blomkålspuré, dillbakad morot och kokt potatis",
+          "Krämig rigatoni pasta med svamp, tomat och bladspenat, rå marinerad zucchini och lagrad ost"
+        ],
+        "Fredag": [
+          "Tonkatsu med krämig asiatisk kålsallad, japanskt ris med sesam och risvinäger, tonkatsusås",
+          "Lime och ingefärsbakad alaskafilé med röd curry och kokossås, sesam och jordnötscrunch, ris",
+          "Sojafärsbolognese med tagliatelle, bakade tomater & Grana Padano"
+        ]
+      }
+    }
+  ]
+};
+
+/* ---- Feed normaliser -----------------------------------------------------
+   I have not seen mudhead's lt.json, so this tries the likely shapes and
+   falls back if none match. If live data renders blank, log the raw json
+   (see boot) and adjust the branch that matches your feed. ---------------- */
+function looksDayKeyed(o){ return o && typeof o==="object" && DAYS.some(d => d in o); }
+
+function normalizeFeed(json){
+  const meta = { week: json.week ?? json.vecka, range: json.range ?? json.datum, dates: json.dates };
+
+  // Shape A: already internal { restaurants:[{name,url,menus:{Day:val}}] }
+  if (Array.isArray(json.restaurants) && json.restaurants[0]?.menus)
+    return { ...meta, restaurants: json.restaurants };
+
+  // Shape B: day-keyed { "Måndag":[{name,url,menu}], ... } (at root, or under .days/.menu/.meny)
+  const dayObj = [json.days, json.menu, json.meny, json].find(looksDayKeyed);
+  if (dayObj){
+    const byName = new Map();
+    DAYS.forEach(d => (dayObj[d]||[]).forEach(row => {
+      const name = row.name ?? row.restaurant ?? row.restaurang ?? row.title;
+      if (!name) return;
+      if (!byName.has(name)) byName.set(name, { name, url: row.url ?? row.link ?? "#", menus:{} });
+      byName.get(name).menus[d] = row.menu ?? row.meny ?? row.dishes ?? row.text ?? "";
+    }));
+    return { ...meta, restaurants:[...byName.values()] };
+  }
+
+  // Shape C: flat rows [{day,name,url,menu}]
+  const rows = Array.isArray(json) ? json : json.rows;
+  if (Array.isArray(rows)){
+    const byName = new Map();
+    rows.forEach(row => {
+      const d = row.day ?? row.dag, name = row.name ?? row.restaurant ?? row.restaurang;
+      if (!d || !name) return;
+      if (!byName.has(name)) byName.set(name, { name, url: row.url ?? "#", menus:{} });
+      byName.get(name).menus[d] = row.menu ?? row.meny ?? "";
+    });
+    return { ...meta, restaurants:[...byName.values()] };
+  }
+
+  throw new Error("Okänt feed-format – justera normalizeFeed()");
+}
+
+/* ---- Classification: which places earn a card vs get demoted -------------- */
+const asText = v => Array.isArray(v) ? v.join(" / ") : (v ?? "");
+const isBlank = v => { const t = asText(v).trim(); return t==="" || t==="—" || t==="-"; };
+
+function classify(r){
+  const nonBlank = DAYS.map(d => r.menus?.[d]).filter(v => !isBlank(v));
+  if (nonBlank.length === 0) return { cat:"empty", why:"ingen meny", text:"" };
+  if (nonBlank.every(v => /^ingen meny/i.test(asText(v)))) return { cat:"error", why:"meny saknas", text:"" };
+  const distinct = [...new Set(nonBlank.map(asText))];
+  if (distinct.length === 1 && nonBlank.length >= 4) return { cat:"static", why:"samma varje dag", text:distinct[0] };
+  return { cat:"real" };
+}
+
+/* ---- Render --------------------------------------------------------------- */
+let selected = 0;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const todayIndex = () => { const g = new Date().getDay(); return (g>=1 && g<=5) ? g-1 : null; };
+const fmtDate = iso => { try{ return new Date(iso+"T00:00:00").toLocaleDateString("sv-SE",{day:"numeric",month:"short"}); }catch{ return ""; } };
+
+function buildRail(){
+  const rail = document.getElementById("rail"); const ti = todayIndex(); rail.innerHTML = "";
+  DAYS.forEach((d,i)=>{
+    const b = document.createElement("button");
+    b.className = "day" + (ti===i ? " is-today" : "");
+    b.setAttribute("role","tab"); b.setAttribute("aria-selected", String(i===selected));
+    b.innerHTML = `<span class="dow">${SHORT[i]}</span><span class="dnum">${WEEK.dates?.[i] ? fmtDate(WEEK.dates[i]) : ""}</span>`;
+    b.addEventListener("click", ()=>{ selected=i; render(); });
+    rail.appendChild(b);
+  });
+}
+
+function render(){
+  const day = DAYS[selected], ti = todayIndex();
+  document.getElementById("weeklabel").textContent = WEEK.week ? `Vecka ${WEEK.week}${WEEK.range ? " · "+WEEK.range : ""}` : "Dagens lunch";
+  document.querySelectorAll(".day").forEach((b,i)=>b.setAttribute("aria-selected", String(i===selected)));
+
+  document.getElementById("dayHeading").textContent = day;
+  const sub = document.getElementById("daySub");
+  if (ti===null && selected===0){ sub.className="subnote warn"; sub.textContent="Helg — visar måndag"; }
+  else if (ti===selected){ sub.className="subnote"; sub.textContent="Idag"; }
+  else { sub.className="subnote"; sub.textContent = WEEK.dates?.[selected] ? fmtDate(WEEK.dates[selected]) : ""; }
+
+  const cards = document.getElementById("cards"); const others = []; cards.innerHTML = "";
+  WEEK.restaurants.forEach(r=>{
+    const info = classify(r);
+    if (info.cat === "real"){
+      const val = r.menus[day];
+      const dishes = Array.isArray(val) ? val : (isBlank(val) ? [] : String(val).split(" / "));
+      const body = dishes.length
+        ? `<ul class="dishes">${dishes.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`
+        : `<p class="empty-today">Ingen dagsmeny idag</p>`;
+      const card = document.createElement("div"); card.className = "card";
+      card.innerHTML = `<h2><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a></h2>${body}`;
+      cards.appendChild(card);
+    } else others.push({ r, info });
+  });
+
+  document.getElementById("othersList").innerHTML = others.map(({r,info})=>`
+    <li><span class="rname"><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a></span>
+    <span class="tag">${esc(info.why)}</span>
+    ${info.text ? `<span class="static-text">${esc(info.text)}</span>` : ""}</li>`).join("");
+  document.getElementById("others").style.display = others.length ? "" : "none";
+  document.getElementById("othersLabel").textContent = `Övriga ställen (${others.length})`;
+}
+
+function setStatus(live, note){
+  const s = document.getElementById("status");
+  s.className = "status " + (live ? "live" : "stale");
+  document.getElementById("statusText").textContent = note;
+}
+
+/* ---- Boot ----------------------------------------------------------------- */
+async function tryFetch(url){
+  const res = await fetch(url, { cache:"no-store" });
+  if (!res.ok) throw new Error(res.status);
+  return normalizeFeed(await res.json());
+}
+
+async function boot(){
+  const ti = todayIndex(); selected = ti===null ? 0 : ti;
+  buildRail(); render();
+
+  for (const url of ["lt.json", "https://mudhead.se/lt.json"]){
+    try{
+      const data = await tryFetch(url);
+      if (data?.restaurants?.length){
+        WEEK = { ...WEEK, ...data };
+        buildRail(); render();
+        setStatus(true, `Live · ${WEEK.range || "uppdaterad"}`);
+        return;
+      }
+    }catch(e){ /* try next source */ }
+  }
+  setStatus(false, `Sparad vecka ${WEEK.week} (kunde inte hämta live)`);
+}
+boot();
+</script>
+</body>
+</html>
