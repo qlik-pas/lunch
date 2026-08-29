@@ -255,8 +255,22 @@ SOURCES = [
 ]
 
 
+def _previous_menus():
+    """Last run's menus keyed by name, so a flaky source keeps its data."""
+    try:
+        with open("lt.json", encoding="utf-8") as f:
+            old = json.load(f)
+        if old.get("week") != week_info()[0]:        # stale week -> don't reuse
+            return {}
+        return {r["name"]: r["menus"] for r in old.get("restaurants", [])
+                if any(r.get("menus", {}).values())}
+    except (OSError, ValueError, KeyError):
+        return {}
+
+
 def build():
     week, dates, rng = week_info()
+    prev = _previous_menus()
     restaurants, errors = [], []
     for name, url, parser, kind in SOURCES:
         try:
@@ -269,8 +283,10 @@ def build():
                 raise ValueError("parsed 0 dishes")
             restaurants.append({"name": name, "url": url, "menus": menus})
         except Exception as e:                       # one bad source ≠ empty file
-            errors.append(f"{name}: {e}")
-            restaurants.append({"name": name, "url": url, "menus": _empty()})
+            kept = prev.get(name)
+            errors.append(f"{name}: {e}" + (" (kept previous)" if kept else ""))
+            restaurants.append({"name": name, "url": url,
+                                "menus": kept or _empty()})
 
     out = {
         "week": week, "range": rng, "dates": dates,
