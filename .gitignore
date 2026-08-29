@@ -3,3 +3,6 @@ __pycache__/
 .DS_Store
 .venv/
 CLAUDE.md
+
+# local working note, not project content
+HANDOFF.md
