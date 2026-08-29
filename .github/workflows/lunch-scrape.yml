@@ -1,12 +1,17 @@
 # .github/workflows/lunch-scrape.yml
-# Runs scraper.py (Edison, Bricks, Smaka på Kina, Eatery) and commits lt.json.
-# Server-side, so no CORS. Commits only when the menu actually changed.
+# Runs scraper.py (Edison, Bricks, Smaka på Kina, Kantin, Eatery) and commits
+# lt.json. Server-side, so no CORS. scraper.py only rewrites lt.json when the
+# menus themselves change, so each commit here marks a real menu update.
 name: Scrape lunch menus
 
 on:
   schedule:
-    - cron: "5 6 * * 1-5"   # 06:05 UTC ~ 08:05 Europe/Stockholm, Mon–Fri
-  workflow_dispatch:         # run manually from the Actions tab
+    # Times are UTC; Europe/Stockholm is +2 (summer) / +1 (winter).
+    # Monday's weekly menu lands late morning (Kantin ~09:20 local), so sweep it.
+    - cron: "7 6,8,10 * * 1"   # Mon  ~08:07 / 10:07 / 12:07 local
+    - cron: "7 6 * * 2-5"      # Tue–Fri  ~08:07 local
+    - cron: "7 11 * * 2-5"     # Tue–Fri  ~13:07 local — catch mid-week fixes
+  workflow_dispatch:           # run manually from the Actions tab
 
 permissions:
   contents: write

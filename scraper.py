@@ -255,22 +255,26 @@ SOURCES = [
 ]
 
 
-def _previous_menus():
-    """Last run's menus keyed by name, so a flaky source keeps its data."""
+def _load_old():
     try:
         with open("lt.json", encoding="utf-8") as f:
-            old = json.load(f)
-        if old.get("week") != week_info()[0]:        # stale week -> don't reuse
-            return {}
-        return {r["name"]: r["menus"] for r in old.get("restaurants", [])
-                if any(r.get("menus", {}).values())}
-    except (OSError, ValueError, KeyError):
+            return json.load(f)
+    except (OSError, ValueError):
         return {}
+
+
+def _previous_menus(old, week):
+    """Last run's menus keyed by name, so a flaky source keeps its data."""
+    if old.get("week") != week:                      # stale week -> don't reuse
+        return {}
+    return {r["name"]: r["menus"] for r in old.get("restaurants", [])
+            if any(r.get("menus", {}).values())}
 
 
 def build():
     week, dates, rng = week_info()
-    prev = _previous_menus()
+    old = _load_old()
+    prev = _previous_menus(old, week)
     restaurants, errors = [], []
     for name, url, parser, kind in SOURCES:
         try:
@@ -295,6 +299,14 @@ def build():
     }
     if errors:
         out["errors"] = errors
+
+    # Only rewrite when the menus themselves changed, so each commit in the
+    # file's history marks a real menu update (not just a new timestamp).
+    if old.get("restaurants") == restaurants and old.get("week") == week:
+        print(f"lt.json oförändrad — vecka {week}, "
+              f"{len(errors)} fel" + (f": {errors}" if errors else ""))
+        return old
+
     with open("lt.json", "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
     print(f"Wrote lt.json — vecka {week}, {len(restaurants)} ställen"
