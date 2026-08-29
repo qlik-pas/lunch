@@ -7,7 +7,7 @@ Sources:
   Restaurang Edison  https://restaurangedison.se/lunch/   (Elementor HTML)
   Bricks Eatery      https://brickseatery.se/lunch         (Elementor HTML, same template)
   Smaka på Kina      https://www.smakapakina.se/meny       (Wix HTML)
-  Eatery             weekly PDF on static.thatsup.website
+  Eatery             weekly PDF linked from eatery.se/anlaggningar/lund
 
 Network libs (requests, beautifulsoup4, pdfminer.six) are imported lazily inside
 the fetchers so the parsers can be unit-tested with no dependencies installed.
@@ -116,39 +116,57 @@ def parse_eatery(text):
 
 
 KANTIN_DAY = re.compile(r"^(Måndag|Tisdag|Onsdag|Torsdag|Fredag)\b\s*\d{1,2}[/.]\d{1,2}\.?\s*(.*)$")
+KANTIN_STOP = re.compile(r"^(Veckans vegetariska|Månadens alternativ|Dagens|Hitta till|Öppettider|Kontakt|Boka)", re.I)
+
+def _kantin_clean(dish):
+    dish = re.sub(r"\s*–\s*", " – ", dish)      # normalise spacing around en-dashes
+    return re.sub(r"\s{2,}", " ", dish).strip(" –").strip()
 
 def parse_kantin(text):
-    """Kantin: 'Måndag 24/8 <dish>' per day, plus the weekly vegetarian shown daily."""
+    """Kantin: 'Måndag 24/8 <dish>' per day, plus the weekly vegetarian shown daily.
+
+    The live markup routinely breaks one day's dish across several lines — even
+    mid-word — so everything after a day header is concatenated (no separator)
+    until the next day header or a section label."""
     menus = _empty()
     lines = _lines(text)
 
     veg = None
-    for line in lines:
-        m = re.match(r"Veckans vegetariska:\s*(.+)", line, re.I)
+    for i, line in enumerate(lines):
+        m = re.match(r"Veckans vegetariska:?\s*(.*)$", line, re.I)
         if m:
             veg = m.group(1).strip()
+            if not veg and i + 1 < len(lines):   # dish sits on the next line
+                veg = _kantin_clean(lines[i + 1])
             break
 
     def entry(dish):
-        e = [dish]
+        e = [_kantin_clean(dish)]
         if veg:
             e.append("Vegetariskt: " + veg)
         return e
 
-    pending = None
+    day, buf = None, ""
+
+    def flush():
+        nonlocal day, buf
+        if day and buf.strip():
+            menus[day] = entry(buf)
+        day, buf = None, ""
+
     for line in lines:
         m = KANTIN_DAY.match(line)
         if m:
-            day, dish = m.group(1), m.group(2).strip()
-            if dish:
-                menus[day] = entry(dish)
-                pending = None
-            else:
-                pending = day          # dish sits on the next line (mirror layout)
+            flush()
+            day, buf = m.group(1), m.group(2).strip()
             continue
-        if pending:
-            menus[pending] = entry(line.strip())
-            pending = None
+        if day is None:
+            continue
+        if KANTIN_STOP.match(line):
+            flush()
+            continue
+        buf += line.strip()
+    flush()
     return menus
 
 
@@ -174,10 +192,44 @@ def fetch_pdf_text(url):
     return extract_text(io.BytesIO(r.content))
 
 
+EATERY_MENU_PAGE = "https://www.eatery.se/anlaggningar/lund"
+
 def eatery_pdf_url(week):
-    # FRAGILE: path + weekly filename. Override with EATERY_PDF_URL when it breaks.
-    return os.environ.get("EATERY_PDF_URL") or \
-        f"https://static.thatsup.website/462/96942/Lund_sv_V{week}.pdf"
+    """Discover the current Swedish lunch PDF by scraping Eatery's Lund page.
+
+    Both the directory and the weekly filename are unpredictable (the file for
+    week 35 was 'Lund_sv_V35indd.pdf'), so the URL is never constructed. Set
+    EATERY_PDF_URL to override when the scrape can't find it."""
+    override = os.environ.get("EATERY_PDF_URL")
+    if override:
+        return override
+
+    import requests
+    r = requests.get(EATERY_MENU_PAGE, headers=UA, timeout=30)
+    r.raise_for_status()
+    urls = re.findall(r'https?://[^"\'\s]+?\.pdf', r.text, re.I)
+    seen, cands = set(), []
+    for u in urls:
+        u = u.split("?")[0]
+        if u not in seen:
+            seen.add(u)
+            cands.append(u)
+
+    def score(u):
+        low = u.lower()
+        s = 0
+        if "lund_sv" in low:
+            s += 10
+        if re.search(rf"v0*{week}(?!\d)", low):
+            s += 5
+        if "_eng" in low or "cafe" in low or "café" in low or "catering" in low:
+            s -= 20
+        return s
+
+    best = max(cands, key=score, default=None)
+    if best is None or score(best) < 10:
+        raise ValueError(f"no Swedish lunch PDF link on {EATERY_MENU_PAGE}")
+    return best
 
 
 # --------------------------------------------------------------------------- #
@@ -203,8 +255,22 @@ SOURCES = [
 ]
 
 
+def _previous_menus():
+    """Last run's menus keyed by name, so a flaky source keeps its data."""
+    try:
+        with open("lt.json", encoding="utf-8") as f:
+            old = json.load(f)
+        if old.get("week") != week_info()[0]:        # stale week -> don't reuse
+            return {}
+        return {r["name"]: r["menus"] for r in old.get("restaurants", [])
+                if any(r.get("menus", {}).values())}
+    except (OSError, ValueError, KeyError):
+        return {}
+
+
 def build():
     week, dates, rng = week_info()
+    prev = _previous_menus()
     restaurants, errors = [], []
     for name, url, parser, kind in SOURCES:
         try:
@@ -217,8 +283,10 @@ def build():
                 raise ValueError("parsed 0 dishes")
             restaurants.append({"name": name, "url": url, "menus": menus})
         except Exception as e:                       # one bad source ≠ empty file
-            errors.append(f"{name}: {e}")
-            restaurants.append({"name": name, "url": url, "menus": _empty()})
+            kept = prev.get(name)
+            errors.append(f"{name}: {e}" + (" (kept previous)" if kept else ""))
+            restaurants.append({"name": name, "url": url,
+                                "menus": kept or _empty()})
 
     out = {
         "week": week, "range": rng, "dates": dates,

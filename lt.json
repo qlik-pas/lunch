@@ -8,7 +8,7 @@
     "2026-08-27",
     "2026-08-28"
   ],
-  "generated": "2026-08-29T09:58:41+00:00",
+  "generated": "2026-08-29T12:44:19+02:00",
   "restaurants": [
     {
       "name": "Restaurang Edison",
@@ -110,19 +110,24 @@
       "url": "https://www.kantinlund.se/",
       "menus": {
         "Måndag": [
-          "Pluma – gochujang beurre blan"
+          "Pluma – gochujang beurre blanć – broccoli – kimchipicklad gurka – ris – frön – koriander",
+          "Vegetariskt: Bakad sötpotatis – fetostkräm – syrad lök – broccoli – jalapeño – fröer – hjärtsallad"
         ],
         "Tisdag": [
-          "Kycklinglårfilé – grön curry – bönor – groddar – paprika – hjärtsallad – rökt mandel – ris"
+          "Kycklinglårfilé – grön curry – bönor – groddar – paprika – hjärtsallad – rökt mandel – ris",
+          "Vegetariskt: Bakad sötpotatis – fetostkräm – syrad lök – broccoli – jalapeño – fröer – hjärtsallad"
         ],
         "Onsdag": [
-          "Nattbakad karré – bbqsås – majskräm – rostad lök – pickles – rostad potatis"
+          "Nattbakad karré – bbqsås – majskräm – rostad lök – pickles – rostad potatis",
+          "Vegetariskt: Bakad sötpotatis – fetostkräm – syrad lök – broccoli – jalapeño – fröer – hjärtsallad"
         ],
         "Torsdag": [
-          "Råbiffstorsdag – Oxtartar – srirachamayo – krispig potatis – syrad lök – gröna bönor – ört"
+          "Råbiffstorsdag – Oxtartar – srirachamayo – krispig potatis – syrad lök – gröna bönor – ört",
+          "Vegetariskt: Bakad sötpotatis – fetostkräm – syrad lök – broccoli – jalapeño – fröer – hjärtsallad"
         ],
         "Fredag": [
-          "Nattbakat högrev – n’dujasky – sötpotatisstomp – broccoli – jalapeño – frön – örter"
+          "Nattbakat högrev – n’dujasky – sötpotatisstomp – broccoli – jalapeño – frön – örter",
+          "Vegetariskt: Bakad sötpotatis – fetostkräm – syrad lök – broccoli – jalapeño – fröer – hjärtsallad"
         ]
       }
     },
@@ -130,15 +135,33 @@
       "name": "Eatery",
       "url": "https://www.eatery.se/lund/lunchmeny",
       "menus": {
-        "Måndag": [],
-        "Tisdag": [],
-        "Onsdag": [],
-        "Torsdag": [],
-        "Fredag": []
+        "Måndag": [
+          "Oxbringa med senapssky, krossade rotfrukter, rostad potatis med persilja och bakad lök,  citronmarinerad morot",
+          "Stekt kummel, zucchini och spenatpuré, skagensås och kokt potatis",
+          "Marockans kikärtsgryta med aubergine, tomat och picklad rödkål och kryddigt ris"
+        ],
+        "Tisdag": [
+          "Citron och rosmarin bakad kyckling med krämig västerbotten risoni och rostad tomatsås",
+          "Pecorino & spenat gratinerad sej med vitvinssås, krossad potatis & citron",
+          "Ricotta & spenatfylld canneloni med aubergineragu, pesto och fänkål"
+        ],
+        "Onsdag": [
+          "BBQ revben med rostad majssalsa, chipotlemajo och spicy kålsallad, klyftpotatis",
+          "Thai fishcakes med ingefära, chili och citrongräs med sojabakad broccoli, sojasås med honung,",
+          "chili och ingefära, jasminris med lime",
+          "Mapo tofu med svart bönpasta, chiliolja och krispig lök, picklad lök och jasminris"
+        ],
+        "Torsdag": [
+          "Salsicciaragu med tryffeldoftande svamp, gremolata, lagrad ost",
+          "Bakad kungsfisk med dillhollandaise, rotselleri och fänkålssallad, potatismos",
+          "Krämig potatis- och purjolökssoppa med vitlöksbröd & örtolja, krispig potatis"
+        ],
+        "Fredag": [
+          "Örtbakad pluma med chimmi churri, friterad klyftpotatis, rostad vitlöksaioli",
+          "Bakad sej med pesto, tomat och ruccola, vit bönpuré med rostad vitlök och citron, rostad potatis",
+          "Rödbetsrisotto med chevré, rostade valnötter, spenat och ruccola sallad"
+        ]
       }
     }
-  ],
-  "errors": [
-    "Eatery: 404 Client Error: Not Found for url: https://static.thatsup.website/462/96942/Lund_sv_V35.pdf"
   ]
 }
