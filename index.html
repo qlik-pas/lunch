@@ -325,9 +325,9 @@ let WEEK = {
       "url": "https://www.eatery.se/lund/lunchmeny",
       "menus": {
         "Måndag": ["Oxbringa med senapssky, krossade rotfrukter, rostad potatis med persilja och bakad lök,  citronmarinerad morot","Stekt kummel, zucchini och spenatpuré, skagensås och kokt potatis","Marockans kikärtsgryta med aubergine, tomat och picklad rödkål och kryddigt ris"],
-        "Tisdag": ["Citron och rosmarin bakad kyckling med krämig västerbotten risoni och rostad tomatsås","Pecorino & spenat gratinerad sej med vitvinssås, krossad potatis & citron","Ricotta & spenatfylld canneloni med aubergineragu, pesto och fänkål","På huset: något sött till kaffet"],
+        "Tisdag": ["Citron och rosmarin bakad kyckling med krämig västerbotten risoni och rostad tomatsås","Pecorino & spenat gratinerad sej med vitvinssås, krossad potatis & citron","Ricotta & spenatfylld canneloni med aubergineragu, pesto och fänkål","Bonus: något sött till kaffet"],
         "Onsdag": ["BBQ revben med rostad majssalsa, chipotlemajo och spicy kålsallad, klyftpotatis","Thai fishcakes med ingefära, chili och citrongräs med sojabakad broccoli, sojasås med honung,","chili och ingefära, jasminris med lime","Mapo tofu med svart bönpasta, chiliolja och krispig lök, picklad lök och jasminris"],
-        "Torsdag": ["Salsicciaragu med tryffeldoftande svamp, gremolata, lagrad ost","Bakad kungsfisk med dillhollandaise, rotselleri och fänkålssallad, potatismos","Krämig potatis- och purjolökssoppa med vitlöksbröd & örtolja, krispig potatis","På huset: pannkakor, lättvispad grädde och hemmagjord sylt"],
+        "Torsdag": ["Salsicciaragu med tryffeldoftande svamp, gremolata, lagrad ost","Bakad kungsfisk med dillhollandaise, rotselleri och fänkålssallad, potatismos","Krämig potatis- och purjolökssoppa med vitlöksbröd & örtolja, krispig potatis","Bonus: pannkakor, lättvispad grädde och hemmagjord sylt"],
         "Fredag": ["Örtbakad pluma med chimmi churri, friterad klyftpotatis, rostad vitlöksaioli","Bakad sej med pesto, tomat och ruccola, vit bönpuré med rostad vitlök och citron, rostad potatis","Rödbetsrisotto med chevré, rostade valnötter, spenat och ruccola sallad"]
       }
     }
@@ -356,8 +356,8 @@ function dishItem(raw){
   const s = String(raw).trim().replace(/\s{2,}/g, " ");
   let m = s.match(/^vegetarisk[t]?\s*:\s*(.+)/i);
   if (m) return `<li class="veg"><span class="veg-chip">Grönt</span>${esc(m[1])}</li>`;
-  m = s.match(/^på huset\s*:\s*(.+)/i);
-  if (m) return `<li class="treat"><span class="treat-chip">På huset</span>${esc(m[1])}</li>`;
+  m = s.match(/^bonus\s*:\s*(.+)/i);
+  if (m) return `<li class="treat"><span class="treat-chip">Bonus</span>${esc(m[1])}</li>`;
   return `<li>${esc(s)}</li>`;
 }
 

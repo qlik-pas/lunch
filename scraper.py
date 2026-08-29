@@ -59,7 +59,7 @@ def claimed_week(text):
 # --------------------------------------------------------------------------- #
 PRICE = re.compile(r"\d{2,3}\s*:-")
 
-# "På huset:" marks a free extra the restaurant throws in on a given weekday
+# "Bonus:" marks a free extra the restaurant throws in on a given weekday
 # (Bricks' Thursday äppelpaj, Eatery's pancakes). It rides in the day's dish
 # list like the "Vegetariskt:" line does; index.html gives it its own marker.
 TREAT = re.compile(r"\bbjuder\b", re.I)
@@ -74,7 +74,7 @@ def parse_elementor(text):
     """Edison & Bricks: dish is the line after each 'NNN:-' price label.
 
     Lines that aren't priced are normally ignored, except a 'Vi bjuder …'
-    sentence under a day — that's the free weekday extra, kept as 'På huset: …'.
+    sentence under a day — that's the free weekday extra, kept as 'Bonus: …'.
     """
     menus = _empty()
     day = None
@@ -91,7 +91,7 @@ def parse_elementor(text):
             want_dish = False
             continue
         if day and TREAT.search(line):
-            menus[day].append("På huset: " + _treat_text(line))
+            menus[day].append("Bonus: " + _treat_text(line))
     return menus
 
 
@@ -142,7 +142,7 @@ def parse_eatery(text):
             continue
         if _is_eatery_promo(line):
             if TREAT.search(line):                    # "Pancake Thursday: Vi bjuder …"
-                menus[day].append("På huset: " + _treat_text(line))
+                menus[day].append("Bonus: " + _treat_text(line))
             continue
         if len(menus[day]) < 4:
             menus[day].append(line)
