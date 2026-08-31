@@ -8,7 +8,7 @@
     "2026-09-03",
     "2026-09-04"
   ],
-  "generated": "2026-08-31T07:31:30+00:00",
+  "generated": "2026-08-31T13:35:02+00:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -25,7 +25,7 @@
           "Mozzarella, creme- fraiche, kantarell, italiensk hårdost och gräslök"
         ],
         "Onsdag": [
-          "Bondomelett med krämig waldorfsallad, valnötter, romansallad, rädisa och gurka",
+          "Bondomelett med krämig coleslaw, valnötter, romansallad, rädisa och gurka",
           "Stekt sill med klassiska tillbehör",
           "Bibimbap med blandat kött, ostronsås, pickles, kimchisallad, ris och stekt ägg",
           "Mozzarella, creme- fraiche, kantarell, italiensk hårdost och gräslök"
@@ -166,5 +166,8 @@
         ]
       }
     }
+  ],
+  "errors": [
+    "Kantin: parsed 0 dishes (kept previous)"
   ]
 }
