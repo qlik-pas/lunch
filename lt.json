@@ -1,14 +1,14 @@
 {
-  "week": 35,
-  "range": "24–28 aug",
+  "week": 36,
+  "range": "31–4 aug",
   "dates": [
-    "2026-08-24",
-    "2026-08-25",
-    "2026-08-26",
-    "2026-08-27",
-    "2026-08-28"
+    "2026-08-31",
+    "2026-09-01",
+    "2026-09-02",
+    "2026-09-03",
+    "2026-09-04"
   ],
-  "generated": "2026-08-29T14:21:00+02:00",
+  "generated": "2026-08-31T07:31:30+00:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -33,7 +33,8 @@
         "Torsdag": [
           "Grönsakswok med soja, chili, hoisinsås, böngroddar, ris och stekt ägg",
           "Pannbiff med stekt lök, potatismos, lingon, timjansky, morot och persilja",
-          "Mozzarella, creme- fraiche, kantarell, italiensk hårdost och gräslök"
+          "Mozzarella, creme- fraiche, kantarell, italiensk hårdost och gräslök",
+          "Bonus: äppelpaj med grädde"
         ],
         "Fredag": [
           "Ost och lökpaj med coleslaw, rostad blomkål, bladspenat och picklad rödlök",
@@ -47,32 +48,32 @@
       "url": "https://www.eatery.se/lund/lunchmeny",
       "menus": {
         "Måndag": [
-          "Oxbringa med senapssky, krossade rotfrukter, rostad potatis med persilja och bakad lök,  citronmarinerad morot",
-          "Stekt kummel, zucchini och spenatpuré, skagensås och kokt potatis",
-          "Marockans kikärtsgryta med aubergine, tomat och picklad rödkål och kryddigt ris"
+          "Ostpanerad fläskschnitzel med basilika och tomatsås, rostad zucchinisallad, buljongkokt ris",
+          "Pocherad kummel, skirat smör, pepparrot, rödbetor, kapris & potatispuré",
+          "Zucchinifritters med rostad klyftpotatis, tzatziki & picklad paprika"
         ],
         "Tisdag": [
-          "Citron och rosmarin bakad kyckling med krämig västerbotten risoni och rostad tomatsås",
-          "Pecorino & spenat gratinerad sej med vitvinssås, krossad potatis & citron",
-          "Ricotta & spenatfylld canneloni med aubergineragu, pesto och fänkål",
+          "Örtbakad fläskkarré med råstekt potatis & pepparsås, rostad pumpa med fänkål",
+          "Chilibakad sejfilé, hummersås, räkor, picklad fänkål & örtslungad potatis",
+          "Linscurry med rostad paprika, jasminris & marinerad rödkålssallad",
           "Bonus: något sött till kaffet"
         ],
         "Onsdag": [
-          "BBQ revben med rostad majssalsa, chipotlemajo och spicy kålsallad, klyftpotatis",
-          "Thai fishcakes med ingefära, chili och citrongräs med sojabakad broccoli, sojasås med honung,",
-          "chili och ingefära, jasminris med lime",
-          "Mapo tofu med svart bönpasta, chiliolja och krispig lök, picklad lök och jasminris"
+          "Pannbiff med stekt lök, pressgurka, skysås och kokt potatis",
+          "Räkmacka med äggröra, avokado, dillmajo och potatissallad",
+          "Vegetarisk lasagne med Grana Padano & ruccola"
         ],
         "Torsdag": [
-          "Salsicciaragu med tryffeldoftande svamp, gremolata, lagrad ost",
-          "Bakad kungsfisk med dillhollandaise, rotselleri och fänkålssallad, potatismos",
-          "Krämig potatis- och purjolökssoppa med vitlöksbröd & örtolja, krispig potatis",
+          "Mexikansk “Asado de Puerco” gryta på fläskkött, ancho chili, salsa verde & basmatiris, picklad morot",
+          "Vannameiräkor i krämig tomatsås med soltorkad tomat, babyspenat & picklad fänkål, linguine med chili och vitlök",
+          "Krämig jordärtskockssoppa, gräslök & persiljeolja, rostad blomkål och krispig lök",
           "Bonus: pannkakor, lättvispad grädde och hemmagjord sylt"
         ],
         "Fredag": [
-          "Örtbakad pluma med chimmi churri, friterad klyftpotatis, rostad vitlöksaioli",
-          "Bakad sej med pesto, tomat och ruccola, vit bönpuré med rostad vitlök och citron, rostad potatis",
-          "Rödbetsrisotto med chevré, rostade valnötter, spenat och ruccola sallad"
+          "Krispig kycklingburgare med chipotle och jalapeno majo, sötpotatispommes och lagrad ost,",
+          "krispig kålsallad med lime och mango",
+          "Friterad kummel med dillmajonnäs, picklade grönsaker & kokt potatis med smör och gräslök",
+          "Bakad aubergine med salladsost, pesto, matvete och krispig rotfrukt, pumpafrö"
         ]
       }
     },
@@ -113,29 +114,29 @@
       "url": "https://restaurangedison.se/lunch/",
       "menus": {
         "Måndag": [
-          "Pumpagryta med halloumi serveras med ris, äpple & spenat",
-          "Panerad torsk med remoulad, kokt potatis, fänkål & ärtor",
-          "Kabanoss med surkål, potatismos, bakat äpple & persilja"
+          "Shakshuka med bulgur, fetaost, ägg63 & persilja",
+          "Pannbiff med svampsås, timjanrostad potatis & äpplekompott",
+          "Indisk biffgryta med ris, rostad lök & mangopickles"
         ],
         "Tisdag": [
-          "Veg pytt med senapscreme, persilja & ägg 64",
-          "Panerad schnitzel med kryddsmör, stekt potatis & rostad broccoli",
-          "Kalkonfärslimpa med bakad purjo, äpple, rostad potatis & cidersenapssky"
+          "Äggakaka med rökt morot, lingon, bakat äpple & persilja",
+          "Pasta med rökt skinka, ostsås, broccoli & gröna blad",
+          "Kyckling med citronsås, vaxbönor, bakad morot & rostad potatis"
         ],
         "Onsdag": [
-          "Röda linsplättar med citronkeso, krassesallad & bränd kål",
-          "Stekt sill med potatispuré, lingon, dill, lök & smör",
-          "Pasta med \"salsiccia\", vitt vin, zucchini & friterad salvia"
+          "Svampsoppa med tryffel, krassefärskost & osttoast",
+          "Halstrad marulk med kräftbuljong, krondill & ostronskivling",
+          "Grillad karré med chimichurri, rostad sötpotatis & gröna bönor"
         ],
         "Torsdag": [
-          "Ärtwallenbergare med citronsmör, potatispuré & bakad morot",
-          "Fläskestek med sockerstekt potatis, äpplekompott, rödkål & sky",
-          "Persisk kyckling med libabröd, saffran, tomatsallad & sesamyoghurt"
+          "Blomkålsbiff med cheddarost, gremolata & rädissallad",
+          "Wallenbergare med potatispuré, ärtor, lingon & brynt smör",
+          "Creolsk kycklinggryta med stark korv, paprika, okra & ris"
         ],
         "Fredag": [
-          "Tomatsoppa med risonisallad, bakad rödlök, basilikacreme & ostscones",
-          "Nattabakad oxe med dragonmajo, rostad potatis & tomatsallad",
-          "Thailändsk laab på fläsk med rostat ris, koriander, böngroddar & ingefärsmajo"
+          "PadThai med tofu, jordnötsvinaigrette, lime & koriander",
+          "Grillad pluma med rödlök-& rödvinssmör, vitlöksfrästa haricotverts & friterad potatis",
+          "Fishtaco med tortillabröd, chilimajo, grön tomatsalsa & klyftpotatis"
         ]
       }
     },
@@ -165,8 +166,5 @@
         ]
       }
     }
-  ],
-  "errors": [
-    "Bricks Eatery: sidan visar vecka 36, väntar på vecka 35 (kept previous)"
   ]
 }
