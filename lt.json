@@ -8,7 +8,7 @@
     "2026-09-03",
     "2026-09-04"
   ],
-  "generated": "2026-08-31T13:35:02+00:00",
+  "generated": "2026-08-31T22:04:27+02:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -145,29 +145,26 @@
       "url": "https://www.kantinlund.se/",
       "menus": {
         "Måndag": [
-          "Pluma – gochujang beurre blanć – broccoli – kimchipicklad gurka – ris – frön – koriander",
-          "Vegetariskt: Bakad sötpotatis – fetostkräm – syrad lök – broccoli – jalapeño – fröer – hjärtsallad"
+          "Kalv tri-tip – bakad tomat – potatis & vitlöksstomp – borettanalök – sky – rostad lök – ört",
+          "Vegetariskt: Rostad spetskål – gochujang smörsås – sojabönor – cashewnötter – frissé – potatis – rostade frön"
         ],
         "Tisdag": [
-          "Kycklinglårfilé – grön curry – bönor – groddar – paprika – hjärtsallad – rökt mandel – ris",
-          "Vegetariskt: Bakad sötpotatis – fetostkräm – syrad lök – broccoli – jalapeño – fröer – hjärtsallad"
+          "Nattbakad fläsksida – dillpickles hot sauce – blomkål – kål & äppleslaw – frön – potatis",
+          "Vegetariskt: Rostad spetskål – gochujang smörsås – sojabönor – cashewnötter – frissé – potatis – rostade frön"
         ],
         "Onsdag": [
-          "Nattbakad karré – bbqsås – majskräm – rostad lök – pickles – rostad potatis",
-          "Vegetariskt: Bakad sötpotatis – fetostkräm – syrad lök – broccoli – jalapeño – fröer – hjärtsallad"
+          "Kycklingsteak – chilimayo – tomat & bönsalsa – paksoi – sky- potatis",
+          "Vegetariskt: Rostad spetskål – gochujang smörsås – sojabönor – cashewnötter – frissé – potatis – rostade frön"
         ],
         "Torsdag": [
-          "Råbiffstorsdag – Oxtartar – srirachamayo – krispig potatis – syrad lök – gröna bönor – ört",
-          "Vegetariskt: Bakad sötpotatis – fetostkräm – syrad lök – broccoli – jalapeño – fröer – hjärtsallad"
+          "Råbiffstorsdag – Oxtartar – tryffelaioli – rostad broccoli – picklad lök – parmesan – frön – krasse",
+          "Vegetariskt: Rostad spetskål – gochujang smörsås – sojabönor – cashewnötter – frissé – potatis – rostade frön"
         ],
         "Fredag": [
-          "Nattbakat högrev – n’dujasky – sötpotatisstomp – broccoli – jalapeño – frön – örter",
-          "Vegetariskt: Bakad sötpotatis – fetostkräm – syrad lök – broccoli – jalapeño – fröer – hjärtsallad"
+          "Nattbakad oxkind – dragonmajo – rostad morot – pickles – chilisky – potatis – ört",
+          "Vegetariskt: Rostad spetskål – gochujang smörsås – sojabönor – cashewnötter – frissé – potatis – rostade frön"
         ]
       }
     }
-  ],
-  "errors": [
-    "Kantin: parsed 0 dishes (kept previous)"
   ]
 }

@@ -149,19 +149,27 @@ def parse_eatery(text):
     return menus
 
 
-KANTIN_DAY = re.compile(r"^(Måndag|Tisdag|Onsdag|Torsdag|Fredag)\b\s*\d{1,2}[/.]\d{1,2}\.?\s*(.*)$")
-KANTIN_STOP = re.compile(r"^(Veckans vegetariska|Månadens alternativ|Dagens|Hitta till|Öppettider|Kontakt|Boka)", re.I)
+# A day line is just the day name now ("Måndag"), with the dish on the
+# following line(s). Older markup put a date + the dish on the line itself
+# ("Måndag 24/8 <dish>"); the optional group keeps that working.
+KANTIN_DAY = re.compile(
+    r"^(Måndag|Tisdag|Onsdag|Torsdag|Fredag)\b\s*(?:\d{1,2}[/.]\d{1,2}\.?)?\s*(.*)$")
+KANTIN_STOP = re.compile(
+    r"^(Veckans vegetariska|Månadens alternativ|Dagens|Hitta till|Öppettider|"
+    r"Köket stänger|Vår syn|Kontakt|Boka)", re.I)
 
 def _kantin_clean(dish):
+    dish = dish.replace("\xa0", " ")
     dish = re.sub(r"\s*–\s*", " – ", dish)      # normalise spacing around en-dashes
     return re.sub(r"\s{2,}", " ", dish).strip(" –").strip()
 
 def parse_kantin(text):
-    """Kantin: 'Måndag 24/8 <dish>' per day, plus the weekly vegetarian shown daily.
+    """Kantin: a bare 'Måndag' line, then that day's dish on the next line(s),
+    plus 'Veckans vegetariska:' (dish on its own next line) shown for every day.
 
-    The live markup routinely breaks one day's dish across several lines — even
-    mid-word — so everything after a day header is concatenated (no separator)
-    until the next day header or a section label."""
+    Everything between a day header and the next header / section label is
+    joined, so a dish wrapped across lines still comes through. 'Månadens
+    alternativ:' and the closing sections are skipped."""
     menus = _empty()
     lines = _lines(text)
 
@@ -184,13 +192,13 @@ def parse_kantin(text):
 
     def flush():
         nonlocal day, buf
-        if day and buf.strip():
+        if day and buf.strip() and not menus[day]:    # first fill wins
             menus[day] = entry(buf)
         day, buf = None, ""
 
     for line in lines:
         m = KANTIN_DAY.match(line)
-        if m:
+        if m and not menus[m.group(1)]:               # a fresh day header
             flush()
             day, buf = m.group(1), m.group(2).strip()
             continue
@@ -199,7 +207,7 @@ def parse_kantin(text):
         if KANTIN_STOP.match(line):
             flush()
             continue
-        buf += line.strip()
+        buf = f"{buf} {line}".strip() if buf else line
     flush()
     return menus
 
