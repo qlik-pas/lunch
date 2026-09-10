@@ -441,12 +441,18 @@ function setStatus(live, note){
   document.getElementById("statusText").textContent = note;
 }
 
-function setGenerated(iso){
-  if (!iso) return;
+function setChecked(menuIso){
+  /* The live fetch just succeeded, so "now" is when the menu was last checked.
+     `generated` is when the menu content last changed — usually Monday, and
+     that's fine for a weekly menu, so only spell it out when it's not today. */
+  const now = new Date();
+  let line = `Kontrollerad kl ${now.toLocaleTimeString("sv-SE",{hour:"2-digit",minute:"2-digit"})}`;
   try {
-    const t = new Date(iso).toLocaleString("sv-SE",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
-    document.getElementById("genLine").textContent = `Uppdaterad ${t}`;
+    const menu = new Date(menuIso);
+    if (!isNaN(menu) && menu.toDateString() !== now.toDateString())
+      line += ` · menyn från ${menu.toLocaleDateString("sv-SE",{weekday:"short",day:"numeric",month:"short"})}`;
   } catch {}
+  document.getElementById("genLine").textContent = line;
 }
 
 /* ---- boot ----------------------------------------------------------------- */
@@ -463,7 +469,7 @@ async function boot(){
       WEEK = data;
       buildRail(); render();
       setStatus(true, "Live");
-      setGenerated(WEEK.generated);
+      setChecked(WEEK.generated);
       return;
     }
     throw new Error("tomt svar");
