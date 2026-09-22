@@ -132,6 +132,7 @@
     font-size:13.5px; font-weight:600; padding:9px 16px 9px 14px;
     border-radius:999px; display:inline-flex; align-items:center; gap:7px;
     transition:border-color .15s ease, transform .15s ease;
+    touch-action:none; user-select:none; -webkit-user-select:none; -webkit-touch-callout:none;
   }
   .picker-btn:hover{border-color:var(--ink-soft)}
   .picker-btn:active{transform:scale(.96)}
@@ -170,18 +171,29 @@
     display:flex; align-items:center;
     min-height:calc(1.45em * 2);   /* room for 2 lines so every row is the same height */
   }
+  .reel-item .pdish-text{
+    /* Every row's height feeds the reel's scroll math — a dish long enough to
+       wrap to 3 lines would grow just that row and break the alignment of
+       every row after it. Clamp to 2 lines with an ellipsis so it can't. */
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
   .picker-again{
     flex:none; align-self:stretch; display:flex; align-items:center;
     appearance:none; border:0; border-left:1px solid var(--hair); background:none;
     color:var(--faint); font-size:17px; line-height:1; padding:0 14px; cursor:pointer;
     transition:color .15s ease;
+    touch-action:none; user-select:none; -webkit-user-select:none; -webkit-touch-callout:none;
   }
   .picker-again:hover{color:var(--ink)}
   .picker-again:focus-visible{outline:2px solid var(--ink); outline-offset:-2px}
+  .picker-again.spinning{animation:spin .5s linear infinite}
 
   @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes reel-loop{to{transform:translateY(var(--loop-dist))}}
   @media (prefers-reduced-motion: reduce){
     .picker-btn.spinning .spin-ico{animation:none}
+    .picker-again.spinning{animation:none}
   }
 
   /* ---- places --------------------------------------------------------- */
@@ -539,7 +551,35 @@ function setChecked(menuIso){
 
 /* ---- random pick ------------------------------------------------------ */
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-let pendingSpinDone = null;   // guards against a stale listener from an interrupted spin
+let cancelPendingLanding = null;   // guards against a stale landing from an interrupted spin
+
+/* Waits for the reel's transform transition to finish, then runs `onDone`
+   exactly once. A `transitionend` normally does it, but that event has
+   turned out to occasionally not fire at all (observed in testing — the
+   transform still reaches its target, the event just never arrives), which
+   would otherwise leave the reel permanently stuck mid-scroll. A timeout
+   slightly past the transition's own duration races it as a backstop. */
+function raceLanding(reel, transitionMs, onDone){
+  if (cancelPendingLanding) cancelPendingLanding();
+  let finished = false;
+  const finish = () => {
+    if (finished) return;
+    finished = true;
+    reel.removeEventListener("transitionend", onTransitionEnd);
+    clearTimeout(timer);
+    cancelPendingLanding = null;
+    onDone();
+  };
+  const onTransitionEnd = (e) => { if (e.propertyName === "transform") finish(); };
+  reel.addEventListener("transitionend", onTransitionEnd);
+  const timer = setTimeout(finish, transitionMs + 200);
+  cancelPendingLanding = () => {
+    finished = true;
+    reel.removeEventListener("transitionend", onTransitionEnd);
+    clearTimeout(timer);
+    cancelPendingLanding = null;
+  };
+}
 
 function todaysPickPool(){
   const day = DAYS[selected], pool = [];
@@ -556,13 +596,14 @@ function todaysPickPool(){
 }
 
 function reelRow(p){
+  const pdish = s => `<span class="pdish"><span class="pdish-text">${esc(s)}</span></span>`;
   return p
     ? `<div class="reel-item">` +
         `<span class="shield" aria-hidden="true" style="--hue:${p.hue}">${esc([...p.name][0] || "•")}</span>` +
-        `<span class="ptext"><span class="pname">${esc(p.name)}</span><span class="pdish">${esc(p.dish)}</span></span>` +
+        `<span class="ptext"><span class="pname">${esc(p.name)}</span>${pdish(p.dish)}</span>` +
       `</div>`
     : `<div class="reel-item"><span class="ptext"><span class="pname">Inget att slumpa</span>` +
-      `<span class="pdish">Ingen dagsmeny hittades för den här dagen</span></span></div>`;
+      `${pdish("Ingen dagsmeny hittades för den här dagen")}</span></div>`;
 }
 
 /* Lay the reel out flat (no transition) showing exactly one row, and report
@@ -603,25 +644,23 @@ function spinPick(){
   const rowH = layReelFlat(rows);
   const reel = document.getElementById("reel");
 
-  // A re-spin before the previous one finished (fast double-click, or a spin
-  // that never got to complete — e.g. the tab was backgrounded and never got
-  // a paint frame) would otherwise leave that old listener attached; it'd
-  // fire later on this new transition and tint/land with its own stale pick.
-  if (pendingSpinDone){ reel.removeEventListener("transitionend", pendingSpinDone); }
-
   btn.classList.add("spinning");
   void reel.offsetHeight;                               // commit the flat state first
+  const spinMs = 1600;
   requestAnimationFrame(() => {
     // One continuous, eased scroll — smoother and easier to read than
-    // swapping text every tick — decelerating hard into the landing, like a
-    // wheel coasting to a stop rather than a slot machine's mechanical clack.
-    reel.style.transition = "transform 1.6s cubic-bezier(.11,.72,.13,1)";
+    // swapping text every tick — decelerating into the landing, like a wheel
+    // coasting to a stop. Was cubic-bezier(.11,.72,.13,1), which measured out
+    // as reaching 100% of the distance by 40% of the duration and then
+    // sitting dead still for the rest — by the time cleanup ran (icon
+    // stopping, background tinting in, row-swap), the reel had looked
+    // finished for the best part of a second, so cleanup read as a glitch
+    // rather than a landing. This curve keeps easing visibly right up to
+    // the end, so cleanup lands the instant it looks like it should.
+    reel.style.transition = `transform ${spinMs}ms cubic-bezier(.22,1,.36,1)`;
     reel.style.transform = `translateY(${-spins * rowH}px)`;
   });
-  pendingSpinDone = function done(e){
-    if (e.propertyName !== "transform") return;
-    reel.removeEventListener("transitionend", pendingSpinDone);
-    pendingSpinDone = null;
+  raceLanding(reel, spinMs, () => {
     btn.classList.remove("spinning");
     tintResult(final.hue);
     // Only the landed row matters now — drop the 8 that scrolled past so
@@ -630,12 +669,102 @@ function spinPick(){
     reel.style.transition = "none";
     reel.style.transform = "translateY(0)";
     reel.innerHTML = reelRow(final);
-  };
-  reel.addEventListener("transitionend", pendingSpinDone);
+  });
 }
 
-document.getElementById("pickBtn").addEventListener("click", spinPick);
-document.getElementById("pickAgain").addEventListener("click", spinPick);
+/* ---- press-and-hold spin ------------------------------------------------ */
+// Holding the button spins for as long as you hold it (a seamless looping
+// reel, so there's no fixed "how long is a spin" to wait out), and releasing
+// commits: freeze exactly where it was, then a short decelerating roll onto
+// a freshly chosen dish — the same landing feel as spinPick's fixed spin,
+// just starting from wherever the hold let go instead of from a standing
+// start. Keyboard activation (Enter/Space) can't "hold", so it still gets
+// spinPick's complete fixed-duration spin via the click fallback below.
+let holding = false;
+
+function startSpin(btn){
+  if (holding) return;
+  const pool = todaysPickPool();
+  const result = document.getElementById("pickResult");
+  result.hidden = false;
+  result.classList.remove("landed");
+  btn.setAttribute("aria-expanded", "true");
+
+  if (!pool.length){ layReelFlat([null]); return; }
+  if (reduceMotion || pool.length === 1){
+    const final = pool[Math.floor(Math.random() * pool.length)];
+    layReelFlat([final]);
+    tintResult(final.hue);
+    return;
+  }
+
+  holding = true;
+  btn.classList.add("spinning");
+
+  const loopRows = 14;
+  const rows = Array.from({length: loopRows}, () => pool[Math.floor(Math.random() * pool.length)]);
+  const reel = document.getElementById("reel");
+  const rowH = layReelFlat(rows.concat(rows));   // duplicated so the loop wraps seamlessly
+  reel.style.setProperty("--loop-dist", `${-loopRows * rowH}px`);
+  reel.style.animation = "reel-loop 2.2s linear infinite";
+}
+
+function stopSpin(btn){
+  if (!holding) return;
+  holding = false;
+  btn.classList.remove("spinning");
+
+  const pool = todaysPickPool();
+  const reel = document.getElementById("reel");
+
+  // Freeze the loop at its exact current position — no snapping, no jump —
+  // so the landing roll continues the same motion instead of restarting it.
+  const m = new DOMMatrix(getComputedStyle(reel).transform);
+  reel.style.animation = "none";
+  reel.style.transition = "none";
+  reel.style.transform = `translateY(${m.m42}px)`;
+  void reel.offsetHeight;
+
+  if (!pool.length){ layReelFlat([null]); return; }
+  const final = pool[Math.floor(Math.random() * pool.length)];
+
+  const rowH = reel.children[0].offsetHeight;
+  const extra = 4;                               // a few more decelerating rows, then land
+  const extraRows = Array.from({length: extra}, () => pool[Math.floor(Math.random() * pool.length)]);
+  extraRows.push(final);
+  const oldLen = reel.children.length;
+  reel.insertAdjacentHTML("beforeend", extraRows.map(reelRow).join(""));
+  void reel.offsetHeight;   // commit the frozen position + new rows before animating away from it
+
+  const landMs = 800;
+  requestAnimationFrame(() => {
+    reel.style.transition = `transform ${landMs}ms cubic-bezier(.22,1,.36,1)`;   // see spinPick's note on the curve
+    reel.style.transform = `translateY(${-(oldLen + extra) * rowH}px)`;
+  });
+  raceLanding(reel, landMs, () => {
+    tintResult(final.hue);
+    reel.style.transition = "none";
+    reel.style.transform = "translateY(0)";
+    reel.innerHTML = reelRow(final);
+  });
+}
+
+function wirePress(el){
+  el.addEventListener("pointerdown", (e) => {
+    if (e.pointerType === "mouse" && e.button !== 0) return;   // left button / touch / pen only
+    startSpin(el);
+  });
+  el.addEventListener("pointerup", () => stopSpin(el));
+  el.addEventListener("pointercancel", () => stopSpin(el));
+  el.addEventListener("pointerleave", () => stopSpin(el));     // dragged off while held = released
+  el.addEventListener("click", (e) => {
+    if (e.detail !== 0) return;                                // 0 = keyboard activation, not a pointer click already handled above
+    spinPick();
+  });
+}
+
+wirePress(document.getElementById("pickBtn"));
+wirePress(document.getElementById("pickAgain"));
 
 /* ---- boot ----------------------------------------------------------------- */
 async function boot(){
