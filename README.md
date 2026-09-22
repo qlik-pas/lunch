@@ -13,7 +13,8 @@ renders whichever day it is.
 - `.github/workflows/lunch-scrape.yml` — scheduled scrape + commit-on-change
 
 ## Run locally
-    pip install requests beautifulsoup4 pdfminer.six
+    pip install requests beautifulsoup4 playwright==1.63.0
+    playwright install chromium   # only needed once, for the Eatery source
     python scraper.py
 
 ## Deploy
@@ -22,5 +23,7 @@ renders whichever day it is.
 3. Actions tab → run **Scrape lunch menus** once
 4. Open `https://qlik-pas.github.io/lunch/`
 
-If Eatery's PDF path changes, set `EATERY_PDF_URL` in the workflow.
+Eatery's menu is a client-rendered board (menu.pej.io) and needs headless
+Chromium to scrape — see `scraper.py`'s `fetch_rendered_text`. If the URL
+moves, set `EATERY_MENU_URL` in the workflow.
 Kantin is scraped from kantinlund.se (robots-disallowed; swap to a mirror if it 403s).

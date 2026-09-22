@@ -7,12 +7,14 @@ Sources:
   Restaurang Edison  https://restaurangedison.se/lunch/   (Elementor HTML)
   Bricks Eatery      https://brickseatery.se/lunch         (Elementor HTML, same template)
   Smaka på Kina      https://www.smakapakina.se/meny       (Wix HTML)
-  Eatery             weekly PDF linked from eatery.se/anlaggningar/lund
+  Kantin             https://www.kantinlund.se/            (WP HTML)
+  Eatery             menu.pej.io TV/kiosk board — client-rendered, needs
+                     headless Chromium (see fetch_rendered_text)
 
-Network libs (requests, beautifulsoup4, pdfminer.six) are imported lazily inside
+Network libs (requests, beautifulsoup4, playwright) are imported lazily inside
 the fetchers so the parsers can be unit-tested with no dependencies installed.
 """
-import os, io, re, json, datetime
+import os, re, json, time, datetime
 
 DAYS = ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag"]
 UPPER = {d.upper(): d for d in DAYS}
@@ -63,11 +65,13 @@ PRICE = re.compile(r"\d{2,3}\s*:-")
 # (Bricks' Thursday äppelpaj, Eatery's pancakes). It rides in the day's dish
 # list like the "Vegetariskt:" line does; index.html gives it its own marker.
 TREAT = re.compile(r"\bbjuder\b", re.I)
+_EMOJI_TAIL = re.compile(r"[\U0001F300-\U0001FAFF☀-➿️]+\s*$")
 
 def _treat_text(line):
     """Reduce a 'Vi bjuder …' sentence to just the thing being offered."""
     s = re.sub(r".*?\bbjuder\b\s*", "", line, flags=re.I)      # drop up to "bjuder"
     s = re.sub(r"^(våra\s+lunchgäster\s+)?på\s+", "", s, flags=re.I)
+    s = _EMOJI_TAIL.sub("", s)                                  # Eatery's "…! 🍬"
     return s.strip(" .!–-").strip() or line.strip()
 
 def parse_elementor(text):
@@ -119,33 +123,54 @@ def parse_kina(text):
     return menus
 
 
-def _is_eatery_footer(line):
-    if line.isupper() and len(line) > 3:            # GENERÖS…, LUNCH, LUND, MENY V34
-        return True
-    return bool(re.match(r"(Med reservation|10\s*%)", line, re.I))
-
-def _is_eatery_promo(line):
-    return bool(re.match(r"(Sweet\s|Pancake\s)", line, re.I)) or "bjuder" in line.lower()
+def _sentence_case(name):
+    """ALL-CAPS dish name -> normal case. A word with no vowel (BBQ, DNA, …)
+    is left as-is instead of being lowered into nonsense."""
+    words = name.split()
+    out = []
+    for i, w in enumerate(words):
+        if not re.search(r"[AEIOUYÅÄÖ]", w, re.I):
+            out.append(w)
+        elif i == 0:
+            out.append(w.capitalize())
+        else:
+            out.append(w.lower())
+    return " ".join(out)
 
 def parse_eatery(text):
-    """Eatery PDF: 3 dishes under each UPPERCASE day; skip promo/footer lines."""
+    """Eatery's menu board (menu.pej.io, client-rendered — see
+    fetch_rendered_text). Each day is a header, then three dish blocks: an
+    ALL-CAPS name line followed by a description line. Some days add a
+    'SWEET TUESDAY' / 'PANCAKE THURSDAY' block — also ALL-CAPS name + a
+    '… vi bjuder på …' line — kept as a 'Bonus:' entry instead of a dish."""
     menus = _empty()
+    lines = _lines(text)
     day = None
-    for line in _lines(text):
+    i, n = 0, len(lines)
+    while i < n:
+        line = lines[i]
         if line.upper() in UPPER:
             day = UPPER[line.upper()]
+            i += 1
             continue
-        if day is None:
+        if day is None:                                # banner text before Måndag
+            i += 1
             continue
-        if _is_eatery_footer(line):
-            day = None
+        if TREAT.search(line):
+            menus[day].append("Bonus: " + _treat_text(line))
+            i += 1
             continue
-        if _is_eatery_promo(line):
-            if TREAT.search(line):                    # "Pancake Thursday: Vi bjuder …"
-                menus[day].append("Bonus: " + _treat_text(line))
-            continue
-        if len(menus[day]) < 4:
-            menus[day].append(line)
+        if line.isupper() and len(line) > 2:
+            nxt = lines[i + 1] if i + 1 < n else ""
+            if TREAT.search(nxt):                       # this caps line was a promo title
+                i += 1
+                continue
+            if nxt and not nxt.isupper():                # name + description pair
+                if len(menus[day]) < 4:
+                    menus[day].append(f"{_sentence_case(line)} {nxt.strip()}")
+                i += 2
+                continue
+        i += 1                                          # stray line, ignore
     return menus
 
 
@@ -226,52 +251,42 @@ def fetch_html_text(url):
     return soup.get_text("\n")
 
 
-def fetch_pdf_text(url):
-    import requests
-    from pdfminer.high_level import extract_text
-    r = requests.get(url, headers=UA, timeout=30)
-    r.raise_for_status()
-    return extract_text(io.BytesIO(r.content))
+# Eatery moved its menu off a weekly PDF onto a TV/kiosk display board built
+# as a client-rendered app (menu.pej.io) — the data streams in over Firestore,
+# so raw HTML never contains it. EATERY_MENU_URL overrides if the URL changes.
+EATERY_MENU_URL = os.environ.get("EATERY_MENU_URL") or "https://menu.pej.io/ea/menus/lund"
 
+def fetch_rendered_text(url, timeout=25):
+    """Render a JS-only page in headless Chromium and return its visible text.
+    Only Eatery needs this today; kept generic in case another source goes
+    client-rendered too.
 
-EATERY_MENU_PAGE = "https://www.eatery.se/anlaggningar/lund"
-
-def eatery_pdf_url(week):
-    """Discover the current Swedish lunch PDF by scraping Eatery's Lund page.
-
-    Both the directory and the weekly filename are unpredictable (the file for
-    week 35 was 'Lund_sv_V35indd.pdf'), so the URL is never constructed. Set
-    EATERY_PDF_URL to override when the scrape can't find it."""
-    override = os.environ.get("EATERY_PDF_URL")
-    if override:
-        return override
-
-    import requests
-    r = requests.get(EATERY_MENU_PAGE, headers=UA, timeout=30)
-    r.raise_for_status()
-    urls = re.findall(r'https?://[^"\'\s]+?\.pdf', r.text, re.I)
-    seen, cands = set(), []
-    for u in urls:
-        u = u.split("?")[0]
-        if u not in seen:
-            seen.add(u)
-            cands.append(u)
-
-    def score(u):
-        low = u.lower()
-        s = 0
-        if "lund_sv" in low:
-            s += 10
-        if re.search(rf"v0*{week}(?!\d)", low):
-            s += 5
-        if "_eng" in low or "cafe" in low or "café" in low or "catering" in low:
-            s -= 20
-        return s
-
-    best = max(cands, key=score, default=None)
-    if best is None or score(best) < 10:
-        raise ValueError(f"no Swedish lunch PDF link on {EATERY_MENU_PAGE}")
-    return best
+    The menu streams in over a live connection (Firestore), so "networkidle"
+    never fires. Worse, the page renders in two steps: every day header shows
+    up immediately with a "Saknar info" placeholder under it, then the real
+    dishes replace those placeholders a moment later — so waiting for the day
+    names alone (or a single fixed sleep) reliably grabs the placeholder page
+    instead. Poll until the placeholder text is gone, or the timeout runs out
+    and we return whatever's there — parse_eatery/build() already treat a bad
+    scrape as a transient failure and fall back to the previous good menu."""
+    from playwright.sync_api import sync_playwright
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        try:
+            page = browser.new_page(user_agent=UA["User-Agent"])
+            page.goto(url, wait_until="domcontentloaded", timeout=30000)
+            deadline = time.monotonic() + timeout
+            text = ""
+            while time.monotonic() < deadline:
+                text = page.inner_text("body")
+                ready = ("saknar info" not in text.lower()
+                         and all(d.upper() in text.upper() for d in DAYS))
+                if ready:
+                    break
+                page.wait_for_timeout(500)
+            return text
+        finally:
+            browser.close()
 
 
 # --------------------------------------------------------------------------- #
@@ -290,7 +305,7 @@ def week_info(today=None):
 SOURCES = [
     # name, public url, parser, fetch-kind   —   order here drives the page order
     ("Bricks Eatery",     "https://brickseatery.se/lunch",      parse_elementor, "html"),
-    ("Eatery",            "https://www.eatery.se/lund/lunchmeny", parse_eatery,  "pdf"),
+    ("Eatery",            "https://www.eatery.se/lund/lunchmeny", parse_eatery,  "rendered"),
     ("Smaka på Kina",     "https://www.smakapakina.se/meny",    parse_kina,      "html"),
     ("Restaurang Edison", "https://restaurangedison.se/lunch/", parse_elementor, "html"),
     ("Kantin",            "https://www.kantinlund.se/",         parse_kantin,    "html"),
@@ -320,8 +335,8 @@ def build():
     restaurants, errors = [], []
     for name, url, parser, kind in SOURCES:
         try:
-            if kind == "pdf":
-                text = fetch_pdf_text(eatery_pdf_url(week))
+            if kind == "rendered":
+                text = fetch_rendered_text(EATERY_MENU_URL)
             else:
                 text = fetch_html_text(url)
             menus = parser(text)

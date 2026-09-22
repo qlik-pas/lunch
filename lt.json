@@ -8,7 +8,7 @@
     "2026-09-24",
     "2026-09-25"
   ],
-  "generated": "2026-09-21T08:01:26+00:00",
+  "generated": "2026-09-22T20:36:17+02:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -47,11 +47,33 @@
       "name": "Eatery",
       "url": "https://www.eatery.se/lund/lunchmeny",
       "menus": {
-        "Måndag": [],
-        "Tisdag": [],
-        "Onsdag": [],
-        "Torsdag": [],
-        "Fredag": []
+        "Måndag": [
+          "Sticky koreansk kyckling med gochujang och soja, gurksallad, sesamris och salladslök",
+          "Färskostbakad hokifilé med betor, spenat, hasselnötter och brynt smör, dillkräm och koktpotatis",
+          "Indisk kokos och linsgryta med bakad pumpa, picklade rotfrukter, mynta yoghurt och basmatiris med nejlika och stjärnanis"
+        ],
+        "Tisdag": [
+          "BBQ marinerad pluma med majskräm, tomatsallad och klyftpotatis, chilibéarnaise",
+          "Sesamstekt kungsfisk med sesammarinerad morot, krämig vittvinsås med miso och ingefära, potatismos med brynt smör",
+          "Dan dan nudlar med spicy vegfärs, jordnötter, salladslök och sesam",
+          "Bonus: något sött till kaffet"
+        ],
+        "Onsdag": [
+          "Färsbiffar med krämig svampsås, rostad potatis, grönabönor med bakad lök och bacon",
+          "Vin och tomatbakad kummel med basilikapesto, marinerad paprika och zucchini, bakad potatis med gremolata",
+          "Majs och yoghurtplättar med pico de gallo, rostad sötpotatissallad och rökt paprikakräm"
+        ],
+        "Torsdag": [
+          "Kyckling thai curry med kokos, röd curry, lime och ingefära, rostad broccoli och jasminris",
+          "Kungsfisk bakad i skaldjursfond med saffransås, dill picklad kålrot, potatis med gräslök, purjolök och smör",
+          "Krispig halloumiburgare med grön aioli, picklad gurka, sallad och klyftpotatis",
+          "Bonus: pannkakor, lättvispad grädde och hemmagjord sylt"
+        ],
+        "Fredag": [
+          "Dansk fläskstekburgare med rödkål, örtmajo, äpple och rostad klyftpotatis",
+          "Panerad tilapia med remoulad, kokt potatis och picklade rotfrukter",
+          "Gnocchi med tomatsås sallad på oliver, kronärtskocka och spenat, ruccola och lagrad ost"
+        ]
       }
     },
     {
@@ -143,8 +165,5 @@
         ]
       }
     }
-  ],
-  "errors": [
-    "Eatery: no Swedish lunch PDF link on https://www.eatery.se/anlaggningar/lund"
   ]
 }
