@@ -117,6 +117,45 @@
   }
   .subnote .date{font-variant-numeric:tabular-nums}
 
+  /* ---- random pick ------------------------------------------------------ */
+  .picker{margin:0 0 var(--step)}
+  .picker-btn{
+    appearance:none; cursor:pointer; border:1px solid var(--hair-strong);
+    background:var(--surface); color:var(--ink); font-family:var(--sans);
+    font-size:13.5px; font-weight:600; padding:9px 16px 9px 14px;
+    border-radius:999px; display:inline-flex; align-items:center; gap:7px;
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .picker-btn:hover{border-color:var(--ink-soft)}
+  .picker-btn:active{transform:scale(.96)}
+  .picker-btn:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
+  .picker-btn .spin-ico{font-size:15px; line-height:1; display:inline-block}
+  .picker-btn.spinning .spin-ico{animation:spin .5s linear infinite}
+
+  .picker-result{
+    margin-top:12px; display:flex; align-items:center; gap:11px;
+    padding:12px 14px; border:1px solid var(--hair); border-radius:var(--radius-sm);
+    background:var(--surface-2);
+  }
+  .picker-result .ptext{flex:1; min-width:0}
+  .picker-result .pname{
+    font-family:var(--serif); font-weight:500; font-size:14px; color:var(--ink);
+    display:block;
+  }
+  .picker-result .pdish{font-size:13.5px; color:var(--ink-soft); display:block; margin-top:2px}
+  .picker-again{
+    flex:none; appearance:none; border:0; background:none; color:var(--faint);
+    font-size:17px; line-height:1; padding:4px; cursor:pointer;
+    transition:color .15s ease;
+  }
+  .picker-again:hover{color:var(--ink)}
+  .picker-again:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
+
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion: reduce){
+    .picker-btn.spinning .spin-ico{animation:none}
+  }
+
   /* ---- places --------------------------------------------------------- */
   .places{display:flex; flex-direction:column}
   .place{
@@ -235,6 +274,13 @@
   <div class="dayhead">
     <h1 class="heading" id="dayHeading">—</h1>
     <p class="subnote" id="daySub"></p>
+  </div>
+
+  <div class="picker">
+    <button class="picker-btn" id="pickBtn" type="button" aria-expanded="false" aria-controls="pickResult">
+      <span class="spin-ico" aria-hidden="true">↻</span> Vad blir det?
+    </button>
+    <div class="picker-result" id="pickResult" hidden></div>
   </div>
 
   <div class="places" id="places"></div>
@@ -389,6 +435,8 @@ function render(){
   document.querySelectorAll(".day").forEach((b,i) => b.setAttribute("aria-selected", String(i === selected)));
 
   document.getElementById("dayHeading").textContent = day;
+  document.getElementById("pickResult").hidden = true;
+  document.getElementById("pickBtn").setAttribute("aria-expanded", "false");
   const sub = document.getElementById("daySub");
   const dateStr = WEEK.dates?.[selected] ? fmtDate(WEEK.dates[selected]) : "";
   if (ti === null && selected === 0){
@@ -454,6 +502,63 @@ function setChecked(menuIso){
   } catch {}
   document.getElementById("genLine").textContent = line;
 }
+
+/* ---- random pick ------------------------------------------------------ */
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function todaysPickPool(){
+  const day = DAYS[selected], pool = [];
+  WEEK.restaurants.forEach(r => {
+    const dishes = Array.isArray(r.menus[day]) ? r.menus[day] : [];
+    dishes.forEach(raw => {
+      const s = String(raw).trim();
+      if (!s || /^bonus\s*:/i.test(s)) return;              // not a lunch choice
+      const veg = s.match(/^vegetarisk[t]?\s*:\s*(.+)/i);
+      pool.push({ name: r.name, hue: hueFor(r.name), dish: veg ? veg[1] : s });
+    });
+  });
+  return pool;
+}
+
+function renderPick(p){
+  const el = document.getElementById("pickResult");
+  el.hidden = false;
+  el.innerHTML =
+    `<span class="shield" aria-hidden="true" style="--hue:${p.hue}">${esc([...p.name][0] || "•")}</span>` +
+    `<span class="ptext"><span class="pname">${esc(p.name)}</span><span class="pdish">${esc(p.dish)}</span></span>` +
+    `<button class="picker-again" type="button" aria-label="Slumpa igen">↺</button>`;
+  el.querySelector(".picker-again").addEventListener("click", spinPick);
+}
+
+function spinPick(){
+  const pool = todaysPickPool();
+  const result = document.getElementById("pickResult");
+  document.getElementById("pickBtn").setAttribute("aria-expanded", "true");
+
+  if (!pool.length){
+    result.hidden = false;
+    result.innerHTML = `<span class="ptext"><span class="pname">Inget att slumpa</span>` +
+      `<span class="pdish">Ingen dagsmeny hittades för den här dagen</span></span>`;
+    return;
+  }
+  const final = pool[Math.floor(Math.random() * pool.length)];
+  if (reduceMotion || pool.length === 1){ renderPick(final); return; }
+
+  const btn = document.getElementById("pickBtn");
+  btn.classList.add("spinning");
+  let n = 0;
+  const spins = 9;
+  const iv = setInterval(() => {
+    renderPick(pool[Math.floor(Math.random() * pool.length)]);
+    if (++n >= spins){
+      clearInterval(iv);
+      btn.classList.remove("spinning");
+      renderPick(final);
+    }
+  }, 70);
+}
+
+document.getElementById("pickBtn").addEventListener("click", spinPick);
 
 /* ---- boot ----------------------------------------------------------------- */
 async function boot(){
