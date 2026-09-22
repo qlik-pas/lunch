@@ -133,34 +133,38 @@
   .picker-btn.spinning .spin-ico{animation:spin .5s linear infinite}
 
   .picker-result{
-    margin-top:12px; display:flex; align-items:center; gap:11px;
-    padding:12px 14px; border:1px solid var(--hair); border-radius:var(--radius-sm);
-    background:var(--surface-2);
+    margin-top:12px; display:flex; align-items:stretch;
+    border:1px solid var(--hair); border-radius:var(--radius-sm);
+    background:var(--surface-2); overflow:hidden;
   }
-  .picker-result.flip{animation:pick-flip .32s cubic-bezier(.22,.7,.25,1) both}
-  @keyframes pick-flip{from{opacity:.3; transform:translateY(3px) scale(.98)} to{opacity:1; transform:none}}
-  .picker-result .ptext{flex:1; min-width:0}
-  .picker-result .pname{
+  .reel-mask{flex:1; min-width:0; overflow:hidden}
+  .reel{display:flex; flex-direction:column; will-change:transform}
+  .reel-item{
+    flex:none; display:flex; align-items:center; gap:11px; padding:12px 14px;
+  }
+  .reel-item .shield{flex:none}
+  .reel-item .ptext{flex:1; min-width:0}
+  .reel-item .pname{
     font-family:var(--serif); font-weight:500; font-size:14px; color:var(--ink);
     display:block;
   }
-  .picker-result .pdish{
+  .reel-item .pdish{
     font-size:13.5px; line-height:1.45; color:var(--ink-soft); margin-top:2px;
     display:flex; align-items:center;
-    min-height:calc(1.45em * 2);   /* room for 2 lines so the card doesn't jump while spinning */
+    min-height:calc(1.45em * 2);   /* room for 2 lines so every row is the same height */
   }
   .picker-again{
-    flex:none; appearance:none; border:0; background:none; color:var(--faint);
-    font-size:17px; line-height:1; padding:4px; cursor:pointer;
+    flex:none; align-self:stretch; display:flex; align-items:center;
+    appearance:none; border:0; border-left:1px solid var(--hair); background:none;
+    color:var(--faint); font-size:17px; line-height:1; padding:0 14px; cursor:pointer;
     transition:color .15s ease;
   }
   .picker-again:hover{color:var(--ink)}
-  .picker-again:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
+  .picker-again:focus-visible{outline:2px solid var(--ink); outline-offset:-2px}
 
   @keyframes spin{to{transform:rotate(360deg)}}
   @media (prefers-reduced-motion: reduce){
     .picker-btn.spinning .spin-ico{animation:none}
-    .picker-result.flip{animation:none}
   }
 
   /* ---- places --------------------------------------------------------- */
@@ -289,7 +293,10 @@
     <button class="picker-btn" id="pickBtn" type="button" aria-expanded="false" aria-controls="pickResult">
       <span class="spin-ico" aria-hidden="true">↻</span> Vad blir det?
     </button>
-    <div class="picker-result" id="pickResult" hidden></div>
+    <div class="picker-result" id="pickResult" hidden>
+      <div class="reel-mask" id="reelMask"><div class="reel" id="reel"></div></div>
+      <button class="picker-again" id="pickAgain" type="button" aria-label="Slumpa igen">↺</button>
+    </div>
   </div>
 
   <details class="others" id="others" hidden>
@@ -527,56 +534,65 @@ function todaysPickPool(){
   return pool;
 }
 
-function renderPick(p){
-  const el = document.getElementById("pickResult");
-  el.hidden = false;
-  el.classList.remove("flip");
-  void el.offsetWidth;                    // restart the animation on repeat calls
-  el.classList.add("flip");
-  el.innerHTML =
-    `<span class="shield" aria-hidden="true" style="--hue:${p.hue}">${esc([...p.name][0] || "•")}</span>` +
-    `<span class="ptext"><span class="pname">${esc(p.name)}</span><span class="pdish">${esc(p.dish)}</span></span>` +
-    `<button class="picker-again" type="button" aria-label="Slumpa igen">↺</button>`;
-  el.querySelector(".picker-again").addEventListener("click", spinPick);
+function reelRow(p){
+  return p
+    ? `<div class="reel-item">` +
+        `<span class="shield" aria-hidden="true" style="--hue:${p.hue}">${esc([...p.name][0] || "•")}</span>` +
+        `<span class="ptext"><span class="pname">${esc(p.name)}</span><span class="pdish">${esc(p.dish)}</span></span>` +
+      `</div>`
+    : `<div class="reel-item"><span class="ptext"><span class="pname">Inget att slumpa</span>` +
+      `<span class="pdish">Ingen dagsmeny hittades för den här dagen</span></span></div>`;
+}
+
+/* Lay the reel out flat (no transition) showing exactly one row, and report
+   that row's real rendered height so the mask/scroll distance can match it
+   exactly regardless of how long the dish text turns out to be. */
+function layReelFlat(rows){
+  const reel = document.getElementById("reel"), mask = document.getElementById("reelMask");
+  reel.style.transition = "none";
+  reel.style.transform = "translateY(0)";
+  reel.innerHTML = rows.map(reelRow).join("");
+  const rowH = reel.children[0].offsetHeight;
+  mask.style.height = rowH + "px";
+  return rowH;
 }
 
 function spinPick(){
   const pool = todaysPickPool();
   const result = document.getElementById("pickResult");
-  document.getElementById("pickBtn").setAttribute("aria-expanded", "true");
-
-  if (!pool.length){
-    result.hidden = false;
-    result.innerHTML = `<span class="ptext"><span class="pname">Inget att slumpa</span>` +
-      `<span class="pdish">Ingen dagsmeny hittades för den här dagen</span></span>`;
-    return;
-  }
-  const final = pool[Math.floor(Math.random() * pool.length)];
-  if (reduceMotion || pool.length === 1){ renderPick(final); return; }
-
   const btn = document.getElementById("pickBtn");
-  btn.classList.add("spinning");
+  btn.setAttribute("aria-expanded", "true");
+  result.hidden = false;
 
-  // Quick flicker at first, then each step waits a little longer than the
-  // last (eased, not linear) so it visibly decelerates into the landing
-  // instead of just stopping — like a wheel coasting to a stop.
-  const steps = 9, minDelay = 45, maxDelay = 260;
-  let step = 0;
-  const tick = () => {
-    if (step >= steps){
-      btn.classList.remove("spinning");
-      renderPick(final);
-      return;
-    }
-    renderPick(pool[Math.floor(Math.random() * pool.length)]);
-    step++;
-    const eased = 1 - Math.pow(1 - step / steps, 3);   // cubic ease-out
-    setTimeout(tick, minDelay + eased * (maxDelay - minDelay));
-  };
-  tick();
+  if (!pool.length){ layReelFlat([null]); return; }
+
+  const final = pool[Math.floor(Math.random() * pool.length)];
+  if (reduceMotion || pool.length === 1){ layReelFlat([final]); return; }
+
+  const spins = 8;                                     // random rows before landing
+  const rows = Array.from({length: spins}, () => pool[Math.floor(Math.random() * pool.length)]);
+  rows.push(final);
+  const rowH = layReelFlat(rows);
+  const reel = document.getElementById("reel");
+
+  btn.classList.add("spinning");
+  void reel.offsetHeight;                               // commit the flat state first
+  requestAnimationFrame(() => {
+    // One continuous, eased scroll — smoother and easier to read than
+    // swapping text every tick — decelerating hard into the landing, like a
+    // wheel coasting to a stop rather than a slot machine's mechanical clack.
+    reel.style.transition = "transform 1.6s cubic-bezier(.11,.72,.13,1)";
+    reel.style.transform = `translateY(${-spins * rowH}px)`;
+  });
+  reel.addEventListener("transitionend", function done(e){
+    if (e.propertyName !== "transform") return;
+    reel.removeEventListener("transitionend", done);
+    btn.classList.remove("spinning");
+  });
 }
 
 document.getElementById("pickBtn").addEventListener("click", spinPick);
+document.getElementById("pickAgain").addEventListener("click", spinPick);
 
 /* ---- boot ----------------------------------------------------------------- */
 async function boot(){
