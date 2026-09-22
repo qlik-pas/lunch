@@ -14,7 +14,7 @@ Sources:
 Network libs (requests, beautifulsoup4, playwright) are imported lazily inside
 the fetchers so the parsers can be unit-tested with no dependencies installed.
 """
-import os, re, json, datetime
+import os, re, json, time, datetime
 
 DAYS = ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag"]
 UPPER = {d.upper(): d for d in DAYS}
@@ -256,21 +256,35 @@ def fetch_html_text(url):
 # so raw HTML never contains it. EATERY_MENU_URL overrides if the URL changes.
 EATERY_MENU_URL = os.environ.get("EATERY_MENU_URL") or "https://menu.pej.io/ea/menus/lund"
 
-def fetch_rendered_text(url):
+def fetch_rendered_text(url, timeout=25):
     """Render a JS-only page in headless Chromium and return its visible text.
     Only Eatery needs this today; kept generic in case another source goes
-    client-rendered too."""
+    client-rendered too.
+
+    The menu streams in over a live connection (Firestore), so "networkidle"
+    never fires. Worse, the page renders in two steps: every day header shows
+    up immediately with a "Saknar info" placeholder under it, then the real
+    dishes replace those placeholders a moment later — so waiting for the day
+    names alone (or a single fixed sleep) reliably grabs the placeholder page
+    instead. Poll until the placeholder text is gone, or the timeout runs out
+    and we return whatever's there — parse_eatery/build() already treat a bad
+    scrape as a transient failure and fall back to the previous good menu."""
     from playwright.sync_api import sync_playwright
     with sync_playwright() as p:
         browser = p.chromium.launch()
         try:
             page = browser.new_page(user_agent=UA["User-Agent"])
             page.goto(url, wait_until="domcontentloaded", timeout=30000)
-            # The menu streams in over a live connection (Firestore), so
-            # "networkidle" never fires — wait for real content instead.
-            page.wait_for_selector("text=/Måndag/i", timeout=20000)
-            page.wait_for_timeout(500)     # let the rest of the push render
-            return page.inner_text("body")
+            deadline = time.monotonic() + timeout
+            text = ""
+            while time.monotonic() < deadline:
+                text = page.inner_text("body")
+                ready = ("saknar info" not in text.lower()
+                         and all(d.upper() in text.upper() for d in DAYS))
+                if ready:
+                    break
+                page.wait_for_timeout(500)
+            return text
         finally:
             browser.close()
 
