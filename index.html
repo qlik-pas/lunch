@@ -136,6 +136,15 @@
     margin-top:12px; display:flex; align-items:stretch;
     border:1px solid var(--hair); border-radius:var(--radius-sm);
     background:var(--surface-2); overflow:hidden;
+    transition:background-color .35s ease;
+  }
+  .picker-result.landed{
+    background:color-mix(in srgb, hsl(var(--hue) 58% 46%) 16%, var(--surface-2));
+  }
+  @media (prefers-color-scheme: dark){
+    .picker-result.landed{
+      background:color-mix(in srgb, hsl(var(--hue) 55% 55%) 18%, var(--surface-2));
+    }
   }
   .reel-mask{flex:1; min-width:0; overflow:hidden}
   .reel{display:flex; flex-direction:column; will-change:transform}
@@ -519,6 +528,7 @@ function setChecked(menuIso){
 
 /* ---- random pick ------------------------------------------------------ */
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let pendingSpinDone = null;   // guards against a stale listener from an interrupted spin
 
 function todaysPickPool(){
   const day = DAYS[selected], pool = [];
@@ -557,23 +567,36 @@ function layReelFlat(rows){
   return rowH;
 }
 
+function tintResult(hue){
+  const result = document.getElementById("pickResult");
+  result.style.setProperty("--hue", hue);
+  result.classList.add("landed");
+}
+
 function spinPick(){
   const pool = todaysPickPool();
   const result = document.getElementById("pickResult");
   const btn = document.getElementById("pickBtn");
   btn.setAttribute("aria-expanded", "true");
   result.hidden = false;
+  result.classList.remove("landed");                    // neutral again until it lands
 
   if (!pool.length){ layReelFlat([null]); return; }
 
   const final = pool[Math.floor(Math.random() * pool.length)];
-  if (reduceMotion || pool.length === 1){ layReelFlat([final]); return; }
+  if (reduceMotion || pool.length === 1){ layReelFlat([final]); tintResult(final.hue); return; }
 
   const spins = 8;                                     // random rows before landing
   const rows = Array.from({length: spins}, () => pool[Math.floor(Math.random() * pool.length)]);
   rows.push(final);
   const rowH = layReelFlat(rows);
   const reel = document.getElementById("reel");
+
+  // A re-spin before the previous one finished (fast double-click, or a spin
+  // that never got to complete — e.g. the tab was backgrounded and never got
+  // a paint frame) would otherwise leave that old listener attached; it'd
+  // fire later on this new transition and tint/land with its own stale pick.
+  if (pendingSpinDone){ reel.removeEventListener("transitionend", pendingSpinDone); }
 
   btn.classList.add("spinning");
   void reel.offsetHeight;                               // commit the flat state first
@@ -584,11 +607,20 @@ function spinPick(){
     reel.style.transition = "transform 1.6s cubic-bezier(.11,.72,.13,1)";
     reel.style.transform = `translateY(${-spins * rowH}px)`;
   });
-  reel.addEventListener("transitionend", function done(e){
+  pendingSpinDone = function done(e){
     if (e.propertyName !== "transform") return;
-    reel.removeEventListener("transitionend", done);
+    reel.removeEventListener("transitionend", pendingSpinDone);
+    pendingSpinDone = null;
     btn.classList.remove("spinning");
-  });
+    tintResult(final.hue);
+    // Only the landed row matters now — drop the 8 that scrolled past so
+    // there's just one row in the DOM again (nothing for a screen reader or
+    // anything else walking the page to trip over).
+    reel.style.transition = "none";
+    reel.style.transform = "translateY(0)";
+    reel.innerHTML = reelRow(final);
+  };
+  reel.addEventListener("transitionend", pendingSpinDone);
 }
 
 document.getElementById("pickBtn").addEventListener("click", spinPick);
