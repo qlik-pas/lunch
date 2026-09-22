@@ -31,12 +31,22 @@ jobs:
           python-version: "3.12"
 
       - name: Install deps
-        run: pip install requests beautifulsoup4 pdfminer.six
+        run: pip install requests beautifulsoup4 playwright==1.63.0
+
+      - name: Cache Playwright's Chromium
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-1.63.0-${{ runner.os }}
+
+      - name: Install Chromium
+        # Downloads only the browsers/OS libs not already restored from cache.
+        run: playwright install --with-deps chromium
 
       - name: Scrape
-        # If Eatery ever changes its PDF path, set the current URL here to override:
+        # Eatery's menu board URL if it ever moves:
         # env:
-        #   EATERY_PDF_URL: https://static.thatsup.website/462/96942/Lund_sv_V34.pdf
+        #   EATERY_MENU_URL: https://menu.pej.io/ea/menus/lund
         run: python scraper.py
 
       - name: Commit if changed
