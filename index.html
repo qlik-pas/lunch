@@ -641,9 +641,15 @@ function spinPick(){
   const spinMs = 1600;
   requestAnimationFrame(() => {
     // One continuous, eased scroll — smoother and easier to read than
-    // swapping text every tick — decelerating hard into the landing, like a
-    // wheel coasting to a stop rather than a slot machine's mechanical clack.
-    reel.style.transition = `transform ${spinMs}ms cubic-bezier(.11,.72,.13,1)`;
+    // swapping text every tick — decelerating into the landing, like a wheel
+    // coasting to a stop. Was cubic-bezier(.11,.72,.13,1), which measured out
+    // as reaching 100% of the distance by 40% of the duration and then
+    // sitting dead still for the rest — by the time cleanup ran (icon
+    // stopping, background tinting in, row-swap), the reel had looked
+    // finished for the best part of a second, so cleanup read as a glitch
+    // rather than a landing. This curve keeps easing visibly right up to
+    // the end, so cleanup lands the instant it looks like it should.
+    reel.style.transition = `transform ${spinMs}ms cubic-bezier(.22,1,.36,1)`;
     reel.style.transform = `translateY(${-spins * rowH}px)`;
   });
   raceLanding(reel, spinMs, () => {
@@ -724,7 +730,7 @@ function stopSpin(btn){
 
   const landMs = 800;
   requestAnimationFrame(() => {
-    reel.style.transition = `transform ${landMs}ms cubic-bezier(.13,.7,.16,1)`;
+    reel.style.transition = `transform ${landMs}ms cubic-bezier(.22,1,.36,1)`;   // see spinPick's note on the curve
     reel.style.transform = `translateY(${-(oldLen + extra) * rowH}px)`;
   });
   raceLanding(reel, landMs, () => {
