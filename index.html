@@ -119,6 +119,13 @@
 
   /* ---- random pick ------------------------------------------------------ */
   .picker{margin-top:var(--step); border-top:1px solid var(--hair); padding-top:20px}
+  .picker-intro{
+    margin:0; display:flex; align-items:center; flex-wrap:wrap; gap:12px 14px;
+  }
+  .picker-intro em{
+    font-family:var(--serif); font-style:italic; font-weight:400;
+    font-size:15px; color:var(--muted);
+  }
   .picker-btn{
     appearance:none; cursor:pointer; border:1px solid var(--hair-strong);
     background:var(--surface); color:var(--ink); font-family:var(--sans);
@@ -132,6 +139,7 @@
   .picker-btn .spin-ico{font-size:15px; line-height:1; display:inline-block}
   .picker-btn.spinning .spin-ico{animation:spin .5s linear infinite}
 
+  .picker-result[hidden]{display:none}
   .picker-result{
     margin-top:12px; display:flex; align-items:stretch;
     border:1px solid var(--hair); border-radius:var(--radius-sm);
@@ -299,9 +307,12 @@
   <div class="places" id="places"></div>
 
   <div class="picker">
-    <button class="picker-btn" id="pickBtn" type="button" aria-expanded="false" aria-controls="pickResult">
-      <span class="spin-ico" aria-hidden="true">↻</span> Vad blir det?
-    </button>
+    <p class="picker-intro">
+      <em>Svårt att bestämma sig?</em>
+      <button class="picker-btn" id="pickBtn" type="button" aria-expanded="false" aria-controls="pickResult">
+        <span class="spin-ico" aria-hidden="true">↻</span> Vad blir det?
+      </button>
+    </p>
     <div class="picker-result" id="pickResult" hidden>
       <div class="reel-mask" id="reelMask"><div class="reel" id="reel"></div></div>
       <button class="picker-again" id="pickAgain" type="button" aria-label="Slumpa igen">↺</button>
