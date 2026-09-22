@@ -118,7 +118,7 @@
   .subnote .date{font-variant-numeric:tabular-nums}
 
   /* ---- random pick ------------------------------------------------------ */
-  .picker{margin:0 0 var(--step)}
+  .picker{margin-top:var(--step); border-top:1px solid var(--hair); padding-top:20px}
   .picker-btn{
     appearance:none; cursor:pointer; border:1px solid var(--hair-strong);
     background:var(--surface); color:var(--ink); font-family:var(--sans);
@@ -137,6 +137,8 @@
     padding:12px 14px; border:1px solid var(--hair); border-radius:var(--radius-sm);
     background:var(--surface-2);
   }
+  .picker-result.flip{animation:pick-flip .32s cubic-bezier(.22,.7,.25,1) both}
+  @keyframes pick-flip{from{opacity:.3; transform:translateY(3px) scale(.98)} to{opacity:1; transform:none}}
   .picker-result .ptext{flex:1; min-width:0}
   .picker-result .pname{
     font-family:var(--serif); font-weight:500; font-size:14px; color:var(--ink);
@@ -154,6 +156,7 @@
   @keyframes spin{to{transform:rotate(360deg)}}
   @media (prefers-reduced-motion: reduce){
     .picker-btn.spinning .spin-ico{animation:none}
+    .picker-result.flip{animation:none}
   }
 
   /* ---- places --------------------------------------------------------- */
@@ -276,14 +279,14 @@
     <p class="subnote" id="daySub"></p>
   </div>
 
+  <div class="places" id="places"></div>
+
   <div class="picker">
     <button class="picker-btn" id="pickBtn" type="button" aria-expanded="false" aria-controls="pickResult">
       <span class="spin-ico" aria-hidden="true">↻</span> Vad blir det?
     </button>
     <div class="picker-result" id="pickResult" hidden></div>
   </div>
-
-  <div class="places" id="places"></div>
 
   <details class="others" id="others" hidden>
     <summary><span id="othersLabel">Även öppet</span></summary>
@@ -523,6 +526,9 @@ function todaysPickPool(){
 function renderPick(p){
   const el = document.getElementById("pickResult");
   el.hidden = false;
+  el.classList.remove("flip");
+  void el.offsetWidth;                    // restart the animation on repeat calls
+  el.classList.add("flip");
   el.innerHTML =
     `<span class="shield" aria-hidden="true" style="--hue:${p.hue}">${esc([...p.name][0] || "•")}</span>` +
     `<span class="ptext"><span class="pname">${esc(p.name)}</span><span class="pdish">${esc(p.dish)}</span></span>` +
@@ -546,16 +552,24 @@ function spinPick(){
 
   const btn = document.getElementById("pickBtn");
   btn.classList.add("spinning");
-  let n = 0;
-  const spins = 9;
-  const iv = setInterval(() => {
-    renderPick(pool[Math.floor(Math.random() * pool.length)]);
-    if (++n >= spins){
-      clearInterval(iv);
+
+  // Quick flicker at first, then each step waits a little longer than the
+  // last (eased, not linear) so it visibly decelerates into the landing
+  // instead of just stopping — like a wheel coasting to a stop.
+  const steps = 9, minDelay = 45, maxDelay = 260;
+  let step = 0;
+  const tick = () => {
+    if (step >= steps){
       btn.classList.remove("spinning");
       renderPick(final);
+      return;
     }
-  }, 70);
+    renderPick(pool[Math.floor(Math.random() * pool.length)]);
+    step++;
+    const eased = 1 - Math.pow(1 - step / steps, 3);   // cubic ease-out
+    setTimeout(tick, minDelay + eased * (maxDelay - minDelay));
+  };
+  tick();
 }
 
 document.getElementById("pickBtn").addEventListener("click", spinPick);
