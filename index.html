@@ -684,8 +684,22 @@ let holding = false;
 
 function startSpin(btn){
   if (holding) return;
+  // A quick tap releases almost immediately, which kicks off stopSpin's
+  // ~0.8s landing roll — but `holding` is already false by then, so a
+  // second quick tap during that window would pass the guard above and
+  // start a fresh loop right on top of it. Without this, the first tap's
+  // landing was still pending (waiting on raceLanding's transitionend/
+  // timeout) and would fire later mid-loop, replacing the reel's 28 looping
+  // rows with a single stale one while the loop animation kept trying to
+  // scroll through 28 — the row spends most of the cycle scrolled out of
+  // the mask, so the card goes visibly blank until the loop comes back
+  // around. Cancelling it here means the second tap always starts clean.
+  if (cancelPendingLanding) cancelPendingLanding();
+
   const pool = todaysPickPool();
   const result = document.getElementById("pickResult");
+  const reel = document.getElementById("reel");
+  reel.style.animation = "none";
   result.hidden = false;
   result.classList.remove("landed");
   btn.setAttribute("aria-expanded", "true");
@@ -703,7 +717,6 @@ function startSpin(btn){
 
   const loopRows = 14;
   const rows = Array.from({length: loopRows}, () => pool[Math.floor(Math.random() * pool.length)]);
-  const reel = document.getElementById("reel");
   const rowH = layReelFlat(rows.concat(rows));   // duplicated so the loop wraps seamlessly
   reel.style.setProperty("--loop-dist", `${-loopRows * rowH}px`);
   reel.style.animation = "reel-loop 2.2s linear infinite";
@@ -711,6 +724,7 @@ function startSpin(btn){
 
 function stopSpin(btn){
   if (!holding) return;
+  if (cancelPendingLanding) cancelPendingLanding();   // same guard, in case one was still pending
   holding = false;
   btn.classList.remove("spinning");
 
