@@ -144,7 +144,11 @@
     font-family:var(--serif); font-weight:500; font-size:14px; color:var(--ink);
     display:block;
   }
-  .picker-result .pdish{font-size:13.5px; color:var(--ink-soft); display:block; margin-top:2px}
+  .picker-result .pdish{
+    font-size:13.5px; line-height:1.45; color:var(--ink-soft); margin-top:2px;
+    display:flex; align-items:center;
+    min-height:calc(1.45em * 2);   /* room for 2 lines so the card doesn't jump while spinning */
+  }
   .picker-again{
     flex:none; appearance:none; border:0; background:none; color:var(--faint);
     font-size:17px; line-height:1; padding:4px; cursor:pointer;
