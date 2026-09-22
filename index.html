@@ -117,6 +117,65 @@
   }
   .subnote .date{font-variant-numeric:tabular-nums}
 
+  /* ---- random pick ------------------------------------------------------ */
+  .picker{margin-top:var(--step); border-top:1px solid var(--hair); padding-top:20px}
+  .picker-btn{
+    appearance:none; cursor:pointer; border:1px solid var(--hair-strong);
+    background:var(--surface); color:var(--ink); font-family:var(--sans);
+    font-size:13.5px; font-weight:600; padding:9px 16px 9px 14px;
+    border-radius:999px; display:inline-flex; align-items:center; gap:7px;
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .picker-btn:hover{border-color:var(--ink-soft)}
+  .picker-btn:active{transform:scale(.96)}
+  .picker-btn:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
+  .picker-btn .spin-ico{font-size:15px; line-height:1; display:inline-block}
+  .picker-btn.spinning .spin-ico{animation:spin .5s linear infinite}
+
+  .picker-result{
+    margin-top:12px; display:flex; align-items:stretch;
+    border:1px solid var(--hair); border-radius:var(--radius-sm);
+    background:var(--surface-2); overflow:hidden;
+    transition:background-color .35s ease;
+  }
+  .picker-result.landed{
+    background:color-mix(in srgb, hsl(var(--hue) 58% 46%) 16%, var(--surface-2));
+  }
+  @media (prefers-color-scheme: dark){
+    .picker-result.landed{
+      background:color-mix(in srgb, hsl(var(--hue) 55% 55%) 18%, var(--surface-2));
+    }
+  }
+  .reel-mask{flex:1; min-width:0; overflow:hidden}
+  .reel{display:flex; flex-direction:column; will-change:transform}
+  .reel-item{
+    flex:none; display:flex; align-items:center; gap:11px; padding:12px 14px;
+  }
+  .reel-item .shield{flex:none}
+  .reel-item .ptext{flex:1; min-width:0}
+  .reel-item .pname{
+    font-family:var(--serif); font-weight:500; font-size:14px; color:var(--ink);
+    display:block;
+  }
+  .reel-item .pdish{
+    font-size:13.5px; line-height:1.45; color:var(--ink-soft); margin-top:2px;
+    display:flex; align-items:center;
+    min-height:calc(1.45em * 2);   /* room for 2 lines so every row is the same height */
+  }
+  .picker-again{
+    flex:none; align-self:stretch; display:flex; align-items:center;
+    appearance:none; border:0; border-left:1px solid var(--hair); background:none;
+    color:var(--faint); font-size:17px; line-height:1; padding:0 14px; cursor:pointer;
+    transition:color .15s ease;
+  }
+  .picker-again:hover{color:var(--ink)}
+  .picker-again:focus-visible{outline:2px solid var(--ink); outline-offset:-2px}
+
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion: reduce){
+    .picker-btn.spinning .spin-ico{animation:none}
+  }
+
   /* ---- places --------------------------------------------------------- */
   .places{display:flex; flex-direction:column}
   .place{
@@ -238,6 +297,16 @@
   </div>
 
   <div class="places" id="places"></div>
+
+  <div class="picker">
+    <button class="picker-btn" id="pickBtn" type="button" aria-expanded="false" aria-controls="pickResult">
+      <span class="spin-ico" aria-hidden="true">↻</span> Vad blir det?
+    </button>
+    <div class="picker-result" id="pickResult" hidden>
+      <div class="reel-mask" id="reelMask"><div class="reel" id="reel"></div></div>
+      <button class="picker-again" id="pickAgain" type="button" aria-label="Slumpa igen">↺</button>
+    </div>
+  </div>
 
   <details class="others" id="others" hidden>
     <summary><span id="othersLabel">Även öppet</span></summary>
@@ -389,6 +458,8 @@ function render(){
   document.querySelectorAll(".day").forEach((b,i) => b.setAttribute("aria-selected", String(i === selected)));
 
   document.getElementById("dayHeading").textContent = day;
+  document.getElementById("pickResult").hidden = true;
+  document.getElementById("pickBtn").setAttribute("aria-expanded", "false");
   const sub = document.getElementById("daySub");
   const dateStr = WEEK.dates?.[selected] ? fmtDate(WEEK.dates[selected]) : "";
   if (ti === null && selected === 0){
@@ -454,6 +525,106 @@ function setChecked(menuIso){
   } catch {}
   document.getElementById("genLine").textContent = line;
 }
+
+/* ---- random pick ------------------------------------------------------ */
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let pendingSpinDone = null;   // guards against a stale listener from an interrupted spin
+
+function todaysPickPool(){
+  const day = DAYS[selected], pool = [];
+  WEEK.restaurants.forEach(r => {
+    const dishes = Array.isArray(r.menus[day]) ? r.menus[day] : [];
+    dishes.forEach(raw => {
+      const s = String(raw).trim();
+      if (!s || /^bonus\s*:/i.test(s)) return;              // not a lunch choice
+      const veg = s.match(/^vegetarisk[t]?\s*:\s*(.+)/i);
+      pool.push({ name: r.name, hue: hueFor(r.name), dish: veg ? veg[1] : s });
+    });
+  });
+  return pool;
+}
+
+function reelRow(p){
+  return p
+    ? `<div class="reel-item">` +
+        `<span class="shield" aria-hidden="true" style="--hue:${p.hue}">${esc([...p.name][0] || "•")}</span>` +
+        `<span class="ptext"><span class="pname">${esc(p.name)}</span><span class="pdish">${esc(p.dish)}</span></span>` +
+      `</div>`
+    : `<div class="reel-item"><span class="ptext"><span class="pname">Inget att slumpa</span>` +
+      `<span class="pdish">Ingen dagsmeny hittades för den här dagen</span></span></div>`;
+}
+
+/* Lay the reel out flat (no transition) showing exactly one row, and report
+   that row's real rendered height so the mask/scroll distance can match it
+   exactly regardless of how long the dish text turns out to be. */
+function layReelFlat(rows){
+  const reel = document.getElementById("reel"), mask = document.getElementById("reelMask");
+  reel.style.transition = "none";
+  reel.style.transform = "translateY(0)";
+  reel.innerHTML = rows.map(reelRow).join("");
+  const rowH = reel.children[0].offsetHeight;
+  mask.style.height = rowH + "px";
+  return rowH;
+}
+
+function tintResult(hue){
+  const result = document.getElementById("pickResult");
+  result.style.setProperty("--hue", hue);
+  result.classList.add("landed");
+}
+
+function spinPick(){
+  const pool = todaysPickPool();
+  const result = document.getElementById("pickResult");
+  const btn = document.getElementById("pickBtn");
+  btn.setAttribute("aria-expanded", "true");
+  result.hidden = false;
+  result.classList.remove("landed");                    // neutral again until it lands
+
+  if (!pool.length){ layReelFlat([null]); return; }
+
+  const final = pool[Math.floor(Math.random() * pool.length)];
+  if (reduceMotion || pool.length === 1){ layReelFlat([final]); tintResult(final.hue); return; }
+
+  const spins = 8;                                     // random rows before landing
+  const rows = Array.from({length: spins}, () => pool[Math.floor(Math.random() * pool.length)]);
+  rows.push(final);
+  const rowH = layReelFlat(rows);
+  const reel = document.getElementById("reel");
+
+  // A re-spin before the previous one finished (fast double-click, or a spin
+  // that never got to complete — e.g. the tab was backgrounded and never got
+  // a paint frame) would otherwise leave that old listener attached; it'd
+  // fire later on this new transition and tint/land with its own stale pick.
+  if (pendingSpinDone){ reel.removeEventListener("transitionend", pendingSpinDone); }
+
+  btn.classList.add("spinning");
+  void reel.offsetHeight;                               // commit the flat state first
+  requestAnimationFrame(() => {
+    // One continuous, eased scroll — smoother and easier to read than
+    // swapping text every tick — decelerating hard into the landing, like a
+    // wheel coasting to a stop rather than a slot machine's mechanical clack.
+    reel.style.transition = "transform 1.6s cubic-bezier(.11,.72,.13,1)";
+    reel.style.transform = `translateY(${-spins * rowH}px)`;
+  });
+  pendingSpinDone = function done(e){
+    if (e.propertyName !== "transform") return;
+    reel.removeEventListener("transitionend", pendingSpinDone);
+    pendingSpinDone = null;
+    btn.classList.remove("spinning");
+    tintResult(final.hue);
+    // Only the landed row matters now — drop the 8 that scrolled past so
+    // there's just one row in the DOM again (nothing for a screen reader or
+    // anything else walking the page to trip over).
+    reel.style.transition = "none";
+    reel.style.transform = "translateY(0)";
+    reel.innerHTML = reelRow(final);
+  };
+  reel.addEventListener("transitionend", pendingSpinDone);
+}
+
+document.getElementById("pickBtn").addEventListener("click", spinPick);
+document.getElementById("pickAgain").addEventListener("click", spinPick);
 
 /* ---- boot ----------------------------------------------------------------- */
 async function boot(){
