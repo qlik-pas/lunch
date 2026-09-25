@@ -8,7 +8,7 @@
     "2026-09-24",
     "2026-09-25"
   ],
-  "generated": "2026-09-22T20:36:17+02:00",
+  "generated": "2026-09-25T11:34:26+00:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -38,7 +38,6 @@
         ],
         "Fredag": [
           "Falafelburgare med med rostad potatis, rökt chilimajonnäs, pickles och isbergssallad",
-          "Kroppkakor med lingon, kål, brynt smör, mandel och persilja",
           "Friterad kycklingburgare (KFC- style) med rostad potatis, rökt chilimajonnäs, pickles och isbergssallad"
         ]
       }
