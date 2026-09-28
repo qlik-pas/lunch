@@ -8,7 +8,7 @@
     "2026-10-01",
     "2026-10-02"
   ],
-  "generated": "2026-09-28T08:02:17+00:00",
+  "generated": "2026-09-28T13:45:38+00:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -47,15 +47,33 @@
       "name": "Eatery",
       "url": "https://www.eatery.se/lund/lunchmeny",
       "menus": {
-        "Måndag": [],
+        "Måndag": [
+          "Bangers and mash löksky, chorizo, potatismos och skånsk senap",
+          "Mandelbakad fisk kall dill- och romsås, morotssallad och kokt potatis",
+          "Vårrullar sweet chili, morot- och kålsallad och jasminris"
+        ],
         "Tisdag": [
+          "Köttfärslimpa svampsås, bakade rotfrukter, gelé och rostad potatis",
+          "Stekt panerad kummel dansk remouladsås, gröna ärtor i dillsmör och kokt potatis",
+          "Ratatouille krispig polenta och fetaost",
           "Bonus: något sött till kaffet"
         ],
-        "Onsdag": [],
+        "Onsdag": [
+          "Pluma dragonbakad potatis, skysås och rostade rotfrukter med honung och timjan",
+          "Bakad sej savoykål, potatismos, krispig örtpanko och vitvinssås",
+          "Japanska kålpannkakor rotfruktssallad med lime och salladslök, sesam och ingefärskräm"
+        ],
         "Torsdag": [
+          "Boeuf bourguignon sidfläsk, lök, champinjoner och potatismos",
+          "Pocherad kummel grönärtspuré, blomkål och dillpotatis",
+          "Vegetarisk gulaschgryta gräddfil, rökt paprika, surkål och potatis",
           "Bonus: pannkakor, lättvispad grädde och hemmagjord sylt"
         ],
-        "Fredag": []
+        "Fredag": [
+          "Teriyakibakad fläsksida asiatisk kålsallad, äppelpuré med ingefära, sesamris och jalapeñomajonnäs",
+          "Teriyaki- och sesambakad hokifilé sötsyrlig paprika och krämig potatissallad",
+          "Halloumi linser, tomat, oliver, lök, couscous och vitlöksyoghurt"
+        ]
       }
     },
     {
@@ -147,5 +165,8 @@
         ]
       }
     }
+  ],
+  "errors": [
+    "Kantin: HTTPSConnectionPool(host='www.kantinlund.se', port=443): Max retries exceeded with url: / (Caused by NewConnectionError(\"HTTPSConnection(host='www.kantinlund.se', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\")) (kept previous)"
   ]
 }
