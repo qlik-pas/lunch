@@ -1,44 +1,45 @@
 {
-  "week": 39,
-  "range": "21–25 sep",
+  "week": 40,
+  "range": "28–2 sep",
   "dates": [
-    "2026-09-21",
-    "2026-09-22",
-    "2026-09-23",
-    "2026-09-24",
-    "2026-09-25"
+    "2026-09-28",
+    "2026-09-29",
+    "2026-09-30",
+    "2026-10-01",
+    "2026-10-02"
   ],
-  "generated": "2026-09-25T11:34:26+00:00",
+  "generated": "2026-09-28T08:02:17+00:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
       "url": "https://brickseatery.se/lunch",
       "menus": {
         "Måndag": [
-          "Potatis och purjolökssoppa med vitlöksbröd, färskostkräm, bakat ägg, potatischips och kruspersilja",
-          "Rödbetsrisotto med kyckling, rostade rödbetor, dragonolja, ruccola och picklad rödlök",
-          "Färsbiff med teriyakisås, ris, brynt kål, champinjoner och jordnötter"
+          "Gnocchi med pumpa, rostad paprikasås, lagrad ost och salvia",
+          "Köttfärslimpa med pepparsås, potatismos, svartvinbärsgele och rostad palsternacka",
+          "Chili på högrev/nötfärs, paprika, lök, bönor, ris nachos, picklad lök och gräddfil"
         ],
         "Tisdag": [
-          "Fylld pasta med tryffelgrädde, purjolök, brynt svamp, lagrad ost och bladspenat",
-          "Kyckling i vin med potatismos, syltlök, bacon, morot, champinjoner och kruspersilja",
-          "Mozzarella, tomatsås, Nduja ( krämig stark salami), basilika och kronärtskocka"
+          "Mexikansk chiliböngryta med ris, avokadokräm, nachos, salsa och lime",
+          "Friterad spätta med tartarsås, potatis, ärtor, fänkål, dill och citron",
+          "Mozzarella, tomatsås, kebab, fefferoni och vitlökssås"
         ],
         "Onsdag": [
-          "“Tofu med bambu”, soja, chili, ris, koriander och böngroddar",
-          "Stekt Multe med bön cassoulet, tomater, oliver och italiensk hårdost",
-          "Wokat fläsk i gojujangchili, ris, grönsaker, böngroddar och koriander",
-          "Mozzarella, tomatsås, Nduja ( krämig stark salami), basilika och kronärtskocka"
+          "Blomkålsterrin med blomkålspuré, gröna linser, rostad mandel, krasse och purjolök",
+          "Stekt kyckling med citron/dijonsenapssås, potatis, spetskål, picklade senapsfrön och morot",
+          "Cajunsotad lax med dragonmajonnäs, ris, rostade hasselnötter, majssallad och lime",
+          "Mozzarella, tomatsås, kebab, fefferoni och vitlökssås"
         ],
         "Torsdag": [
-          "Okonomiyaki- japansk kålpannkaka med chilicoleslaw, sojabönor och BBQ-sås",
-          "Indisk “biff vindaloo” på högrev med ris, naanbröd, gurkraita, paprika och lök",
-          "Mozzarella, tomatsås, Nduja ( krämig stark salami), basilika och kronärtskocka",
+          "Grönsakswok med teriyakisås, jordnötter, stekt ägg, chiliolja och koriandersallad",
+          "Dansk fläskstek med rödkål, gräddsås, äppelmos, persilja och stekt potatis",
+          "Mozzarella, tomatsås, kebab, fefferoni och vitlökssås",
           "Bonus: äppelpaj med grädde"
         ],
         "Fredag": [
-          "Falafelburgare med med rostad potatis, rökt chilimajonnäs, pickles och isbergssallad",
-          "Friterad kycklingburgare (KFC- style) med rostad potatis, rökt chilimajonnäs, pickles och isbergssallad"
+          "Polentakräm med sotad broccoli, picklad lök, majs och jerkkryddad tofu",
+          "Schnitzel med bearnaisesås, rostad potatis, brytbönor, picklad lök och rotselleri",
+          "Bakad potatis med krämig kycklingcurryröra, äpple och grönsallad"
         ]
       }
     },
@@ -46,33 +47,15 @@
       "name": "Eatery",
       "url": "https://www.eatery.se/lund/lunchmeny",
       "menus": {
-        "Måndag": [
-          "Sticky koreansk kyckling med gochujang och soja, gurksallad, sesamris och salladslök",
-          "Färskostbakad hokifilé med betor, spenat, hasselnötter och brynt smör, dillkräm och koktpotatis",
-          "Indisk kokos och linsgryta med bakad pumpa, picklade rotfrukter, mynta yoghurt och basmatiris med nejlika och stjärnanis"
-        ],
+        "Måndag": [],
         "Tisdag": [
-          "BBQ marinerad pluma med majskräm, tomatsallad och klyftpotatis, chilibéarnaise",
-          "Sesamstekt kungsfisk med sesammarinerad morot, krämig vittvinsås med miso och ingefära, potatismos med brynt smör",
-          "Dan dan nudlar med spicy vegfärs, jordnötter, salladslök och sesam",
           "Bonus: något sött till kaffet"
         ],
-        "Onsdag": [
-          "Färsbiffar med krämig svampsås, rostad potatis, grönabönor med bakad lök och bacon",
-          "Vin och tomatbakad kummel med basilikapesto, marinerad paprika och zucchini, bakad potatis med gremolata",
-          "Majs och yoghurtplättar med pico de gallo, rostad sötpotatissallad och rökt paprikakräm"
-        ],
+        "Onsdag": [],
         "Torsdag": [
-          "Kyckling thai curry med kokos, röd curry, lime och ingefära, rostad broccoli och jasminris",
-          "Kungsfisk bakad i skaldjursfond med saffransås, dill picklad kålrot, potatis med gräslök, purjolök och smör",
-          "Krispig halloumiburgare med grön aioli, picklad gurka, sallad och klyftpotatis",
           "Bonus: pannkakor, lättvispad grädde och hemmagjord sylt"
         ],
-        "Fredag": [
-          "Dansk fläskstekburgare med rödkål, örtmajo, äpple och rostad klyftpotatis",
-          "Panerad tilapia med remoulad, kokt potatis och picklade rotfrukter",
-          "Gnocchi med tomatsås sallad på oliver, kronärtskocka och spenat, ruccola och lagrad ost"
-        ]
+        "Fredag": []
       }
     },
     {
@@ -80,30 +63,30 @@
       "url": "https://www.smakapakina.se/meny",
       "menus": {
         "Måndag": [
-          "General Tsos kyckling (左宗棠鸡)",
-          "Fläsk med grönabönor (四季豆炒肉)",
-          "Snabbstekt blomkål (干锅花菜)"
+          "Krispig saltade kyckling (盐酥鸡)",
+          "Fläsk med shimejisvamp (白玉菇炒肉)",
+          "Torrstekta grönabönor (干煸豆角)"
         ],
         "Tisdag": [
-          "Wokade kyckling med chili (双椒鸡丁)",
-          "Kamben med svartsojabönsås (豉汁排骨)",
-          "Snabbstekt spetskål (手撕包菜)"
+          "Sötsur fisk i tomatsås (茄汁鱼片)",
+          "Bondes stekt fläsk (农家小炒肉)",
+          "Snabbstekd spetskål med glasnudlar (粉丝包菜)"
         ],
         "Onsdag": [
-          "Rött bräserat sidfläsk (红烧肉)",
-          "Biff i chiligryta (水煮牛肉)",
-          "Potatis strimlor med paprika (彩椒土豆丝)",
-          "Mapo Tofu (麻婆豆腐)"
+          "Dongpo sidfläsk (东坡肉)",
+          "Gongbao kyckling (宫保鸡丁))",
+          "Snabbstekt pak choi (清炒油菜)",
+          "Tofu med honungsås (蜜汁豆腐"
         ],
         "Torsdag": [
-          "Ångkokt fläsk med senapskål (梅菜扣肉)",
-          "Spicy pot mix (麻辣香锅)",
-          "Homestyle tofu (家常豆腐)"
+          "Gult  bräserad biff (黄焖牛肉)",
+          "Kamben med chili och spiskummin (香辣孜然排骨)",
+          "Snabbstekt broccoli  (蒜蓉西兰花)"
         ],
         "Fredag": [
-          "Sötsur fläsk med anannas (菠萝古老肉)",
-          "Rött bräserat lammribs (红焖羊排)",
-          "Selleri med cashewnötter och liljalök (腰果百合西芹)"
+          "Chili kyckling (辣子鸡)",
+          "Fläsk med surkål och glasnudlar (猪肉酸菜炖粉条)",
+          "Jordens tre goda wok (地三鲜)"
         ]
       }
     },
@@ -112,29 +95,29 @@
       "url": "https://restaurangedison.se/lunch/",
       "menus": {
         "Måndag": [
-          "Tortellini/tomatsås/pesto/ruccola",
-          "Pannbiff/potatismos/lingon/gräddsås",
-          "Chiligryta/svartabönor/gräddfil/ris"
+          "Bränd spetskål/brynt smör/mandel/linser",
+          "Panerad fisk/kapriscreme/kokt potatis",
+          "Nouef Bourguignon/svamp/syltlök/potatispuré"
         ],
         "Tisdag": [
-          "Okonomiyaki/sesammajo/nori/böngroddar",
-          "Lättrökt kyckling/äppleslaw/cidersky",
-          "Yakisoba/äggnudlar/picklad ingefära"
+          "Fylld paprika/ris/ajvar/persilja",
+          "Kransjka/senap/picklad lök/krasse",
+          "Sweet´n sour kyckling/ananas/ris/jordnöt"
         ],
         "Onsdag": [
-          "Linsgryta/lökchutney/naan/koriander",
-          "Fiskbiff/sandefjordsås/vaxbönor/potatis",
-          "Schnitzel/syrad kål/ris/tonkatsu"
+          "Lökfritters/muhammara/bulgur/mynta",
+          "Biff Lindström/kryddsmör/klyftpotatis",
+          "Karrékebab/aioli/libabröd/tomatsallad"
         ],
         "Torsdag": [
-          "Gulärtsbiff/saltgurka/vitlöksmajo/persilja",
-          "Rimmat fläsk/rotmos/persiljeskum/senap",
-          "Kycklingburgare/teriyakisås/sesamslaw/potatis"
+          "Svampsoppa/ostpaj/picklad svamp",
+          "Wallenbergare/brynt smör/lingon/potatispuré",
+          "Pulled pork/avokadocreme/syrlig kål"
         ],
         "Fredag": [
-          "Smördegspizza/zucchini/lagrad ost/pinjenöt",
-          "Fläskestek/rödkål/äpplekompott/sockerstekt potatis",
-          "Bobotie/aubergine/mandel/gult ris"
+          "Rödbetsbiff/fetaostcreme/granatäpple",
+          "Kalkonfärslimpa/svampsås/purjopotatis",
+          "Grillad karré/chilibea/pommes"
         ]
       }
     },
@@ -143,24 +126,24 @@
       "url": "https://www.kantinlund.se/",
       "menus": {
         "Måndag": [
-          "Nattbakat högrev – potatisstomp – rostad beta – pickles – sky – rostad lök – ört",
-          "Vegetariskt: Bakad portabello – gröna linser – rostad beta – pickles – citronsmetana – örter"
+          "Kycklingsteak – rostad kål – smörad kyckling & misosky – sesamrostad blomkål – syrad morot – rostad lök – potatis",
+          "Vegetariskt: Rostad palsternacka – västerbottencréme – lingon – friterad ostronskivling – quinoa – brynt dillsmör"
         ],
         "Tisdag": [
-          "Pluma – basilika beurre blanć – gröna ärtor – stjälkselleri – smetana – polkabeta – grön chili – frön – potatis",
-          "Vegetariskt: Bakad portabello – gröna linser – rostad beta – pickles – citronsmetana – örter"
+          "Pulled pork – bbq-sås – kålsallad – habaneromajo – bönor – smetana – ris",
+          "Vegetariskt: Rostad palsternacka – västerbottencréme – lingon – friterad ostronskivling – quinoa – brynt dillsmör"
         ],
         "Onsdag": [
-          "Guajillo bakad kycklinglårfilé – hjärtsallad – sambal majo – tomat – pickles – friterad tortilla – potatis – koriander",
-          "Vegetariskt: Bakad portabello – gröna linser – rostad beta – pickles – citronsmetana – örter"
+          "Ankbröst 5-spice – friterad brysselkål – röd endive – hasselnöt – syrad kål – sky – potatis",
+          "Vegetariskt: Rostad palsternacka – västerbottencréme – lingon – friterad ostronskivling – quinoa – brynt dillsmör"
         ],
         "Torsdag": [
-          "Råbiffstorsdag – Oxtartar – mozzarellacremé – tomater – lök – bönor – olivkrisp – ruccola",
-          "Vegetariskt: Bakad portabello – gröna linser – rostad beta – pickles – citronsmetana – örter"
+          "Råbiffstorsdag Oxtartar – rostad aioli – silverlök – hjärtsallad – broccoli – rostad lök – ört",
+          "Vegetariskt: Rostad palsternacka – västerbottencréme – lingon – friterad ostronskivling – quinoa – brynt dillsmör"
         ],
         "Fredag": [
-          "Skirtsteak – tryffelmajo – bakad tomat – bordelaisesås – örtrostad potatis",
-          "Vegetariskt: Bakad portabello – gröna linser – rostad beta – pickles – citronsmetana – örter"
+          "Picanha – harissamajo – tomat & löksallad – haricot verts – sky – potatis",
+          "Vegetariskt: Rostad palsternacka – västerbottencréme – lingon – friterad ostronskivling – quinoa – brynt dillsmör"
         ]
       }
     }
