@@ -8,7 +8,7 @@
     "2026-10-08",
     "2026-10-09"
   ],
-  "generated": "2026-10-06T08:01:50+00:00",
+  "generated": "2026-10-09T17:25:22+00:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -81,30 +81,30 @@
       "url": "https://www.smakapakina.se/meny",
       "menus": {
         "Måndag": [
-          "General Tsos kyckling (左宗棠鸡)",
-          "Fläsk med tofu stick (腐竹烧肉)",
-          "Isbergsallad med vego/ostronsås (蚝油生菜)"
+          "Krispig saltade kyckling (盐酥鸡)",
+          "Peking fläskstrimlor (京酱肉丝)",
+          "Yuxiang aubergine (鱼香茄子)"
         ],
         "Tisdag": [
-          "Wokade kyckling med chili (双椒鸡丁)",
-          "Kamben med svartsojabönsås (豉汁排骨)",
-          "Snabbstekt blomkål med tomatsås (番茄花菜)"
+          "Gongbao kyckling (宫保鸡丁)",
+          "Sötsur kamben  (糖醋排骨)",
+          "Kinakål med glasnudlar och vitlök sås (蒜蓉粉丝白菜)"
         ],
         "Onsdag": [
-          "Rött bräserat sidfläsk (红烧肉)",
-          "Kyckling med chili olja sås (口水鸡)",
-          "Majs med pinjenötter (松仁玉米)",
-          "Snabbstekt zucchini (素炒西葫芦)"
+          "Dongpo sidfläsk (东坡肉)",
+          "Yuxiang kyckling (鱼香鸡丝)",
+          "Bakad pumpa med saltad ankäggula (咸蛋黄焗南瓜)",
+          "Spenat med tofu (菠菜炒豆腐丝)"
         ],
         "Torsdag": [
-          "Stekt kokt sidfläsk (回锅肉)",
-          "Tre koppar kyckling (三杯鸡)",
-          "Snabbstekt kinakål med skogssvamp (黑白菜)"
+          "Bondes stekt fläsk (农家小炒肉)",
+          "Ångkokt fisk (清蒸鱼)",
+          "Snabbstekt pak choi med shitake"
         ],
         "Fredag": [
-          "Bräserade fläsklägg (冰糖肘子)",
-          "Vitlök krispig kycklingvingar (蒜香鸡翅）",
-          "Wokade aubergin ( 烧茄子)"
+          "Chili kyckling (辣子鸡)",
+          "Biff med ostronsås, gul lök och paprika (蚝油牛肉)",
+          "Snabbstekt champinjon (素炒口蘑)"
         ]
       }
     },
@@ -165,5 +165,8 @@
         ]
       }
     }
+  ],
+  "errors": [
+    "Bricks Eatery: sidan visar vecka 42, väntar på vecka 41 (kept previous)"
   ]
 }
