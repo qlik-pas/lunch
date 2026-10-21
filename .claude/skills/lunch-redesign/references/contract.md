@@ -116,6 +116,16 @@ place's emoji + short label (Bricks Eatery → "Bricks", Restaurang Edison →
   blurbs go in verbatim (jokes and Swedish included), `·` becomes ` | `;
 - a note (and, only if the copy was refused, the text itself) shows under the heading; it is hidden again on day switch.
 
+## Mobile affordances
+
+- **Jump row** under the day heading: one hue-tinted initial shield per card
+  (`#jump`, links to `#place-N`) plus a ↻ that scrolls to the "Vad blir det?" block
+  (`#picker`). Hidden with fewer than 3 cards. Cards use `scroll-margin-top` so the
+  sticky day rail doesn't cover them; smooth scroll is off under `prefers-reduced-motion`.
+- **Tap targets ≥ 44px** (the pick button, jump chips, "Fast meny"/"Även öppet" summaries,
+  each fixed-menu row); a card's whole header row (shield, name, ↗) is its link, via a
+  stretched `::after`. The share button is 40px so it stays in line with the IDAG tag.
+
 ## Status indicator
 
 Three states, currently a coloured dot + label in the header:
