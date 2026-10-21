@@ -403,6 +403,111 @@ def _entry(name, url, menus):
     return e
 
 
+# --------------------------------------------------------------------------- #
+# English text for the page's "Kopiera dagens utbud" button
+# --------------------------------------------------------------------------- #
+# Each restaurant gets an `en` field in lt.json — the same shape as `menus`
+# (day -> list, aligned 1:1 with the Swedish entries) but as short English dish
+# names, ready to paste into Slack. It's produced here, at scrape time, so the
+# button can copy synchronously (browsers only allow a clipboard write inside
+# the click) and the page never calls a model itself.
+#
+# Translations are cached: a restaurant whose Swedish menus are unchanged keeps
+# its `en`, so a model is only called when a menu actually changes (normally
+# Monday). Provider: Claude if ANTHROPIC_API_KEY is set, otherwise GitHub
+# Models using the workflow's own GITHUB_TOKEN (`permissions: models: read`).
+# Any failure just leaves `en` off — the button falls back to the Swedish text.
+TRANSLATE_PROMPT = """You turn restaurant lunch-menu lines (Swedish, sometimes English, sometimes with Chinese characters) into short English dish names for a Slack message listing today's lunch.
+
+Rules:
+- One output line per input line, same order. Never merge, drop, or add lines.
+- Keep it short: the dish's essence in roughly 3-8 words, like "Slow-baked beef chuck with aioli & sage jus", "Fried herring & mash", "Oven pancake with smoked celeriac". Drop long garnish and sauce lists; keep what defines the dish.
+- Use "&" instead of "and". Keep proper names and well-known foreign dish names (Mapo tofu, Tandoori chicken, raggmunk with a short gloss).
+- Drop Chinese characters. Don't add words that aren't in the dish.
+- A line starting "Vegetariskt:" becomes "Vegetarian: ..."; "Bonus:" stays "Bonus: ...".
+- Reply with JSON only: {"<day>": ["...", ...], ...} using exactly the day keys and list lengths you were given."""
+
+
+def _reply(r):
+    """The response body as JSON, or an error that says what actually came back
+    (an endpoint that answers 200 "OK" in text/plain would otherwise surface as
+    a baffling JSONDecodeError)."""
+    if not r.ok:
+        raise RuntimeError(f"HTTP {r.status_code}: {r.text[:150]!r}")
+    try:
+        return r.json()
+    except ValueError:
+        raise RuntimeError(f"non-JSON reply ({r.headers.get('content-type')}): {r.text[:150]!r}")
+
+
+def _llm_json(system, payload):
+    """One JSON-in / JSON-out model call; returns the parsed reply."""
+    import requests
+    user = json.dumps(payload, ensure_ascii=False)
+    key = os.environ.get("ANTHROPIC_API_KEY")
+    if key:
+        r = requests.post(
+            "https://api.anthropic.com/v1/messages", timeout=90,
+            headers={"x-api-key": key, "anthropic-version": "2023-06-01"},
+            json={"model": os.environ.get("TRANSLATE_MODEL", "claude-haiku-4-5-20251001"),
+                  "max_tokens": 3000, "system": system,
+                  "messages": [{"role": "user", "content": user}]})
+        text = _reply(r)["content"][0]["text"]
+    else:
+        token = os.environ.get("GITHUB_TOKEN")
+        if not token:
+            raise RuntimeError("no ANTHROPIC_API_KEY or GITHUB_TOKEN")
+        r = requests.post(
+            "https://models.github.ai/inference/chat/completions", timeout=90,
+            headers={"Authorization": f"Bearer {token}",
+                     "Accept": "application/vnd.github+json",
+                     "X-GitHub-Api-Version": "2022-11-28"},
+            json={"model": os.environ.get("TRANSLATE_MODEL", "openai/gpt-4o-mini"),
+                  "temperature": 0.2, "response_format": {"type": "json_object"},
+                  "messages": [{"role": "system", "content": system},
+                               {"role": "user", "content": user}]})
+        text = _reply(r)["choices"][0]["message"]["content"]
+    return json.loads(re.search(r"\{.*\}", text, re.S).group(0))
+
+
+def _with_translations(restaurants, old, translate=_llm_json):
+    """Attach `en` to each restaurant — reused from `old` when its menus are
+    unchanged, otherwise freshly translated. Never raises."""
+    prev = {r["name"]: r for r in old.get("restaurants", [])}
+    force = bool(os.environ.get("FORCE_TRANSLATE"))
+    cached, fresh, failed = [], [], []
+    for r in restaurants:
+        src = {d: v for d, v in r["menus"].items() if v}
+        if not src:
+            continue
+        p = prev.get(r["name"])
+        if p and p.get("en") and p.get("menus") == r["menus"] and not force:
+            r["en"] = p["en"]
+            cached.append(r["name"])
+            continue
+        try:
+            # a weekly menu is the same list every day — translate it once
+            ask = {"Måndag": src["Måndag"]} if r.get("weekly") else src
+            got = translate(TRANSLATE_PROMPT, ask)
+            if r.get("weekly"):
+                got = {d: got["Måndag"] for d in src}
+            en = {}
+            for d, lines in src.items():
+                out = got.get(d)
+                if (isinstance(out, list) and len(out) == len(lines)
+                        and all(isinstance(x, str) and x.strip() for x in out)):
+                    en[d] = [x.strip() for x in out]
+            if not en:
+                raise ValueError("reply didn't match the menu shape")
+            r["en"] = en
+            fresh.append(r["name"])
+        except Exception as e:
+            failed.append(f"{r['name']} ({type(e).__name__}: {str(e)[:120]})")
+    print(f"English: {len(cached)} cached, {len(fresh)} translated"
+          + (f", {len(failed)} failed: {failed}" if failed else ""))
+    return restaurants
+
+
 def _load_old():
     try:
         with open("lt.json", encoding="utf-8") as f:
@@ -441,6 +546,8 @@ def build():
             kept = prev.get(name)
             errors.append(f"{name}: {e}" + (" (kept previous)" if kept else ""))
             restaurants.append(_entry(name, url, kept or _empty()))
+
+    _with_translations(restaurants, old)
 
     out = {
         "week": week, "range": rng, "dates": dates,

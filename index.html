@@ -301,6 +301,18 @@
   }
   .fixed .rname a:hover::after{color:hsl(var(--hue) 55% 45%)}
 
+  /* ---- share text ------------------------------------------------------- */
+  .share{margin-top:var(--step); border-top:1px solid var(--hair); padding-top:20px}
+  .share-result{margin-top:12px}
+  .share-status{margin:0 0 8px; font-size:12.5px; color:var(--muted)}
+  .share-status.warn{color:var(--treat)}
+  .share-out{
+    margin:0; padding:12px 14px; max-height:340px; overflow:auto;
+    background:var(--surface-2); border:1px solid var(--hair); border-radius:var(--radius-sm);
+    font:12px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color:var(--ink-soft); white-space:pre-wrap; word-break:break-word; user-select:text;
+  }
+
   /* ---- footer --------------------------------------------------------- */
   footer{
     margin-top:calc(var(--step) + 8px); padding-top:6px;
@@ -357,6 +369,19 @@
     <ul id="othersList"></ul>
   </details>
 
+  <div class="share">
+    <p class="picker-intro">
+      <em>Ska lunchen delas?</em>
+      <button class="picker-btn" id="shareBtn" type="button">
+        <span class="spin-ico" aria-hidden="true">⧉</span> <span id="shareBtnLabel">Kopiera dagens utbud (EN)</span>
+      </button>
+    </p>
+    <div class="share-result" id="shareResult" hidden>
+      <p class="share-status" id="shareStatus" role="status"></p>
+      <pre class="share-out" id="shareOut"></pre>
+    </div>
+  </div>
+
   <footer>
     <span id="genLine"></span>
     <span>Skrapas varje vardagsmorgon · <a href="https://github.com/qlik-pas/lunch" target="_blank" rel="noopener">källkod</a></span>
@@ -403,6 +428,13 @@ let WEEK = {
         "Onsdag": ["“Mapo tofu” med sojafärs, champinjoner, salladslök, chili, fermenterad chili och jasminris","Stekt sill med potatismos, brynt smör och lingon","Tandoorikyckling med spenatgryta, kokosmjölk, ris, papadums och yoghurt","Mozzarella, tomatsås och tryffelsalami & basilika"],
         "Torsdag": ["Okonomiyaki (japansk kål pannkaka), misomajonnäs, rostad lök, nori och ingefära","Raggmunk med stekt fläsk, lingon, råkostsallad och senapsvinaigrette","Mozzarella, tomatsås och tryffelsalami & basilika","Bonus: äppelpaj med grädde"],
         "Fredag": ["Tariks falafelrulle med blandad sås, isbergssallad, rödlök, tomat, fefferoni och persilja","Pulled pork taco med bönor, chilimajonnäs, salsa, picklad rödlök, nachos och jalapeno","Ramen med kyckling, glasnudlar, räkchips, kål, svamp, ägg, vårlök och böngroddar"]
+      },
+      "en": {
+        "Måndag": ["Cauliflower soup with garlic bread","Pan-fried beef patties with fried onion & mash","Indian curry with beef chuck, rice & naan"],
+        "Tisdag": ["Arancini with tomato sauce & aged cheese","Chicken noodle wok with oyster sauce","Truffle salami pizza"],
+        "Onsdag": ["Mapo tofu","Fried herring & mash","Tandoori chicken","Truffle salami pizza"],
+        "Torsdag": ["Okonomiyaki (Japanese cabbage pancake) with miso mayo","Raggmunk (potato pancakes) with fried pork & lingonberries","Truffle salami pizza","Bonus: apple pie with cream"],
+        "Fredag": ["Tarik's falafel wrap","Pulled pork taco with beans & chili mayo","Chicken ramen with glass noodles"]
       }
     },
     {
@@ -414,6 +446,13 @@ let WEEK = {
         "Onsdag": ["Pannbiff ölbrässerad lök, svamp och bacon, timjanssky, rostad potatis med fänkål och rosépeppar, inlagd gurka samt lingon","Dill- och vinbakad hokifilé aubergine, oliver och tomat, lagrad ost, rostad potatis samt tomatsås","Bakad butternutpumpa fetaost, svartris och pesto, fänkål samt grönkålssallad"],
         "Torsdag": ["Nattbakad karré bakad tomat, potatisgratäng, skysås och béarnaisesås, picklad morotssallad","Bakad kungsfisk betor, kapris, dill och pepparrot, brynt smör med citron samt kokt potatis","Minestronesoppa sojafärs, vita bönor, tomat och svartkål, risoni samt gremolata","Ärtsoppa rimmad fläskbog","Bonus: pannkakor, lättvispad grädde och hemmagjord sylt"],
         "Fredag": ["Friterad kyckling ranchdressing, coleslaw med fänkål och äpple, klyftpotatis med örtsalt samt friterad lök","Havets wallenbergare brynt smör, gröna ärtor med lök och dill samt kokt potatis med krasse och citron","Tortelloni med ricotta och spenat krämig tomat- och basilikasås, aubergine med ruccola, chili och vitlök"]
+      },
+      "en": {
+        "Måndag": ["Fried chicken with cream, sun-dried tomato & mash","Oven-baked pollock with hollandaise & baked cabbage","Indian lentil stew with basmati rice"],
+        "Tisdag": ["Beef chuck chili with chipotle & habanero","Fried hake with Skagen sauce & pickled fennel","Creamy mushroom pasta with rocket salad","Bonus: something sweet with your coffee"],
+        "Onsdag": ["Swedish beef patties","Dill-baked hoki","Roasted butternut squash & feta"],
+        "Torsdag": ["Slow-baked pork collar with potato gratin & béarnaise","Baked kingfish with beetroot & brown butter","Minestrone with soy mince & white beans","Pea soup with salted pork","Bonus: pancakes with whipped cream & homemade jam"],
+        "Fredag": ["Fried chicken with ranch dressing & coleslaw","Seafood Wallenbergers with brown butter & peas","Tortelloni with ricotta & spinach"]
       }
     },
     {
@@ -425,6 +464,13 @@ let WEEK = {
         "Onsdag": ["Rött bräserat sidfläsk (红烧肉)","Wokade kyckling med chili (双椒鸡丁)","Potatis med inlagd chili(泡椒土豆丝)","Mapo Tofu (麻婆豆腐)"],
         "Torsdag": ["Ångkokt fläsk med senapskål (梅菜扣肉)","Spicy pot mix (麻辣香锅)","Homestyle tofu (家常豆腐)"],
         "Fredag": ["Sötsur fläsk med anannas (菠萝古老肉)","Rött bräserat lammribs (红焖羊排)","Selleri med cashewnötter och liljalök (腰果百合西芹)"]
+      },
+      "en": {
+        "Måndag": ["General Tso's chicken","Pork with green beans","Stir-fried cauliflower"],
+        "Tisdag": ["Beef with tomato & egg","Spicy grilled chicken wings","Stir-fried pointed cabbage"],
+        "Onsdag": ["Red-braised pork belly","Chili chicken stir-fry","Potato with pickled chili","Mapo tofu"],
+        "Torsdag": ["Steamed pork with pickled mustard greens","Spicy pot mix","Homestyle tofu"],
+        "Fredag": ["Sweet & sour pork with pineapple","Red-braised lamb ribs","Celery with cashews & lily bulb"]
       }
     },
     {
@@ -436,6 +482,13 @@ let WEEK = {
         "Onsdag": ["Ugnspannkaka/rökt rotselleri/färskost/lingon","Kotlett/lökcreme/bakat äpple/krispig grönkål","Panerad kyckling/jordnötssås/ris/gurkkimchi"],
         "Torsdag": ["BetaBourguignon/potatispuré/syltlök/persilja","Havets wallenberg/potatispuré/brynt dillsmör/ärtor","FläskVindaloo/ris/rostad blomkål/chili"],
         "Fredag": ["Samosas/stekt ris/tzatziki","Grillad kalv/3pepparmajo/pommes","Pasta/skinksås/rostade grönsaker/lagrad ost"]
+      },
+      "en": {
+        "Måndag": ["Cauliflower curry with rice & pickled onion","Beef patties with fried onion & mash","Chicken with red curry & rice"],
+        "Tisdag": ["Risotto with baked pumpkin & mushroom","Fish stew with saffron aioli","Pulled pork brioche with ginger cucumber"],
+        "Onsdag": ["Oven pancake with smoked celeriac","Pork chop with onion cream","Breaded chicken with peanut sauce"],
+        "Torsdag": ["Beet bourguignon with mash","Seafood Wallenberger with mash & dill butter","Pork vindaloo with rice & roasted cauliflower"],
+        "Fredag": ["Samosas with fried rice & tzatziki","Grilled veal with pepper mayo & fries","Pasta with ham sauce & roasted vegetables"]
       }
     },
     {
@@ -447,6 +500,13 @@ let WEEK = {
         "Onsdag": ["Nattbakat högrev – aioli – bakad tomat – rostad potatis – bunt morot – salviasky","Vegetariskt: Gnocchi arrabiata – tomatsås – kronärtskocka – tomat – ruccola – frön – grana padano"],
         "Torsdag": ["råbiffstorsdag Oxtartar – tryffelaioli – potatiskrisp – grana padano – bakad tomat – silverlök – ruccola","Vegetariskt: Gnocchi arrabiata – tomatsås – kronärtskocka – tomat – ruccola – frön – grana padano"],
         "Fredag": ["Helstekt ryggbiff – chimichurrimajo – rostad sötpotatis – pickles – sky – rostad lök – hjärtsallad","Vegetariskt: Gnocchi arrabiata – tomatsås – kronärtskocka – tomat – ruccola – frön – grana padano"]
+      },
+      "en": {
+        "Måndag": ["Pluma pork with spicy tomato sauce & feta","Vegetarian: Gnocchi arrabiata with artichoke & tomato"],
+        "Tisdag": ["Sremska sausage with hot sauce & mustard mash","Vegetarian: Gnocchi arrabiata with artichoke & tomato"],
+        "Onsdag": ["Slow-baked beef chuck with aioli & sage jus","Vegetarian: Gnocchi arrabiata with artichoke & tomato"],
+        "Torsdag": ["Raw beef Thursday: ox tartare with truffle aioli","Vegetarian: Gnocchi arrabiata with artichoke & tomato"],
+        "Fredag": ["Whole-roasted sirloin with chimichurri mayo & sweet potato","Vegetarian: Gnocchi arrabiata with artichoke & tomato"]
       }
     },
     {
@@ -459,6 +519,13 @@ let WEEK = {
         "Onsdag": ["Kampong Style Hainanese Chicken – Rice steamed in chicken broth, tender chicken thigh, ginger, chili, garlic, cilantro, served with Kampong red sauce, chicken broth & fermented soybean/ginger dip - to keep you warm during the autumn chill.","Pad Thai Chicken – Stir-fried chicken, egg, tofu, garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, rice noodles, peanuts","VEG Pad Thai Double Style Tofu – Garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, choice to add an egg, peanuts."],
         "Torsdag": ["Kampong Style Hainanese Chicken – Rice steamed in chicken broth, tender chicken thigh, ginger, chili, garlic, cilantro, served with Kampong red sauce, chicken broth & fermented soybean/ginger dip - to keep you warm during the autumn chill.","Pad Thai Chicken – Stir-fried chicken, egg, tofu, garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, rice noodles, peanuts","VEG Pad Thai Double Style Tofu – Garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, choice to add an egg, peanuts."],
         "Fredag": ["Kampong Style Hainanese Chicken – Rice steamed in chicken broth, tender chicken thigh, ginger, chili, garlic, cilantro, served with Kampong red sauce, chicken broth & fermented soybean/ginger dip - to keep you warm during the autumn chill.","Pad Thai Chicken – Stir-fried chicken, egg, tofu, garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, rice noodles, peanuts","VEG Pad Thai Double Style Tofu – Garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, choice to add an egg, peanuts."]
+      },
+      "en": {
+        "Måndag": ["Hainanese chicken rice","Chicken Pad Thai","Tofu Pad Thai"],
+        "Tisdag": ["Hainanese chicken rice","Chicken Pad Thai","Tofu Pad Thai"],
+        "Onsdag": ["Hainanese chicken rice","Chicken Pad Thai","Tofu Pad Thai"],
+        "Torsdag": ["Hainanese chicken rice","Chicken Pad Thai","Tofu Pad Thai"],
+        "Fredag": ["Hainanese chicken rice","Chicken Pad Thai","Tofu Pad Thai"]
       }
     },
     {
@@ -470,6 +537,13 @@ let WEEK = {
         "Onsdag": ["Fläskgryta med trattkantarell, dragon, varmrökt sidfläsk och smörbakad rotselleri","Vegetariskt: Variation på pumpa med linser, vispad brieost och rostad brysselkål"],
         "Torsdag": ["“Kalops” på högrev med inlagd rödbeta, kokt potatis och persilja","Vegetariskt: Variation på pumpa med linser, vispad brieost och rostad brysselkål"],
         "Fredag": ["Kycklingbröst från Knäred med råstekt potatis, soltorkad tomat, basilika och parmesan","Vegetariskt: Variation på pumpa med linser, vispad brieost och rostad brysselkål"]
+      },
+      "en": {
+        "Måndag": ["Pork cutlet with mushroom & pickled pumpkin","Vegetarian: Pumpkin with lentils, whipped brie & Brussels sprouts"],
+        "Tisdag": ["Västerbotten-cheese-baked salmon with broccoli & mussels","Vegetarian: Pumpkin with lentils, whipped brie & Brussels sprouts"],
+        "Onsdag": ["Pork stew with chanterelles, tarragon & smoked pork belly","Vegetarian: Pumpkin with lentils, whipped brie & Brussels sprouts"],
+        "Torsdag": ["Beef chuck \"kalops\" with pickled beetroot & potatoes","Vegetarian: Pumpkin with lentils, whipped brie & Brussels sprouts"],
+        "Fredag": ["Chicken breast with roast potatoes & sun-dried tomato","Vegetarian: Pumpkin with lentils, whipped brie & Brussels sprouts"]
       }
     }
   ]
@@ -564,6 +638,7 @@ function render(){
 
   document.getElementById("dayHeading").textContent = day;
   document.getElementById("pickResult").hidden = true;
+  document.getElementById("shareResult").hidden = true;
   document.getElementById("pickBtn").setAttribute("aria-expanded", "false");
   const sub = document.getElementById("daySub");
   const dateStr = WEEK.dates?.[selected] ? fmtDate(WEEK.dates[selected]) : "";
@@ -879,6 +954,95 @@ function wirePress(el){
 
 wirePress(document.getElementById("pickBtn"));
 wirePress(document.getElementById("pickAgain"));
+
+/* ---- "Dagens utbud" as pasteable English text --------------------------- */
+/* Matches the team's Slack post: a wheel header, then per place an
+   ":emoji: Label:" line and its dishes joined with " | ". Dishes come from
+   lt.json's `en` (translated at scrape time — see scraper.py); fixed-menu
+   blurbs go in verbatim, jokes and all. Per place: [emoji, label]. */
+const SLACK = {
+  "Bricks Eatery": [":bricks:", "Bricks"],
+  "Bricks & Bones": [":bone:", "Bricks & Bones"],
+  "Chop-chop": [":takeout_box:", "Chop-chop"],
+  "Delphi": [":burrito:", "Delphi"],
+  "Restaurang Edison": [":bulb:", "Edison"],
+  "Eatery": [":knife_fork_plate:", "Eatery"],
+  "Kantin": [":female-cook::skin-tone-4:", "Kantin"],
+  "Laziza": [":flag-lb:", "Laziza"],
+  "Linnea Basilika": [":ramen:", "Linnea Basilika"],
+  "Mat och Harmoni": ["𝄞⨾𓍢ִ໋", "Mat och Harmoni"],
+  "Matstudio Kungsmarken": [":fork_and_knife:", "Matstudio Kungsmarken"],
+  "Orvars burgers": [":hamburger:", "Örvars"],
+  "Rekas": [":hamburger:", "Rekas"],
+  "Troppo": [":ramen:", "Troppo"],
+  "Sallads & Smoothies": [":green_salad:", "Sallads & Smoothies"],
+  "Smaka på Kina": [":chopsticks:", "Smaka på Kina"],
+  "Sweet Lemon Thai": [":ramen:", "Sweet Lemon Thai"],
+};
+const sortKey = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+/* Returns { text, untranslated:[names] } for the day currently shown. */
+function utbudText(){
+  const day = DAYS[selected], places = [], untranslated = [];
+  WEEK.restaurants.forEach(r => {
+    const sv = Array.isArray(r.menus?.[day]) ? r.menus[day] : [];
+    const en = Array.isArray(r.en?.[day]) ? r.en[day] : [];
+    const items = []; let fellBack = false;
+    sv.forEach((raw, i) => {
+      const s = String(raw).trim();
+      if (!s || /^(bonus|vegetarisk[t]?)\s*:/i.test(s)) return;   // main dishes only, like the Slack post
+      const e = typeof en[i] === "string" ? en[i].trim() : "";
+      if (e) items.push(e); else { items.push(s); fellBack = true; }
+    });
+    if (!items.length) return;
+    if (fellBack) untranslated.push((SLACK[r.name] || [, r.name])[1]);
+    places.push({ name: r.name, items });
+  });
+  FIXED_PLACES.forEach(p => places.push({ name: p.name, items: p.blurb.split(" · ") }));
+
+  const lines = places.map(p => {
+    const [emoji, label] = SLACK[p.name] || [":fork_and_knife:", p.name];
+    return { key: sortKey(label), text: `${emoji} ${label}:\n${p.items.join(" | ")}` };
+  }).sort((a, b) => a.key.localeCompare(b.key, "en"));
+  return { text: [":ferris_wheel: Lunch wheel of the day:", ...lines.map(l => l.text)].join("\n"), untranslated };
+}
+
+/* navigator.clipboard needs a secure context (GitHub Pages is https); the
+   textarea fallback covers anything stricter. Called straight from the click so
+   the browser still counts it as a user gesture. */
+function copyToClipboard(text){
+  const legacy = () => {
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.setAttribute("readonly", "");
+    ta.style.cssText = "position:fixed;top:-1000px;opacity:0";
+    document.body.appendChild(ta); ta.select();
+    let ok = false; try { ok = document.execCommand("copy"); } catch {}
+    ta.remove(); return ok;
+  };
+  return navigator.clipboard?.writeText
+    ? navigator.clipboard.writeText(text).then(() => true, legacy)
+    : Promise.resolve(legacy());
+}
+
+let shareTimer = null;
+document.getElementById("shareBtn").addEventListener("click", () => {
+  const { text, untranslated } = utbudText();
+  const out = document.getElementById("shareOut"), status = document.getElementById("shareStatus");
+  const label = document.getElementById("shareBtnLabel");
+  out.textContent = text;
+  document.getElementById("shareResult").hidden = false;
+  copyToClipboard(text).then(ok => {
+    status.classList.toggle("warn", !ok || untranslated.length > 0);
+    status.textContent = (ok
+      ? "Kopierat till urklipp – klistra in med Ctrl+V."
+      : "Kunde inte kopiera automatiskt – markera texten nedan och kopiera själv.")
+      + (untranslated.length ? ` Ej översatt än: ${untranslated.join(", ")}.` : "");
+    if (!ok){ const sel = getSelection(), rng = document.createRange(); rng.selectNodeContents(out); sel.removeAllRanges(); sel.addRange(rng); }
+    label.textContent = ok ? "Kopierat ✓" : "Kopiera dagens utbud (EN)";
+    clearTimeout(shareTimer);
+    shareTimer = setTimeout(() => { label.textContent = "Kopiera dagens utbud (EN)"; }, 2200);
+  });
+});
 
 /* Static, so rendered once rather than on every day switch. */
 function renderFixed(){
