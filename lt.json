@@ -278,6 +278,28 @@
           "Helstekt ryggbiff – chimichurrimajo – rostad sötpotatis – pickles – sky – rostad lök – hjärtsallad",
           "Vegetariskt: Gnocchi arrabiata – tomatsås – kronärtskocka – tomat – ruccola – frön – grana padano"
         ]
+      },
+      "en": {
+        "Måndag": [
+          "Pluma pork with spicy tomato sauce & feta",
+          "Vegetarian: Gnocchi arrabiata with artichoke & tomato"
+        ],
+        "Tisdag": [
+          "Sremska sausage with hot sauce & mustard mash",
+          "Vegetarian: Gnocchi arrabiata with artichoke & tomato"
+        ],
+        "Onsdag": [
+          "Slow-baked beef chuck with aioli & sage jus",
+          "Vegetarian: Gnocchi arrabiata with artichoke & tomato"
+        ],
+        "Torsdag": [
+          "Raw beef Thursday: ox tartare with truffle aioli",
+          "Vegetarian: Gnocchi arrabiata with artichoke & tomato"
+        ],
+        "Fredag": [
+          "Whole-roasted sirloin with chimichurri mayo & sweet potato",
+          "Vegetarian: Gnocchi arrabiata with artichoke & tomato"
+        ]
       }
     },
     {
@@ -310,7 +332,34 @@
           "VEG Pad Thai Double Style Tofu – Garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, choice to add an egg, peanuts."
         ]
       },
-      "weekly": true
+      "weekly": true,
+      "en": {
+        "Måndag": [
+          "Hainanese chicken rice",
+          "Chicken Pad Thai",
+          "Tofu Pad Thai"
+        ],
+        "Tisdag": [
+          "Hainanese chicken rice",
+          "Chicken Pad Thai",
+          "Tofu Pad Thai"
+        ],
+        "Onsdag": [
+          "Hainanese chicken rice",
+          "Chicken Pad Thai",
+          "Tofu Pad Thai"
+        ],
+        "Torsdag": [
+          "Hainanese chicken rice",
+          "Chicken Pad Thai",
+          "Tofu Pad Thai"
+        ],
+        "Fredag": [
+          "Hainanese chicken rice",
+          "Chicken Pad Thai",
+          "Tofu Pad Thai"
+        ]
+      }
     },
     {
       "name": "Matstudio Kungsmarken",
@@ -335,6 +384,28 @@
         "Fredag": [
           "Kycklingbröst från Knäred med råstekt potatis, soltorkad tomat, basilika och parmesan",
           "Vegetariskt: Variation på pumpa med linser, vispad brieost och rostad brysselkål"
+        ]
+      },
+      "en": {
+        "Måndag": [
+          "Pork cutlet with mushroom & pickled pumpkin",
+          "Vegetarian: Pumpkin with lentils, whipped brie & Brussels sprouts"
+        ],
+        "Tisdag": [
+          "Västerbotten-cheese-baked salmon with broccoli & mussels",
+          "Vegetarian: Pumpkin with lentils, whipped brie & Brussels sprouts"
+        ],
+        "Onsdag": [
+          "Pork stew with chanterelles, tarragon & smoked pork belly",
+          "Vegetarian: Pumpkin with lentils, whipped brie & Brussels sprouts"
+        ],
+        "Torsdag": [
+          "Beef chuck \"kalops\" with pickled beetroot & potatoes",
+          "Vegetarian: Pumpkin with lentils, whipped brie & Brussels sprouts"
+        ],
+        "Fredag": [
+          "Chicken breast with roast potatoes & sun-dried tomato",
+          "Vegetarian: Pumpkin with lentils, whipped brie & Brussels sprouts"
         ]
       }
     },
@@ -366,6 +437,33 @@
           "Friterad kyckling, lime- & chilicreme, klyftpotatis, sötpotatis",
           "Stekt fläsk, löksås, kokt potatis, lingon",
           "Spaghetti, vegofärssås, jalapeñocreme"
+        ]
+      },
+      "en": {
+        "Måndag": [
+          "Rosemary-fried pork chop with Dijon sauce",
+          "Chicken curry",
+          "Curry stew"
+        ],
+        "Tisdag": [
+          "Spicy fish stew with prawns & mussels",
+          "Chicken curry",
+          "Spaghetti with veggie mince sauce"
+        ],
+        "Onsdag": [
+          "Swedish meatballs & gravy",
+          "Chicken curry",
+          "Vegetarian meatballs"
+        ],
+        "Torsdag": [
+          "Sliced beef with vegetables & sesame",
+          "Fried pork with onion sauce",
+          "Soy-bean pieces with vegetables & sesame"
+        ],
+        "Fredag": [
+          "Fried chicken with lime & chili cream",
+          "Fried pork with onion sauce",
+          "Spaghetti with veggie mince sauce"
         ]
       }
     },
@@ -402,6 +500,38 @@
           "Vitlöksmarinerade jätteräkor med grovmalen svartpeppar, koriander och thai basilika",
           "Wokad kycklingfilé med färsk ingefära och grönsaker",
           "Grillad kycklinginnerfilé på spett med hemlagad jordnötssås"
+        ]
+      },
+      "en": {
+        "Måndag": [
+          "Chicken & cauliflower in creamy Thai yellow curry",
+          "Wok-fried pork with spicy Thai basil",
+          "Wok-fried chicken with roasted cashews & vegetables",
+          "Grilled hot wings Asian style"
+        ],
+        "Tisdag": [
+          "Chicken & green beans in panang curry",
+          "Wok-fried sirloin with mushrooms & bamboo shoots",
+          "Garlic-marinated chicken with black pepper, coriander & Thai basil",
+          "Grilled chicken skewers with homemade peanut sauce"
+        ],
+        "Onsdag": [
+          "Chicken & zucchini in hot Thai green curry",
+          "Crispy pork with pineapple & sweet chili sauce",
+          "Wok-fried minced chicken with spicy Thai basil",
+          "Homemade spring rolls with minced meat, vermicelli & black fungus"
+        ],
+        "Torsdag": [
+          "Chicken & aubergine in spicy Thai red curry",
+          "Wok-fried sirloin with spicy Thai basil",
+          "Wok-fried chicken with pineapple in sweet & sour sauce",
+          "Grilled hot wings Asian style"
+        ],
+        "Fredag": [
+          "Chicken & potato in creamy massaman curry",
+          "Garlic-marinated king prawns with black pepper, coriander & Thai basil",
+          "Wok-fried chicken with fresh ginger & vegetables",
+          "Grilled chicken skewers with homemade peanut sauce"
         ]
       }
     }

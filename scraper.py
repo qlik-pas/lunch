@@ -479,7 +479,7 @@ Rules:
 - Use "&" instead of "and". Keep proper names and well-known foreign dish names (Mapo tofu, Tandoori chicken, raggmunk with a short gloss).
 - Drop Chinese characters. Don't add words that aren't in the dish.
 - A line starting "Vegetariskt:" becomes "Vegetarian: ..."; "Bonus:" stays "Bonus: ...".
-- Reply with JSON only: {"<day>": ["...", ...], ...} using exactly the day keys and list lengths you were given."""
+- The input is JSON {"<restaurant>": {"<day>": ["line", ...], ...}, ...}. Reply with JSON only, the same structure: exactly the restaurant names, day keys and list lengths you were given."""
 
 
 def _reply(r):
@@ -498,7 +498,7 @@ def _reply(r):
 # call retries with a pause and then falls through to the next model. One shared
 # time budget keeps a bad day from stalling the whole scrape.
 GEMINI_MODELS = ["gemini-flash-latest", "gemini-flash-lite-latest", "gemini-2.5-flash"]
-TRANSLATE_BUDGET = 240          # seconds of waiting allowed per scraper run
+TRANSLATE_BUDGET = 90           # seconds of waiting allowed per scraper run
 _waited = 0.0
 
 
@@ -541,10 +541,11 @@ def _llm_json(system, payload):
 
 def _with_translations(restaurants, old, translate=_llm_json):
     """Attach `en` to each restaurant — reused from `old` when its menus are
-    unchanged, otherwise freshly translated. Never raises."""
+    unchanged, otherwise freshly translated. Never raises. Everything that needs
+    translating goes in ONE model call (the free tier rate-limits per request)."""
     prev = {r["name"]: r for r in old.get("restaurants", [])}
     force = bool(os.environ.get("FORCE_TRANSLATE"))
-    cached, fresh, failed = [], [], []
+    cached, fresh, failed, todo = [], [], [], {}
     for r in restaurants:
         src = {d: v for d, v in r["menus"].items() if v}
         if not src:
@@ -553,15 +554,25 @@ def _with_translations(restaurants, old, translate=_llm_json):
         if p and p.get("en") and p.get("menus") == r["menus"] and not force:
             r["en"] = p["en"]
             cached.append(r["name"])
-            continue
-        try:
+        else:
             # a weekly menu is the same list every day — translate it once
-            ask = {"Måndag": src["Måndag"]} if r.get("weekly") else src
-            got = translate(TRANSLATE_PROMPT, ask)
-            if r.get("weekly"):
-                got = {d: got["Måndag"] for d in src}
+            todo[r["name"]] = (r, {"Måndag": src["Måndag"]} if r.get("weekly") else src)
+
+    got_all, call_error = {}, None
+    if todo:
+        try:
+            got_all = translate(TRANSLATE_PROMPT, {n: ask for n, (_, ask) in todo.items()})
+        except Exception as e:
+            call_error = f"{type(e).__name__}: {str(e)[:160]}"
+    for name, (r, ask) in todo.items():
+        try:
+            if call_error:
+                raise ValueError(call_error)
+            got = got_all.get(name) or {}
+            if r.get("weekly") and "Måndag" in got:
+                got = {d: got["Måndag"] for d in r["menus"] if r["menus"][d]}
             en = {}
-            for d, lines in src.items():
+            for d, lines in {d: v for d, v in r["menus"].items() if v}.items():
                 out = got.get(d)
                 if (isinstance(out, list) and len(out) == len(lines)
                         and all(isinstance(x, str) and x.strip() for x in out)):
@@ -569,13 +580,15 @@ def _with_translations(restaurants, old, translate=_llm_json):
             if not en:
                 raise ValueError("reply didn't match the menu shape")
             r["en"] = en
-            fresh.append(r["name"])
+            fresh.append(name)
         except Exception as e:
-            failed.append(f"{r['name']} ({type(e).__name__}: {str(e)[:120]})")
+            failed.append(name if call_error else f"{name} ({e})")
+            p = prev.get(name)
             if p and p.get("en") and p.get("menus") == r["menus"]:
                 r["en"] = p["en"]                    # a failed *re*translate mustn't wipe good text
     print(f"English: {len(cached)} cached, {len(fresh)} translated"
-          + (f", {len(failed)} failed: {failed}" if failed else ""))
+          + (f", {len(failed)} failed: {failed}" if failed else "")
+          + (f" — {call_error}" if call_error else ""))
     return restaurants
 
 
