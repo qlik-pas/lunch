@@ -96,7 +96,7 @@ rendered once at load rather than per day. Two places they must show up:
 - the "Vad blir det?" pick pool (the result name is a link too, same ↗ treatment) — one entry each (`dish` = the blurb), so the
   wheel can land on "go to Troppo", not just on a dish.
 
-## "Copy todays choices" (share text)
+## "Copy today's lunch" (share text)
 
 A button in the day heading row (right of the Idag/date tag) that builds the day's lunch as a Slack-ready English
 post and puts it **on the clipboard** (so a plain Ctrl+V pastes it), with a

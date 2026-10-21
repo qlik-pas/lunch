@@ -354,7 +354,7 @@
     <div class="subrow">
       <p class="subnote" id="daySub"></p>
       <button class="picker-btn share-btn" id="shareBtn" type="button">
-        <span class="spin-ico" aria-hidden="true">⧉</span> <span id="shareBtnLabel">Copy todays choices</span>
+        <span class="spin-ico" aria-hidden="true">⧉</span> <span id="shareBtnLabel">Copy today's lunch</span>
       </button>
     </div>
   </div>
@@ -1082,9 +1082,9 @@ document.getElementById("shareBtn").addEventListener("click", () => {
     out.hidden = ok;
     box.hidden = ok && !note;
     if (!ok){ const sel = getSelection(), rng = document.createRange(); rng.selectNodeContents(out); sel.removeAllRanges(); sel.addRange(rng); }
-    label.textContent = ok ? "Copied ✓" : "Copy todays choices";
+    label.textContent = ok ? "Copied ✓" : "Copy today's lunch";
     clearTimeout(shareTimer);
-    shareTimer = setTimeout(() => { label.textContent = "Copy todays choices"; }, 2200);
+    shareTimer = setTimeout(() => { label.textContent = "Copy today's lunch"; }, 2200);
   });
 });
 
