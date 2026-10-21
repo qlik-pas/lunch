@@ -520,29 +520,31 @@ def _llm_json(system, payload):
     body = {"systemInstruction": {"parts": [{"text": system}]},
             "contents": [{"role": "user", "parts": [{"text": user}]}],
             "generationConfig": {"temperature": 0.2, "responseMimeType": "application/json"}}
-    r = timed_out = None
+    problems = []                       # one line per model that didn't deliver
     for model in models:
         for attempt in range(3):
             try:
                 r = requests.post(
                     f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
                     timeout=100, headers={"x-goog-api-key": key}, json=body)
-            except requests.exceptions.Timeout as e:   # a slow model: try the next one rather than the same again
-                r = None; timed_out = e
+            except requests.exceptions.Timeout:        # a slow model: the next one may be quicker
+                problems.append(f"{model}: timed out")
                 break
-            if r.status_code not in (429, 500, 503):
+            if r.ok:
+                text = _reply(r)["candidates"][0]["content"]["parts"][0]["text"]
+                return json.loads(re.search(r"\{.*\}", text, re.S).group(0))
+            if r.status_code == 404:                    # model id gone: try the next one
+                problems.append(f"{model}: HTTP 404")
                 break
+            if r.status_code not in (429, 500, 503):    # bad key / bad request: no model will fix it
+                _reply(r)
+            problems.append(f"{model}: HTTP {r.status_code}")
             wait = _retry_delay(r, attempt)
-            if _waited + wait > TRANSLATE_BUDGET:
-                raise RuntimeError(f"gave up after waiting {_waited:.0f}s — HTTP {r.status_code}: {r.text[:100]!r}")
+            if attempt == 2 or _waited + wait > TRANSLATE_BUDGET:
+                break                                   # out of retries or time: next model, no pointless sleep
             _waited += wait
             time.sleep(wait)
-        if r is not None and r.ok:
-            break
-    if r is None:
-        raise RuntimeError(f"every model timed out: {timed_out}")
-    text = _reply(r)["candidates"][0]["content"]["parts"][0]["text"]
-    return json.loads(re.search(r"\{.*\}", text, re.S).group(0))
+    raise RuntimeError("no model answered — " + "; ".join(problems[-4:]))
 
 
 def _with_translations(restaurants, old, translate=_llm_json):
