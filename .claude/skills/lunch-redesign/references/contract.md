@@ -110,6 +110,8 @@ place's emoji + short label (Bricks Eatery → "Bricks", Restaurang Edison →
   refuse it otherwise) — never `await` a model/network call before it;
 - dishes come from `en` (translated at scrape time); a place without `en` falls
   back to its Swedish text and is named in the status line ("Ej översatt än");
+- a scraped place with no dishes that day (menu not published/updated yet) is listed as `no menu yet`, not skipped;
+- Laziza reads `CRISPY CHICKEN!` on Wednesdays of even ISO weeks (a running joke);
 - `Vegetariskt:` and `Bonus:` lines are left out (main dishes only), fixed-menu
   blurbs go in verbatim (jokes and Swedish included), `·` becomes ` | `;
 - a note (and, only if the copy was refused, the text itself) shows under the heading; it is hidden again on day switch.
