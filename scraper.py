@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Scrapes the five Lund lunch sources and writes lt.json in the shape index.html
+Scrapes the seven Lund lunch sources and writes lt.json in the shape index.html
 expects: { week, range, dates[5], generated, restaurants:[{name,url,menus:{Day:[...]}}] }
 
 Sources:
@@ -8,6 +8,8 @@ Sources:
   Bricks Eatery      https://brickseatery.se/lunch         (Elementor HTML, same template)
   Smaka på Kina      https://www.smakapakina.se/meny       (Wix HTML)
   Kantin             https://www.kantinlund.se/            (WP HTML)
+  Troppo             https://www.troppo.se/lunch           (Webflow; one weekly menu)
+  Matstudio Kungsmarken https://www.matstudiokungsmarken.se/lunch/ (WP HTML)
   Eatery             menu.pej.io TV/kiosk board — client-rendered, needs
                      headless Chromium (see fetch_rendered_text)
 
@@ -42,17 +44,20 @@ def _empty():
     return {d: [] for d in DAYS}
 
 
-# Edison says "Vecka 35", Bricks "Lunchmeny V36", Eatery's PDF "MENY V35".
+# Edison says "Vecka 35", Bricks "Lunchmeny V36", Eatery's board "VECKA 39",
+# Troppo "Lunch Week 43, 2026", Matstudio Kungsmarken "Dagens v 43".
 # Restaurants publish the coming week mid-week, so the label is the only way to
 # tell "next week, live early" from "this week's menu".
-WEEK_LABEL = re.compile(r"vecka\s*(\d{1,2})\b|meny\s*v\.?\s*(\d{1,2})\b", re.I)
+WEEK_LABEL = re.compile(
+    r"vecka\s*(\d{1,2})\b|meny\s*v\.?\s*(\d{1,2})\b|"
+    r"\bweek\s*(\d{1,2})\b|dagens\s+v\.?\s*(\d{1,2})\b", re.I)
 
 def claimed_week(text):
     """ISO week the page/PDF claims to be for, or None if it carries no label."""
     m = WEEK_LABEL.search(text)
     if not m:
         return None
-    n = int(m.group(1) or m.group(2))
+    n = int(next(g for g in m.groups() if g))
     return n if 1 <= n <= 53 else None
 
 
@@ -237,6 +242,79 @@ def parse_kantin(text):
     return menus
 
 
+# Troppo serves one weekly lunch menu (a new one every Saturday) — the same
+# three dishes Mon–Fri — laid out as "Name -", a description, an origin tag
+# like "(Thai)", and an "or" between dishes. The page is Webflow and sprinkles
+# zero-width joiners between blocks, which would otherwise count as lines.
+def parse_troppo(text):
+    menus = _empty()
+    lines = _lines(re.sub(r"[\u200b-\u200d\ufeff]", "", text))
+    start = next((i for i, l in enumerate(lines) if re.search(r"lunch\s+menu", l, re.I)), None)
+    if start is None:
+        return menus
+    dishes = []
+    for l in lines[start + 1:]:
+        if re.match(r"find us", l, re.I):
+            break
+        if l.lower() == "or" or re.fullmatch(r"\([^)]*\)", l) or l == ".":
+            continue                                   # separator / "(Thai)" tag / stray dot
+        m = re.match(r"^(.+?)\s+-\s*$", l)
+        if m:
+            dishes.append([m.group(1)])                # "Pad Thai Chicken -" opens a dish
+        elif dishes:
+            dishes[-1].append(l)
+    entries = []
+    for name, *desc in dishes:
+        d = re.sub(r"\s+([.,])", r"\1", " ".join(desc)).strip()
+        entries.append(f"{name} – {d}" if d else name)
+    for day in DAYS:
+        menus[day] = list(entries)
+    return menus
+
+
+# Matstudio Kungsmarken: "Dagens v 43", then Måndag…Fredag each followed by
+# that day's dish (sometimes wrapped over two lines), then "Veckans gröda" —
+# the vegetarian dish, shown under every day like Kantin's. The à la carte
+# list further down is permanent and ignored.
+MATSTUDIO_STOP = re.compile(
+    r"^(Veckans gröda|Alla rätter|Varmt välkomna|A LA CARTE|Kontakt)", re.I)
+
+def parse_matstudio(text):
+    menus = _empty()
+    lines = _lines(text)
+    veg = ""
+    for i, line in enumerate(lines):
+        if re.match(r"Veckans gröda", line, re.I):
+            parts = []
+            for nxt in lines[i + 1:]:
+                if MATSTUDIO_STOP.match(nxt):
+                    break
+                parts.append(nxt)
+            veg = _kantin_clean(" ".join(parts))
+            break
+    day, buf = None, []
+
+    def flush():
+        nonlocal day, buf
+        if day and buf and not menus[day]:             # first fill wins
+            menus[day] = [_kantin_clean(" ".join(buf))] + (["Vegetariskt: " + veg] if veg else [])
+        day, buf = None, []
+
+    for line in lines:
+        if line in DAYS and not menus[line]:
+            flush()
+            day = line
+        elif day is None:
+            continue
+        elif MATSTUDIO_STOP.match(line):
+            flush()
+        else:
+            buf.append(line)
+    flush()
+    return menus
+
+
+
 # --------------------------------------------------------------------------- #
 # fetchers (network; deps imported here)
 # --------------------------------------------------------------------------- #
@@ -309,7 +387,20 @@ SOURCES = [
     ("Smaka på Kina",     "https://www.smakapakina.se/meny",    parse_kina,      "html"),
     ("Restaurang Edison", "https://restaurangedison.se/lunch/", parse_elementor, "html"),
     ("Kantin",            "https://www.kantinlund.se/",         parse_kantin,    "html"),
+    ("Troppo",            "https://www.troppo.se/lunch",        parse_troppo,    "html"),
+    ("Matstudio Kungsmarken", "https://www.matstudiokungsmarken.se/lunch/", parse_matstudio, "html"),
 ]
+
+# One menu for the whole week, the same every day. lt.json marks these so the
+# page shows them as full cards instead of demoting "same every day" to the
+# collapsed "Även öppet" list (that rule is for places with no real daily menu).
+WEEKLY = {"Troppo"}
+
+def _entry(name, url, menus):
+    e = {"name": name, "url": url, "menus": menus}
+    if name in WEEKLY:
+        e["weekly"] = True
+    return e
 
 
 def _load_old():
@@ -345,12 +436,11 @@ def build():
             cw = claimed_week(text)
             if cw is not None and cw != week:
                 raise ValueError(f"sidan visar vecka {cw}, väntar på vecka {week}")
-            restaurants.append({"name": name, "url": url, "menus": menus})
+            restaurants.append(_entry(name, url, menus))
         except Exception as e:                       # one bad source ≠ empty file
             kept = prev.get(name)
             errors.append(f"{name}: {e}" + (" (kept previous)" if kept else ""))
-            restaurants.append({"name": name, "url": url,
-                                "menus": kept or _empty()})
+            restaurants.append(_entry(name, url, kept or _empty()))
 
     out = {
         "week": week, "range": rng, "dates": dates,

@@ -8,7 +8,7 @@
     "2026-10-22",
     "2026-10-23"
   ],
-  "generated": "2026-10-21T08:01:33+00:00",
+  "generated": "2026-10-21T17:14:32+02:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -163,6 +163,64 @@
         "Fredag": [
           "Helstekt ryggbiff – chimichurrimajo – rostad sötpotatis – pickles – sky – rostad lök – hjärtsallad",
           "Vegetariskt: Gnocchi arrabiata – tomatsås – kronärtskocka – tomat – ruccola – frön – grana padano"
+        ]
+      }
+    },
+    {
+      "name": "Troppo",
+      "url": "https://www.troppo.se/lunch",
+      "menus": {
+        "Måndag": [
+          "Kampong Style Hainanese Chicken – Rice steamed in chicken broth, tender chicken thigh, ginger, chili, garlic, cilantro, served with Kampong red sauce, chicken broth & fermented soybean/ginger dip - to keep you warm during the autumn chill.",
+          "Pad Thai Chicken – Stir-fried chicken, egg, tofu, garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, rice noodles, peanuts",
+          "VEG Pad Thai Double Style Tofu – Garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, choice to add an egg, peanuts."
+        ],
+        "Tisdag": [
+          "Kampong Style Hainanese Chicken – Rice steamed in chicken broth, tender chicken thigh, ginger, chili, garlic, cilantro, served with Kampong red sauce, chicken broth & fermented soybean/ginger dip - to keep you warm during the autumn chill.",
+          "Pad Thai Chicken – Stir-fried chicken, egg, tofu, garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, rice noodles, peanuts",
+          "VEG Pad Thai Double Style Tofu – Garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, choice to add an egg, peanuts."
+        ],
+        "Onsdag": [
+          "Kampong Style Hainanese Chicken – Rice steamed in chicken broth, tender chicken thigh, ginger, chili, garlic, cilantro, served with Kampong red sauce, chicken broth & fermented soybean/ginger dip - to keep you warm during the autumn chill.",
+          "Pad Thai Chicken – Stir-fried chicken, egg, tofu, garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, rice noodles, peanuts",
+          "VEG Pad Thai Double Style Tofu – Garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, choice to add an egg, peanuts."
+        ],
+        "Torsdag": [
+          "Kampong Style Hainanese Chicken – Rice steamed in chicken broth, tender chicken thigh, ginger, chili, garlic, cilantro, served with Kampong red sauce, chicken broth & fermented soybean/ginger dip - to keep you warm during the autumn chill.",
+          "Pad Thai Chicken – Stir-fried chicken, egg, tofu, garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, rice noodles, peanuts",
+          "VEG Pad Thai Double Style Tofu – Garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, choice to add an egg, peanuts."
+        ],
+        "Fredag": [
+          "Kampong Style Hainanese Chicken – Rice steamed in chicken broth, tender chicken thigh, ginger, chili, garlic, cilantro, served with Kampong red sauce, chicken broth & fermented soybean/ginger dip - to keep you warm during the autumn chill.",
+          "Pad Thai Chicken – Stir-fried chicken, egg, tofu, garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, rice noodles, peanuts",
+          "VEG Pad Thai Double Style Tofu – Garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, choice to add an egg, peanuts."
+        ]
+      },
+      "weekly": true
+    },
+    {
+      "name": "Matstudio Kungsmarken",
+      "url": "https://www.matstudiokungsmarken.se/lunch/",
+      "menus": {
+        "Måndag": [
+          "Kotlettrad med champinjon, picklad pumpa, rostad pumpafrö och brytböna",
+          "Vegetariskt: Variation på pumpa med linser, vispad brieost och rostad brysselkål"
+        ],
+        "Tisdag": [
+          "Västerbottensostbakad lax med broccoli, blåmussla och örtsmörsås",
+          "Vegetariskt: Variation på pumpa med linser, vispad brieost och rostad brysselkål"
+        ],
+        "Onsdag": [
+          "Fläskgryta med trattkantarell, dragon, varmrökt sidfläsk och smörbakad rotselleri",
+          "Vegetariskt: Variation på pumpa med linser, vispad brieost och rostad brysselkål"
+        ],
+        "Torsdag": [
+          "“Kalops” på högrev med inlagd rödbeta, kokt potatis och persilja",
+          "Vegetariskt: Variation på pumpa med linser, vispad brieost och rostad brysselkål"
+        ],
+        "Fredag": [
+          "Kycklingbröst från Knäred med råstekt potatis, soltorkad tomat, basilika och parmesan",
+          "Vegetariskt: Variation på pumpa med linser, vispad brieost och rostad brysselkål"
         ]
       }
     }
