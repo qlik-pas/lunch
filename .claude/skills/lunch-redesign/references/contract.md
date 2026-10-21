@@ -98,10 +98,10 @@ rendered once at load rather than per day. Two places they must show up:
 
 ## "Copy today's lunch" (share text)
 
-A button in the day heading row (right of the Idag/date tag) that builds the day's lunch as a Slack-ready English
+A button in the day heading row (right of the Idag/date tag) that builds the day's lunch as a Teams/Slack-ready English
 post and puts it **on the clipboard** (so a plain Ctrl+V pastes it), with a
-(no preview — only on a failed copy). Format: a `:ferris_wheel: Lunch wheel of the day:` header,
-then per place an `:emoji: Label:` line and its dishes joined with ` | `, places
+(no preview — only on a failed copy). Format: a `🎡 Lunch wheel of the day:` header,
+then per place an `🧱 Label:` line (real Unicode emoji — `:shortcodes:` stay literal in Teams) and its dishes joined with ` | `, places
 sorted by label (accents ignored). The `SLACK` map in `index.html` holds each
 place's emoji + short label (Bricks Eatery → "Bricks", Restaurang Edison →
 "Edison", Orvars burgers → "Örvars"). Rules a redesign must keep:

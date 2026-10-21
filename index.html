@@ -996,28 +996,28 @@ wirePress(document.getElementById("pickBtn"));
 wirePress(document.getElementById("pickAgain"));
 
 /* ---- "Dagens utbud" as pasteable English text --------------------------- */
-/* Matches the team's Slack post: a wheel header, then per place an
-   ":emoji: Label:" line and its dishes joined with " | ". Dishes come from
+/* Plain text that pastes cleanly into Teams and Slack (real Unicode emoji, not :shortcodes:): a wheel header, then per place an
+   "emoji Label:" line and its dishes joined with " | ". Dishes come from
    lt.json's `en` (translated at scrape time — see scraper.py); fixed-menu
    blurbs go in verbatim, jokes and all. Per place: [emoji, label]. */
 const SLACK = {
-  "Bricks Eatery": [":bricks:", "Bricks"],
-  "Bricks & Bones": [":bone:", "Bricks & Bones"],
-  "Chop-chop": [":takeout_box:", "Chop-chop"],
-  "Delphi": [":burrito:", "Delphi"],
-  "Restaurang Edison": [":bulb:", "Edison"],
-  "Eatery": [":knife_fork_plate:", "Eatery"],
-  "Kantin": [":female-cook::skin-tone-4:", "Kantin"],
-  "Laziza": [":flag-lb:", "Laziza"],
-  "Linnea Basilika": [":ramen:", "Linnea Basilika"],
-  "Mat och Harmoni": ["𝄞⨾𓍢ִ໋", "Mat och Harmoni"],
-  "Matstudio Kungsmarken": [":fork_and_knife:", "Matstudio Kungsmarken"],
-  "Orvars burgers": [":hamburger:", "Örvars"],
-  "Rekas": [":hamburger:", "Rekas"],
-  "Troppo": [":ramen:", "Troppo"],
-  "Sallads & Smoothies": [":green_salad:", "Sallads & Smoothies"],
-  "Smaka på Kina": [":chopsticks:", "Smaka på Kina"],
-  "Sweet Lemon Thai": [":ramen:", "Sweet Lemon Thai"],
+  "Bricks Eatery": ["🧱", "Bricks"],
+  "Bricks & Bones": ["🦴", "Bricks & Bones"],
+  "Chop-chop": ["🥡", "Chop-chop"],
+  "Delphi": ["🌯", "Delphi"],
+  "Restaurang Edison": ["💡", "Edison"],
+  "Eatery": ["🍽️", "Eatery"],
+  "Kantin": ["👩🏾‍🍳", "Kantin"],
+  "Laziza": ["🇱🇧", "Laziza"],
+  "Linnea Basilika": ["🍜", "Linnea Basilika"],
+  "Mat och Harmoni": ["🎶", "Mat och Harmoni"],
+  "Matstudio Kungsmarken": ["🍴", "Matstudio Kungsmarken"],
+  "Orvars burgers": ["🍔", "Örvars"],
+  "Rekas": ["🍔", "Rekas"],
+  "Troppo": ["🍜", "Troppo"],
+  "Sallads & Smoothies": ["🥗", "Sallads & Smoothies"],
+  "Smaka på Kina": ["🥢", "Smaka på Kina"],
+  "Sweet Lemon Thai": ["🍜", "Sweet Lemon Thai"],
 };
 const sortKey = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
@@ -1044,10 +1044,10 @@ function utbudText(){
 
   /* Each group alphabetical by label; the standing-menu places go last. */
   const lines = group => group.map(p => {
-    const [emoji, label] = SLACK[p.name] || [":fork_and_knife:", p.name];
+    const [emoji, label] = SLACK[p.name] || ["🍴", p.name];
     return { key: sortKey(label), text: `${emoji} ${label}:\n${p.items.join(" | ")}` };
   }).sort((a, b) => a.key.localeCompare(b.key, "en")).map(l => l.text);
-  return { text: [":ferris_wheel: Lunch wheel of the day:", ...lines(places), ...lines(fixed)].join("\n"), untranslated };
+  return { text: ["🎡 Lunch wheel of the day:", ...lines(places), ...lines(fixed)].join("\n"), untranslated };
 }
 
 /* navigator.clipboard needs a secure context (GitHub Pages is https); the
