@@ -314,6 +314,7 @@
 
   /* ---- share text ------------------------------------------------------- */
   .share-btn{padding:6px 12px 6px 10px; font-size:12.5px}
+  .share-btn .uk{width:17px; height:auto; flex:none; border-radius:2px; box-shadow:0 0 0 1px var(--hair-strong)}
   .share-result{margin:0 0 calc(var(--step) - 4px)}
   .share-status{margin:0 0 8px; font-size:12.5px; color:var(--treat)}
   .share-out{
@@ -354,7 +355,7 @@
     <div class="subrow">
       <p class="subnote" id="daySub"></p>
       <button class="picker-btn share-btn" id="shareBtn" type="button">
-        <span class="spin-ico" aria-hidden="true">⧉</span> <span id="shareBtnLabel">Copy today's lunch</span>
+        <svg class="uk" viewBox="0 0 60 30" aria-hidden="true"><clipPath id="ukclip"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#ukclip)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></svg> <span id="shareBtnLabel">Copy today's lunch</span>
       </button>
     </div>
   </div>
