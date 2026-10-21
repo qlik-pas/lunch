@@ -11,6 +11,7 @@ Sources:
   Troppo             https://www.troppo.se/lunch           (Webflow; one weekly menu)
   Matstudio Kungsmarken https://www.matstudiokungsmarken.se/lunch/ (WP HTML)
   Mat och Harmoni    https://www.matochharmoni.se/#dagens  (WP HTML)
+  Linnea Basilika    https://www.linneabasilika.se/lund-brunnshog/ (WP HTML)
   Eatery             menu.pej.io TV/kiosk board — client-rendered, needs
                      headless Chromium (see fetch_rendered_text)
 
@@ -53,11 +54,21 @@ WEEK_LABEL = re.compile(
     r"vecka\s*(\d{1,2})\b|meny\s*v\.?\s*(\d{1,2})\b|"
     r"\bweek\s*(\d{1,2})\b|dagens\s+v\.?\s*(\d{1,2})\b", re.I)
 
+# No "Vecka N" label? A day header with a date ("Måndag 19 okt") says the same.
+DATED_DAY = re.compile(r"\b(?:måndag|tisdag|onsdag|torsdag|fredag)\s+(\d{1,2})\s+(" + "|".join(MONTHS_SV) + r")\b", re.I)
+
 def claimed_week(text):
     """ISO week the page/PDF claims to be for, or None if it carries no label."""
     m = WEEK_LABEL.search(text)
     if not m:
-        return None
+        d = DATED_DAY.search(text)
+        if not d:
+            return None
+        try:
+            return datetime.date(datetime.date.today().year, MONTHS_SV.index(d.group(2).lower()) + 1,
+                                 int(d.group(1))).isocalendar()[1]
+        except ValueError:
+            return None
     n = int(next(g for g in m.groups() if g))
     return n if 1 <= n <= 53 else None
 
@@ -338,6 +349,24 @@ def parse_matochharmoni(text):
     return menus
 
 
+# Linnea Basilika: a lunch buffet whose hot dishes rotate daily. "Måndag 19 okt"
+# header, then one dish per line, until the "Lunchbuffén serveras …" blurb.
+LINNEA_DAY = re.compile(r"^(Måndag|Tisdag|Onsdag|Torsdag|Fredag)\s+\d{1,2}\s+\w{3}\b", re.I)
+
+def parse_linnea(text):
+    menus = _empty()
+    day = None
+    for l in _lines(text):
+        m = LINNEA_DAY.match(l)
+        if m:
+            day = m.group(1).capitalize()
+        elif day and re.match(r"Lunchbuffén serveras", l, re.I):
+            break
+        elif day:
+            menus[day].append(l)
+    return menus
+
+
 # --------------------------------------------------------------------------- #
 # fetchers (network; deps imported here)
 # --------------------------------------------------------------------------- #
@@ -413,6 +442,7 @@ SOURCES = [
     ("Troppo",            "https://www.troppo.se/lunch",        parse_troppo,    "html"),
     ("Matstudio Kungsmarken", "https://www.matstudiokungsmarken.se/lunch/", parse_matstudio, "html"),
     ("Mat och Harmoni",   "https://www.matochharmoni.se/#dagens", parse_matochharmoni, "html"),
+    ("Linnea Basilika",   "https://www.linneabasilika.se/lund-brunnshog/", parse_linnea, "html"),
 ]
 
 # One menu for the whole week, the same every day. lt.json marks these so the
