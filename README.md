@@ -10,12 +10,11 @@ Ten more places with a standing menu rather than a dish of the day are listed
 by hand in `index.html` (`FIXED_PLACES`) — a collapsed "Fast meny" section, and
 all of them are on the "Vad blir det?" wheel.
 
-The "Kopiera dagens utbud (EN)" button copies the day's lunch to the clipboard as
+The "Copy todays choices" button (next to the day heading) copies the day's lunch to the clipboard as
 a Slack-ready English post. The English dish names are produced in `scraper.py`
 (an `en` field per restaurant in `lt.json`) and only re-done when a menu changes:
-with GitHub Models through the workflow's own token, or with Claude if you add an
-`ANTHROPIC_API_KEY` repo secret. If neither answers, the button falls back to the
-Swedish text. Run the workflow manually with *retranslate* ticked to redo them all.
+with GitHub Models through the workflow's own token. If it doesn't answer, the
+button falls back to the Swedish text. Places with a standing menu are listed last. Run the workflow manually with *retranslate* ticked to redo them all.
 
 ## Files
 - `index.html` — the page (fetches `lt.json`, falls back to a baked-in snapshot)
