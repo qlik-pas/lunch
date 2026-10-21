@@ -100,7 +100,7 @@ rendered once at load rather than per day. Two places they must show up:
 
 A button in the day heading row (right of the Idag/date tag) that builds the day's lunch as a Slack-ready English
 post and puts it **on the clipboard** (so a plain Ctrl+V pastes it), with a
-preview underneath. Format: a `:ferris_wheel: Lunch wheel of the day:` header,
+(no preview — only on a failed copy). Format: a `:ferris_wheel: Lunch wheel of the day:` header,
 then per place an `:emoji: Label:` line and its dishes joined with ` | `, places
 sorted by label (accents ignored). The `SLACK` map in `index.html` holds each
 place's emoji + short label (Bricks Eatery → "Bricks", Restaurang Edison →
@@ -112,7 +112,7 @@ place's emoji + short label (Bricks Eatery → "Bricks", Restaurang Edison →
   back to its Swedish text and is named in the status line ("Ej översatt än");
 - `Vegetariskt:` and `Bonus:` lines are left out (main dishes only), fixed-menu
   blurbs go in verbatim (jokes and Swedish included), `·` becomes ` | `;
-- the preview is hidden again on day switch, like the pick result.
+- a note (and, only if the copy was refused, the text itself) shows under the heading; it is hidden again on day switch.
 
 ## Status indicator
 
