@@ -96,9 +96,9 @@ rendered once at load rather than per day. Two places they must show up:
 - the "Vad blir det?" pick pool — one entry each (`dish` = the blurb), so the
   wheel can land on "go to Troppo", not just on a dish.
 
-## "Kopiera dagens utbud (EN)" (share text)
+## "Copy todays choices" (share text)
 
-A button above the footer that builds the day's lunch as a Slack-ready English
+A button in the day heading row (right of the Idag/date tag) that builds the day's lunch as a Slack-ready English
 post and puts it **on the clipboard** (so a plain Ctrl+V pastes it), with a
 preview underneath. Format: a `:ferris_wheel: Lunch wheel of the day:` header,
 then per place an `:emoji: Label:` line and its dishes joined with ` | `, places

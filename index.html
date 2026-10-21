@@ -102,8 +102,9 @@
     font-size:clamp(2.1rem, 6vw + .6rem, 2.9rem); line-height:1.05;
     margin:0; text-transform:capitalize; color:var(--ink);
   }
+  .subrow{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px 12px; margin-top:11px}
   .subnote{
-    display:flex; align-items:center; gap:9px; margin:11px 0 0;
+    display:flex; align-items:center; gap:9px; margin:0;
     color:var(--muted); font-size:13px;
   }
   .subnote .tag{
@@ -302,8 +303,8 @@
   .fixed .rname a:hover::after{color:hsl(var(--hue) 55% 45%)}
 
   /* ---- share text ------------------------------------------------------- */
-  .share{margin-top:var(--step); border-top:1px solid var(--hair); padding-top:20px}
-  .share-result{margin-top:12px}
+  .share-btn{padding:6px 12px 6px 10px; font-size:12.5px}
+  .share-result{margin:0 0 calc(var(--step) - 4px)}
   .share-status{margin:0 0 8px; font-size:12.5px; color:var(--muted)}
   .share-status.warn{color:var(--treat)}
   .share-out{
@@ -341,7 +342,17 @@
 
   <div class="dayhead">
     <h1 class="heading" id="dayHeading">—</h1>
-    <p class="subnote" id="daySub"></p>
+    <div class="subrow">
+      <p class="subnote" id="daySub"></p>
+      <button class="picker-btn share-btn" id="shareBtn" type="button">
+        <span class="spin-ico" aria-hidden="true">⧉</span> <span id="shareBtnLabel">Copy todays choices</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="share-result" id="shareResult" hidden>
+    <p class="share-status" id="shareStatus" role="status"></p>
+    <pre class="share-out" id="shareOut"></pre>
   </div>
 
   <div class="places" id="places"></div>
@@ -368,19 +379,6 @@
     <summary><span id="othersLabel">Även öppet</span></summary>
     <ul id="othersList"></ul>
   </details>
-
-  <div class="share">
-    <p class="picker-intro">
-      <em>Ska lunchen delas?</em>
-      <button class="picker-btn" id="shareBtn" type="button">
-        <span class="spin-ico" aria-hidden="true">⧉</span> <span id="shareBtnLabel">Kopiera dagens utbud (EN)</span>
-      </button>
-    </p>
-    <div class="share-result" id="shareResult" hidden>
-      <p class="share-status" id="shareStatus" role="status"></p>
-      <pre class="share-out" id="shareOut"></pre>
-    </div>
-  </div>
 
   <footer>
     <span id="genLine"></span>
@@ -1014,13 +1012,14 @@ function utbudText(){
     if (fellBack) untranslated.push((SLACK[r.name] || [, r.name])[1]);
     places.push({ name: r.name, items });
   });
-  FIXED_PLACES.forEach(p => places.push({ name: p.name, items: p.blurb.split(" · ") }));
+  const fixed = FIXED_PLACES.map(p => ({ name: p.name, items: p.blurb.split(" · ") }));
 
-  const lines = places.map(p => {
+  /* Each group alphabetical by label; the standing-menu places go last. */
+  const lines = group => group.map(p => {
     const [emoji, label] = SLACK[p.name] || [":fork_and_knife:", p.name];
     return { key: sortKey(label), text: `${emoji} ${label}:\n${p.items.join(" | ")}` };
-  }).sort((a, b) => a.key.localeCompare(b.key, "en"));
-  return { text: [":ferris_wheel: Lunch wheel of the day:", ...lines.map(l => l.text)].join("\n"), untranslated };
+  }).sort((a, b) => a.key.localeCompare(b.key, "en")).map(l => l.text);
+  return { text: [":ferris_wheel: Lunch wheel of the day:", ...lines(places), ...lines(fixed)].join("\n"), untranslated };
 }
 
 /* navigator.clipboard needs a secure context (GitHub Pages is https); the
@@ -1054,9 +1053,9 @@ document.getElementById("shareBtn").addEventListener("click", () => {
       : "Kunde inte kopiera automatiskt – markera texten nedan och kopiera själv.")
       + (untranslated.length ? ` Ej översatt än: ${untranslated.join(", ")}.` : "");
     if (!ok){ const sel = getSelection(), rng = document.createRange(); rng.selectNodeContents(out); sel.removeAllRanges(); sel.addRange(rng); }
-    label.textContent = ok ? "Kopierat ✓" : "Kopiera dagens utbud (EN)";
+    label.textContent = ok ? "Copied ✓" : "Copy todays choices";
     clearTimeout(shareTimer);
-    shareTimer = setTimeout(() => { label.textContent = "Kopiera dagens utbud (EN)"; }, 2200);
+    shareTimer = setTimeout(() => { label.textContent = "Copy todays choices"; }, 2200);
   });
 });
 
