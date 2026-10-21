@@ -545,6 +545,24 @@ let WEEK = {
         "Torsdag": ["Beef chuck \"kalops\" with pickled beetroot & potatoes","Vegetarian: Pumpkin with lentils, whipped brie & Brussels sprouts"],
         "Fredag": ["Chicken breast with roast potatoes & sun-dried tomato","Vegetarian: Pumpkin with lentils, whipped brie & Brussels sprouts"]
       }
+    },
+    {
+      "name": "Mat och Harmoni",
+      "url": "https://www.matochharmoni.se/#dagens",
+      "menus": {
+        "Måndag": ["Rosmarinstekt kotlettrad, dijonsås, stekt potatis, saltgurka","Kyckling curry, ris, gröna ärtor","Currygryta, ris, gröna ärtor"],
+        "Tisdag": ["Het fiskgryta, räkor, musslor, aioli, citronpotatis","Kyckling curry, ris, gröna ärtor","Spaghetti, vegofärssås, jalapeñocreme"],
+        "Onsdag": ["Köttbullar, gräddsås, potatismos, lingon, gurka","Kyckling curry, ris, gröna ärtor","Vegobullar, potatismos, lingon, gurka"],
+        "Torsdag": ["Strimlad biff, grönsaker, sesam, basmatiris","Stekt fläsk, löksås, kokt potatis, lingon","Vegobitar (soyaböna), grönsaker, sesam, basmatiris"],
+        "Fredag": ["Friterad kyckling, lime- & chilicreme, klyftpotatis, sötpotatis","Stekt fläsk, löksås, kokt potatis, lingon","Spaghetti, vegofärssås, jalapeñocreme"]
+      },
+      "en": {
+        "Måndag": ["Rosemary-fried pork chop with Dijon sauce","Chicken curry","Curry stew"],
+        "Tisdag": ["Spicy fish stew with prawns & mussels","Chicken curry","Spaghetti with veggie mince sauce"],
+        "Onsdag": ["Swedish meatballs & gravy","Chicken curry","Vegetarian meatballs"],
+        "Torsdag": ["Sliced beef with vegetables & sesame","Fried pork with onion sauce","Soy-bean pieces with vegetables & sesame"],
+        "Fredag": ["Fried chicken with lime & chili cream","Fried pork with onion sauce","Spaghetti with veggie mince sauce"]
+      }
     }
   ]
 };
@@ -556,7 +574,7 @@ let WEEK = {
    the team's own words. `url` is the official site where one was found, else a
    Google Maps search for the place — swap in the real site whenever you have it.
    (Places that turn out to have a dish of the day belong in scraper.py instead —
-   Troppo started here and moved.) */
+   Troppo and Mat och Harmoni started here and moved.) */
 const mapsUrl = q => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
 const FIXED_PLACES = [
   { name: "Bricks & Bones",      blurb: "Kött-puck och bröd.",
@@ -577,8 +595,6 @@ const FIXED_PLACES = [
     url: mapsUrl("Sweet Lemon Thai Kitchen Lund") },
   { name: "Linnea Basilika",     blurb: "Asian Buffet · Chicken in Thai green curry · Crispy pork with pineapple & sweet chili · Spicy Thai basil chicken · Homemade spring rolls",
     url: "https://www.linneabasilika.se/" },
-  { name: "Mat och Harmoni",     blurb: "Swedish meatballs & gravy · Chicken curry · Vegetarian meatballs",
-    url: "https://www.matochharmoni.se/" },
 ];
 
 /* ---- classification: full block vs demoted to "also open" ------------- */
