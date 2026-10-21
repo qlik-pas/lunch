@@ -600,6 +600,56 @@ def _with_translations(restaurants, old, translate=_llm_json):
     return restaurants
 
 
+# --------------------------------------------------------------------------- #
+# Gemini as a fallback parser
+# --------------------------------------------------------------------------- #
+# When a restaurant redesigns its page the hand-written parser finds 0 dishes.
+# Rather than showing last week's menu (or nothing) until someone fixes it, the
+# page text is handed to Gemini to read the menu out. Nothing is trusted blindly:
+# every dish must be made of words that actually appear on the page, so an
+# invented menu is rejected and the old "kept previous" fallback takes over.
+EXTRACT_PROMPT = """You read the text of a Swedish restaurant's lunch web page and extract this week's lunch menu.
+
+- Input is JSON {"restaurant": ..., "page_text": ...}. Reply with JSON only: {"Måndag": [...], "Tisdag": [...], "Onsdag": [...], "Torsdag": [...], "Fredag": [...]}.
+- One string per dish, copied from the page in its original language and wording. Join a dish that wraps over several lines; drop prices, allergen codes and opening hours. Never translate, invent or complete dishes.
+- Only the lunch of the day / week. Ignore à la carte menus, standing buffets, drinks, catering and take-away lists.
+- The page's weekly vegetarian option gets the prefix "Vegetariskt: ", a free extra (dessert, pancakes) the prefix "Bonus: ".
+- If one menu applies to the whole week, repeat it under every day. A day without dishes gets [].
+- If the page has no lunch menu at all, reply with all five days empty."""
+
+PAGE_TEXT_LIMIT = 30000         # characters sent; the menu is always far smaller
+
+
+def _words(s):
+    return set(re.findall(r"[0-9a-zåäöéèü]+", s.lower()))
+
+
+def _llm_extract_menus(name, text, call=None):
+    """{Day: [dish]} read from the page text by Gemini, or ValueError if the
+    answer is unusable. `call` defaults to `_llm_json` (injectable for tests)."""
+    page = "\n".join(_lines(text))[:PAGE_TEXT_LIMIT]
+    if not page:
+        raise ValueError("empty page text")
+    got = (call or _llm_json)(EXTRACT_PROMPT, {"restaurant": name, "page_text": page})
+    page_words = _words(page)
+    menus, kept, dropped = _empty(), 0, 0
+    for day in DAYS:
+        dishes = got.get(day) if isinstance(got, dict) else None
+        for d in dishes if isinstance(dishes, list) else []:
+            if not isinstance(d, str) or not d.strip():
+                continue
+            w = _words(re.sub(r"^(vegetariskt|bonus)\s*:\s*", "", d, flags=re.I))
+            if w and len(w & page_words) / len(w) >= 0.85:
+                menus[day].append(re.sub(r"\s+", " ", d).strip()); kept += 1
+            else:
+                dropped += 1
+    if not kept:
+        raise ValueError("Gemini found no menu on the page")
+    if dropped > kept / 3:
+        raise ValueError(f"Gemini's answer didn't match the page ({dropped} of {kept + dropped} dishes not found in it)")
+    return menus
+
+
 def _load_old():
     try:
         with open("lt.json", encoding="utf-8") as f:
@@ -629,7 +679,11 @@ def build():
                 text = fetch_html_text(url)
             menus = parser(text)
             if not any(menus.values()):
-                raise ValueError("parsed 0 dishes")
+                try:
+                    menus = _llm_extract_menus(name, text)
+                except Exception as e:
+                    raise ValueError(f"parsed 0 dishes (Gemini fallback: {str(e)[:120]})")
+                errors.append(f"{name}: parser found 0 dishes — menu read by Gemini instead, fix the parser")
             cw = claimed_week(text)
             if cw is not None and cw != week:
                 raise ValueError(f"sidan visar vecka {cw}, väntar på vecka {week}")
