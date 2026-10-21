@@ -1018,11 +1018,13 @@ function utbudText(){
       const e = typeof en[i] === "string" ? en[i].trim() : "";
       if (e) items.push(e); else { items.push(s); fellBack = true; }
     });
-    if (!items.length) return;
+    if (!items.length){ places.push({ name: r.name, items: ["no menu yet"] }); return; }   // not published/updated yet
     if (fellBack) untranslated.push((SLACK[r.name] || [, r.name])[1]);
     places.push({ name: r.name, items });
   });
-  const fixed = FIXED_PLACES.map(p => ({ name: p.name, items: p.blurb.split(" · ") }));
+  /* Laziza's running joke: every Wednesday in an even ISO week. */
+  const crispy = p => p.name === "Laziza" && selected === 2 && WEEK.week % 2 === 0;
+  const fixed = FIXED_PLACES.map(p => ({ name: p.name, items: crispy(p) ? ["CRISPY CHICKEN!"] : p.blurb.split(" · ") }));
 
   /* Each group alphabetical by label; the standing-menu places go last. */
   const lines = group => group.map(p => {
