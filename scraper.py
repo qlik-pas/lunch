@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Scrapes the seven Lund lunch sources and writes lt.json in the shape index.html
+Scrapes the eight Lund lunch sources and writes lt.json in the shape index.html
 expects: { week, range, dates[5], generated, restaurants:[{name,url,menus:{Day:[...]}}] }
 
 Sources:
@@ -10,6 +10,7 @@ Sources:
   Kantin             https://www.kantinlund.se/            (WP HTML)
   Troppo             https://www.troppo.se/lunch           (Webflow; one weekly menu)
   Matstudio Kungsmarken https://www.matstudiokungsmarken.se/lunch/ (WP HTML)
+  Mat och Harmoni    https://www.matochharmoni.se/#dagens  (WP HTML)
   Eatery             menu.pej.io TV/kiosk board — client-rendered, needs
                      headless Chromium (see fetch_rendered_text)
 
@@ -315,6 +316,28 @@ def parse_matstudio(text):
 
 
 
+# Mat och Harmoni: "Dagens rätt vecka 43", then Måndag…Fredag each followed by
+# that day's three dishes, one per line. "Veckans pasta/sallad" and the buffets
+# further down are weekly/permanent extras and ignored.
+MATHARMONI_STOP = re.compile(r"^(Veckans pasta|Veckans sallad|Buffé)", re.I)
+
+def parse_matochharmoni(text):
+    menus = _empty()
+    lines = _lines(text)
+    start = next((i for i, l in enumerate(lines) if re.match(r"Dagens rätt", l, re.I)), None)
+    if start is None:
+        return menus
+    day = None
+    for l in lines[start + 1:]:
+        if MATHARMONI_STOP.match(l):
+            break
+        if l in DAYS and not menus[l]:
+            day = l
+        elif day:
+            menus[day].append(l)
+    return menus
+
+
 # --------------------------------------------------------------------------- #
 # fetchers (network; deps imported here)
 # --------------------------------------------------------------------------- #
@@ -389,6 +412,7 @@ SOURCES = [
     ("Kantin",            "https://www.kantinlund.se/",         parse_kantin,    "html"),
     ("Troppo",            "https://www.troppo.se/lunch",        parse_troppo,    "html"),
     ("Matstudio Kungsmarken", "https://www.matstudiokungsmarken.se/lunch/", parse_matstudio, "html"),
+    ("Mat och Harmoni",   "https://www.matochharmoni.se/#dagens", parse_matochharmoni, "html"),
 ]
 
 # One menu for the whole week, the same every day. lt.json marks these so the

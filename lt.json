@@ -8,7 +8,7 @@
     "2026-10-22",
     "2026-10-23"
   ],
-  "generated": "2026-10-21T17:14:32+02:00",
+  "generated": "2026-10-21T17:38:25+02:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -406,6 +406,64 @@
         "Fredag": [
           "Chicken breast with roast potatoes & sun-dried tomato",
           "Vegetarian: Pumpkin with lentils, whipped brie & Brussels sprouts"
+        ]
+      }
+    },
+    {
+      "name": "Mat och Harmoni",
+      "url": "https://www.matochharmoni.se/#dagens",
+      "menus": {
+        "Måndag": [
+          "Rosmarinstekt kotlettrad, dijonsås, stekt potatis, saltgurka",
+          "Kyckling curry, ris, gröna ärtor",
+          "Currygryta, ris, gröna ärtor"
+        ],
+        "Tisdag": [
+          "Het fiskgryta, räkor, musslor, aioli, citronpotatis",
+          "Kyckling curry, ris, gröna ärtor",
+          "Spaghetti, vegofärssås, jalapeñocreme"
+        ],
+        "Onsdag": [
+          "Köttbullar, gräddsås, potatismos, lingon, gurka",
+          "Kyckling curry, ris, gröna ärtor",
+          "Vegobullar, potatismos, lingon, gurka"
+        ],
+        "Torsdag": [
+          "Strimlad biff, grönsaker, sesam, basmatiris",
+          "Stekt fläsk, löksås, kokt potatis, lingon",
+          "Vegobitar (soyaböna), grönsaker, sesam, basmatiris"
+        ],
+        "Fredag": [
+          "Friterad kyckling, lime- & chilicreme, klyftpotatis, sötpotatis",
+          "Stekt fläsk, löksås, kokt potatis, lingon",
+          "Spaghetti, vegofärssås, jalapeñocreme"
+        ]
+      },
+      "en": {
+        "Måndag": [
+          "Rosemary-fried pork chop with Dijon sauce",
+          "Chicken curry",
+          "Curry stew"
+        ],
+        "Tisdag": [
+          "Spicy fish stew with prawns & mussels",
+          "Chicken curry",
+          "Spaghetti with veggie mince sauce"
+        ],
+        "Onsdag": [
+          "Swedish meatballs & gravy",
+          "Chicken curry",
+          "Vegetarian meatballs"
+        ],
+        "Torsdag": [
+          "Sliced beef with vegetables & sesame",
+          "Fried pork with onion sauce",
+          "Soy-bean pieces with vegetables & sesame"
+        ],
+        "Fredag": [
+          "Fried chicken with lime & chili cream",
+          "Fried pork with onion sauce",
+          "Spaghetti with veggie mince sauce"
         ]
       }
     }
