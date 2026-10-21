@@ -315,8 +315,7 @@
   /* ---- share text ------------------------------------------------------- */
   .share-btn{padding:6px 12px 6px 10px; font-size:12.5px}
   .share-result{margin:0 0 calc(var(--step) - 4px)}
-  .share-status{margin:0 0 8px; font-size:12.5px; color:var(--muted)}
-  .share-status.warn{color:var(--treat)}
+  .share-status{margin:0 0 8px; font-size:12.5px; color:var(--treat)}
   .share-out{
     margin:0; padding:12px 14px; max-height:340px; overflow:auto;
     background:var(--surface-2); border:1px solid var(--hair); border-radius:var(--radius-sm);
@@ -1052,16 +1051,18 @@ function copyToClipboard(text){
 let shareTimer = null;
 document.getElementById("shareBtn").addEventListener("click", () => {
   const { text, untranslated } = utbudText();
-  const out = document.getElementById("shareOut"), status = document.getElementById("shareStatus");
-  const label = document.getElementById("shareBtnLabel");
-  out.textContent = text;
-  document.getElementById("shareResult").hidden = false;
+  const box = document.getElementById("shareResult"), out = document.getElementById("shareOut");
+  const status = document.getElementById("shareStatus"), label = document.getElementById("shareBtnLabel");
   copyToClipboard(text).then(ok => {
-    status.classList.toggle("warn", !ok || untranslated.length > 0);
-    status.textContent = (ok
-      ? "Kopierat till urklipp – klistra in med Ctrl+V."
-      : "Kunde inte kopiera automatiskt – markera texten nedan och kopiera själv.")
-      + (untranslated.length ? ` Ej översatt än: ${untranslated.join(", ")}.` : "");
+    /* Nothing is shown on a clean copy — the button says "Copied ✓". The text
+       only appears if the browser refused, so it can still be copied by hand. */
+    const note = (ok ? "" : "Kunde inte kopiera automatiskt – markera texten nedan och kopiera själv. ")
+      + (untranslated.length ? `Ej översatt än: ${untranslated.join(", ")}.` : "");
+    status.textContent = note.trim();
+    status.hidden = !note;
+    out.textContent = text;
+    out.hidden = ok;
+    box.hidden = ok && !note;
     if (!ok){ const sel = getSelection(), rng = document.createRange(); rng.selectNodeContents(out); sel.removeAllRanges(); sel.addRange(rng); }
     label.textContent = ok ? "Copied ✓" : "Copy todays choices";
     clearTimeout(shareTimer);
