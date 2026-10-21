@@ -547,6 +547,8 @@ def _with_translations(restaurants, old, translate=_llm_json):
             fresh.append(r["name"])
         except Exception as e:
             failed.append(f"{r['name']} ({type(e).__name__}: {str(e)[:120]})")
+            if p and p.get("en") and p.get("menus") == r["menus"]:
+                r["en"] = p["en"]                    # a failed *re*translate mustn't wipe good text
     print(f"English: {len(cached)} cached, {len(fresh)} translated"
           + (f", {len(failed)} failed: {failed}" if failed else ""))
     return restaurants
