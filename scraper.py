@@ -520,12 +520,16 @@ def _llm_json(system, payload):
     body = {"systemInstruction": {"parts": [{"text": system}]},
             "contents": [{"role": "user", "parts": [{"text": user}]}],
             "generationConfig": {"temperature": 0.2, "responseMimeType": "application/json"}}
-    r = None
+    r = timed_out = None
     for model in models:
         for attempt in range(3):
-            r = requests.post(
-                f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
-                timeout=90, headers={"x-goog-api-key": key}, json=body)
+            try:
+                r = requests.post(
+                    f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+                    timeout=100, headers={"x-goog-api-key": key}, json=body)
+            except requests.exceptions.Timeout as e:   # a slow model: try the next one rather than the same again
+                r = None; timed_out = e
+                break
             if r.status_code not in (429, 500, 503):
                 break
             wait = _retry_delay(r, attempt)
@@ -533,8 +537,10 @@ def _llm_json(system, payload):
                 raise RuntimeError(f"gave up after waiting {_waited:.0f}s — HTTP {r.status_code}: {r.text[:100]!r}")
             _waited += wait
             time.sleep(wait)
-        if r.ok:
+        if r is not None and r.ok:
             break
+    if r is None:
+        raise RuntimeError(f"every model timed out: {timed_out}")
     text = _reply(r)["candidates"][0]["content"]["parts"][0]["text"]
     return json.loads(re.search(r"\{.*\}", text, re.S).group(0))
 
