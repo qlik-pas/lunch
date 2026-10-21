@@ -93,7 +93,7 @@ rendered once at load rather than per day. Two places they must show up:
   so it reads as clickable), blurb, and the same
   hue-tinted initial shield used elsewhere (hues come from `HUES`, keyed by
   name, so the shield matches the pick card);
-- the "Vad blir det?" pick pool — one entry each (`dish` = the blurb), so the
+- the "Vad blir det?" pick pool (the result name is a link too, same ↗ treatment) — one entry each (`dish` = the blurb), so the
   wheel can land on "go to Troppo", not just on a dish.
 
 ## "Copy todays choices" (share text)
