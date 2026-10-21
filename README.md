@@ -17,6 +17,10 @@ with Google Gemini (a free AI Studio key stored as the `GEMINI_API_KEY` repo
 secret). If it doesn't answer, the
 button falls back to the Swedish text. Places with a standing menu are listed last. Run the workflow manually with *retranslate* ticked to redo them all.
 
+If a restaurant redesigns its page and a parser finds nothing, the page text is
+handed to Gemini to read the menu out instead (only dishes whose words really
+appear on the page are accepted); lt.json's `errors` then says which parser to fix.
+
 ## Files
 - `index.html` — the page (fetches `lt.json`, falls back to a baked-in snapshot)
 - `scraper.py` — fetches the nine sources, writes `lt.json`
