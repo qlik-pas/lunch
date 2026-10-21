@@ -8,7 +8,7 @@
     "2026-10-22",
     "2026-10-23"
   ],
-  "generated": "2026-10-21T17:38:25+02:00",
+  "generated": "2026-10-21T18:01:01+02:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -464,6 +464,74 @@
           "Fried chicken with lime & chili cream",
           "Fried pork with onion sauce",
           "Spaghetti with veggie mince sauce"
+        ]
+      }
+    },
+    {
+      "name": "Linnea Basilika",
+      "url": "https://www.linneabasilika.se/lund-brunnshog/",
+      "menus": {
+        "Måndag": [
+          "Kycklingfilé med ananas och blomkål i krämig thai gul curry",
+          "Wokad fläskfilé med stark thai basilika",
+          "Wokad kycklingfilé med egenrostade cashewnötter och grönsaker",
+          "Grillade hot wings asian style"
+        ],
+        "Tisdag": [
+          "Kycklingfilé med brytbönor i panang curry",
+          "Wokad ryggbiff med champinjoner och bambuskott",
+          "Vitlöksmarinerad kycklingfilé med grovmalen svartpeppar, koriander och thai basilika",
+          "Grillad kycklinginnerfilé på spett med hemlagad jordnötssås"
+        ],
+        "Onsdag": [
+          "Kycklingfilé med zucchini i het thai grön curry",
+          "Krispig fläskfilé med ananas i hemlagad sweet chilisås",
+          "Wokad grovmalen kycklingfärs med stark thai basilika",
+          "Egenrullade vårrullar med blandfärs, vermicelli, black fungus svamp och örter"
+        ],
+        "Torsdag": [
+          "Kycklingfilé med aubergine i kryddig thai röd curry",
+          "Wokad ryggbiff med stark thai basilika",
+          "Wokad kycklingfilé med ananas i hemlagad sötsursås",
+          "Grillade hot wings asian style"
+        ],
+        "Fredag": [
+          "Kycklingfilé med potatis i krämig masaman curry",
+          "Vitlöksmarinerade jätteräkor med grovmalen svartpeppar, koriander och thai basilika",
+          "Wokad kycklingfilé med färsk ingefära och grönsaker",
+          "Grillad kycklinginnerfilé på spett med hemlagad jordnötssås"
+        ]
+      },
+      "en": {
+        "Måndag": [
+          "Chicken & cauliflower in creamy Thai yellow curry",
+          "Wok-fried pork with spicy Thai basil",
+          "Wok-fried chicken with roasted cashews & vegetables",
+          "Grilled hot wings Asian style"
+        ],
+        "Tisdag": [
+          "Chicken & green beans in panang curry",
+          "Wok-fried sirloin with mushrooms & bamboo shoots",
+          "Garlic-marinated chicken with black pepper, coriander & Thai basil",
+          "Grilled chicken skewers with homemade peanut sauce"
+        ],
+        "Onsdag": [
+          "Chicken & zucchini in hot Thai green curry",
+          "Crispy pork with pineapple & sweet chili sauce",
+          "Wok-fried minced chicken with spicy Thai basil",
+          "Homemade spring rolls with minced meat, vermicelli & black fungus"
+        ],
+        "Torsdag": [
+          "Chicken & aubergine in spicy Thai red curry",
+          "Wok-fried sirloin with spicy Thai basil",
+          "Wok-fried chicken with pineapple in sweet & sour sauce",
+          "Grilled hot wings Asian style"
+        ],
+        "Fredag": [
+          "Chicken & potato in creamy massaman curry",
+          "Garlic-marinated king prawns with black pepper, coriander & Thai basil",
+          "Wok-fried chicken with fresh ginger & vegetables",
+          "Grilled chicken skewers with homemade peanut sauce"
         ]
       }
     }

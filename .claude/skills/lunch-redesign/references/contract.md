@@ -35,7 +35,7 @@ Everything the redesign must keep working. The visual layer is free; this is not
     }
     // the scraped places, in the order scraper.py's SOURCES list defines:
     // "Bricks Eatery", "Eatery", "Smaka på Kina", "Restaurang Edison", "Kantin",
-    // "Troppo", "Matstudio Kungsmarken", "Mat och Harmoni"
+    // "Troppo", "Matstudio Kungsmarken", "Mat och Harmoni", "Linnea Basilika"
     // (render them in the order they arrive — don't re-sort)
   ],
   "errors": ["Eatery: …"]              // optional; present when a source failed
@@ -143,7 +143,7 @@ a failed fetch sees a plausible current-ish menu.
 - [ ] Embedded snapshot kept and refreshed
 - [ ] Today-first; weekend → Monday + "Helg" note
 - [ ] All visible text in Swedish; `<html lang="sv">`
-- [ ] Eight scraped restaurants, correct order, per-day menus (`weekly` ones stay cards)
+- [ ] Nine scraped restaurants, correct order, per-day menus (`weekly` ones stay cards)
 - [ ] Fixed-menu places: collapsed list + included in the pick pool
 - [ ] `Vegetariskt:` and `Bonus:` lines visually distinct from lunch options
 - [ ] Two-tier restaurant classification (card vs demoted) preserved
