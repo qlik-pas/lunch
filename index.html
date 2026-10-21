@@ -284,6 +284,10 @@
   .others .rname a{text-decoration:none}
   .others .note{color:var(--faint); margin-left:8px}
   .others .static-text{display:block; color:var(--muted); margin-top:3px}
+  .fixed li{display:flex; align-items:center; gap:11px}
+  .fixed .shield{width:28px; height:28px; border-radius:8px; font-size:14px}
+  .fixed .ftext{flex:1; min-width:0}
+  .fixed .static-text{margin-top:1px}
 
   /* ---- footer --------------------------------------------------------- */
   footer{
@@ -331,6 +335,11 @@
     </div>
   </div>
 
+  <details class="others fixed" id="fixed">
+    <summary><span id="fixedLabel">Fast meny</span></summary>
+    <ul id="fixedList"></ul>
+  </details>
+
   <details class="others" id="others" hidden>
     <summary><span id="othersLabel">Även öppet</span></summary>
     <ul id="othersList"></ul>
@@ -358,6 +367,10 @@ const SHORT = ["Mån","Tis","Ons","Tor","Fre"];
 const HUES = {
   "Restaurang Edison": 32, "Bricks Eatery": 350, "Smaka på Kina": 292,
   "Kantin": 155, "Eatery": 210,
+  /* fixed-menu places (below) */
+  "Bricks & Bones": 322, "Chop-chop": 182, "Delphi": 238, "Laziza": 80,
+  "Orvars burgers": 11, "Rekas": 105, "Troppo": 265,
+  "Sallads & Smoothies": 130, "Sweet Lemon Thai": 55,
 };
 const hueFor = name => HUES[name] ??
   ([...name].reduce((h,c)=>(h*31 + c.charCodeAt(0))>>>0, 7) % 360);
@@ -425,6 +438,23 @@ let WEEK = {
     }
   ]
 };
+
+/* ---- Fixed-menu places -------------------------------------------------- */
+/* Hand-curated (not scraped): places with one standing menu rather than a
+   dish of the day. Shown in the collapsed "Fast meny" section, and each one
+   counts as a single entry in the "Vad blir det?" pick. Blurbs are kept in
+   the team's own words. `url` is optional — add one to make the name a link. */
+const FIXED_PLACES = [
+  { name: "Bricks & Bones",      blurb: "Kött-puck och bröd." },
+  { name: "Chop-chop",           blurb: "Chinese food menu." },
+  { name: "Delphi",              blurb: "Tony Starksauce och flygande tefat." },
+  { name: "Laziza",              blurb: "Our favourite Lebanese food buffet." },
+  { name: "Orvars burgers",      blurb: "Burgers & More." },
+  { name: "Rekas",               blurb: "Bórgars :V" },
+  { name: "Troppo",              blurb: "Hainanese chicken rice · Chicken Pad Thai · Tofu Pad Thai" },
+  { name: "Sallads & Smoothies", blurb: "Sallads. Also, smoothies." },
+  { name: "Sweet Lemon Thai",    blurb: "Thai Food menu." },
+];
 
 /* ---- classification: full block vs demoted to "also open" ------------- */
 const isBlank = v => !Array.isArray(v) || v.filter(x => String(x).trim()).length === 0;
@@ -592,6 +622,8 @@ function todaysPickPool(){
       pool.push({ name: r.name, hue: hueFor(r.name), dish: veg ? veg[1] : s });
     });
   });
+  // The fixed-menu places are on the wheel too — same every day, one entry each.
+  FIXED_PLACES.forEach(p => pool.push({ name: p.name, hue: hueFor(p.name), dish: p.blurb }));
   return pool;
 }
 
@@ -795,6 +827,20 @@ function wirePress(el){
 
 wirePress(document.getElementById("pickBtn"));
 wirePress(document.getElementById("pickAgain"));
+
+/* Static, so rendered once rather than on every day switch. */
+function renderFixed(){
+  document.getElementById("fixedLabel").textContent = `Fast meny (${FIXED_PLACES.length})`;
+  document.getElementById("fixedList").innerHTML = FIXED_PLACES.map(p => {
+    const name = p.url
+      ? `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.name)}</a>`
+      : esc(p.name);
+    return `<li><span class="shield" aria-hidden="true" style="--hue:${hueFor(p.name)}">${esc([...p.name][0])}</span>` +
+      `<span class="ftext"><span class="rname">${name}</span>` +
+      `<span class="static-text">${esc(p.blurb)}</span></span></li>`;
+  }).join("");
+}
+renderFixed();
 
 /* ---- boot ----------------------------------------------------------------- */
 async function boot(){

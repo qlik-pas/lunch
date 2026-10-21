@@ -71,7 +71,9 @@ offline, loads instantly, and stays correct. Read
 - **Today-first.** On load, select the current weekday; on weekends show Monday
   with a "Helg" note. Mon–Fri only.
 - **Swedish UI.** All visible strings in Swedish. Keep `<html lang="sv">`.
-- **Five restaurants, per-weekday menus.** Two kinds of line get their own
+- **Five restaurants, per-weekday menus** (plus the hand-curated fixed-menu
+  places — see `references/contract.md`; they must stay in both the "Fast meny"
+  list and the pick pool). Two kinds of line get their own
   marker, kept separate from the pick-one lunch options: `Vegetariskt:` (Kantin's
   weekly veg option) and `Bonus:` (a free weekday extra — Bricks' Thursday
   äppelpaj, Eatery's pancakes). Restaurants with no menu, or the identical menu

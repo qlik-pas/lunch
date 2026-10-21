@@ -74,6 +74,20 @@ The redesign can present them differently, but the two-tier distinction (this
 place has a real daily menu vs. it doesn't) must survive — it's the difference
 between useful and noise.
 
+## Fixed-menu places (not from lt.json)
+
+Separate from the five scraped restaurants: `FIXED_PLACES` in `index.html` is a
+hand-curated array of places with one standing menu instead of a dish of the
+day — `{ name, blurb, url? }`, blurbs kept verbatim in the team's own words
+(some English, some jokes — don't translate or tidy them). They are static, so
+rendered once at load rather than per day. Two places they must show up:
+
+- a collapsed "Fast meny (N)" `<details>` — name, blurb, and the same
+  hue-tinted initial shield used elsewhere (hues come from `HUES`, keyed by
+  name, so the shield matches the pick card);
+- the "Vad blir det?" pick pool — one entry each (`dish` = the blurb), so the
+  wheel can land on "go to Troppo", not just on a dish.
+
 ## Status indicator
 
 Three states, currently a coloured dot + label in the header:
@@ -101,7 +115,8 @@ a failed fetch sees a plausible current-ish menu.
 - [ ] Embedded snapshot kept and refreshed
 - [ ] Today-first; weekend → Monday + "Helg" note
 - [ ] All visible text in Swedish; `<html lang="sv">`
-- [ ] Five restaurants, correct order, per-day menus
+- [ ] Five scraped restaurants, correct order, per-day menus
+- [ ] Fixed-menu places: collapsed list + included in the pick pool
 - [ ] `Vegetariskt:` and `Bonus:` lines visually distinct from lunch options
 - [ ] Two-tier restaurant classification (card vs demoted) preserved
 - [ ] Deliberate light AND dark themes; `<meta name="theme-color">` updated

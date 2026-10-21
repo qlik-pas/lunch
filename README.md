@@ -1,10 +1,14 @@
 # lunch
 
-Today-first lunch view for five Lund places (Edison, Bricks, Smaka på Kina,
-Kantin, Eatery). A GitHub Action scrapes the menus on weekdays (Monday a few
-times through late morning, when the new week's menu lands, plus a midday pass
-Tue–Fri) and commits `lt.json` only when a menu actually changed; `index.html`
-renders whichever day it is.
+Today-first lunch view for five Lund places with a dish of the day (Edison,
+Bricks, Smaka på Kina, Kantin, Eatery). A GitHub Action scrapes the menus on
+weekdays (Monday a few times through late morning, when the new week's menu
+lands, plus a midday pass Tue–Fri) and commits `lt.json` only when a menu
+actually changed; `index.html` renders whichever day it is.
+
+Nine more places with a standing menu rather than a dish of the day are listed
+by hand in `index.html` (`FIXED_PLACES`) — a collapsed "Fast meny" section, and
+all of them are on the "Vad blir det?" wheel.
 
 ## Files
 - `index.html` — the page (fetches `lt.json`, falls back to a baked-in snapshot)
