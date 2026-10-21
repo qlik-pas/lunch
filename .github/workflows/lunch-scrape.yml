@@ -20,7 +20,6 @@ on:
 
 permissions:
   contents: write
-  models: read      # lets scraper.py translate menus via GitHub Models with GITHUB_TOKEN
 
 concurrency:
   group: lunch-scrape
@@ -51,7 +50,8 @@ jobs:
 
       - name: Scrape
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Repo secret for the English translations (Google AI Studio key).
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           FORCE_TRANSLATE: ${{ inputs.retranslate && '1' || '' }}
         # If Eatery's menu board ever moves, add EATERY_MENU_URL (default
         # https://menu.pej.io/ea/menus/lund) to the env block above.

@@ -13,7 +13,8 @@ all of them are on the "Vad blir det?" wheel.
 The "Copy todays choices" button (next to the day heading) copies the day's lunch to the clipboard as
 a Slack-ready English post. The English dish names are produced in `scraper.py`
 (an `en` field per restaurant in `lt.json`) and only re-done when a menu changes:
-with GitHub Models through the workflow's own token. If it doesn't answer, the
+with Google Gemini (a free AI Studio key stored as the `GEMINI_API_KEY` repo
+secret). If it doesn't answer, the
 button falls back to the Swedish text. Places with a standing menu are listed last. Run the workflow manually with *retranslate* ticked to redo them all.
 
 ## Files

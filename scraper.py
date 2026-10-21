@@ -468,8 +468,8 @@ def _entry(name, url, menus):
 #
 # Translations are cached: a restaurant whose Swedish menus are unchanged keeps
 # its `en`, so a model is only called when a menu actually changes (normally
-# Monday). Provider: GitHub Models using the workflow's own GITHUB_TOKEN
-# (`permissions: models: read`) — no separate API key or billing.
+# Monday). Provider: Google Gemini (free tier) with a GEMINI_API_KEY repo secret.
+# (GitHub Models, used before, was retired 2026-07-30.)
 # Any failure just leaves `en` off — the button falls back to the Swedish text.
 TRANSLATE_PROMPT = """You turn restaurant lunch-menu lines (Swedish, sometimes English, sometimes with Chinese characters) into short English dish names for a Slack message listing today's lunch.
 
@@ -498,19 +498,17 @@ def _llm_json(system, payload):
     """One JSON-in / JSON-out model call; returns the parsed reply."""
     import requests
     user = json.dumps(payload, ensure_ascii=False)
-    token = os.environ.get("GITHUB_TOKEN")
-    if not token:
-        raise RuntimeError("no GITHUB_TOKEN")
+    key = os.environ.get("GEMINI_API_KEY")
+    if not key:
+        raise RuntimeError("no GEMINI_API_KEY")
+    model = os.environ.get("TRANSLATE_MODEL", "gemini-flash-latest")   # alias, so no model-id rot
     r = requests.post(
-        "https://models.github.ai/inference/chat/completions", timeout=90,
-        headers={"Authorization": f"Bearer {token}",
-                 "Accept": "application/vnd.github+json",
-                 "X-GitHub-Api-Version": "2022-11-28"},
-        json={"model": os.environ.get("TRANSLATE_MODEL", "openai/gpt-4o-mini"),
-              "temperature": 0.2, "response_format": {"type": "json_object"},
-              "messages": [{"role": "system", "content": system},
-                           {"role": "user", "content": user}]})
-    text = _reply(r)["choices"][0]["message"]["content"]
+        f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+        timeout=90, headers={"x-goog-api-key": key},
+        json={"systemInstruction": {"parts": [{"text": system}]},
+              "contents": [{"role": "user", "parts": [{"text": user}]}],
+              "generationConfig": {"temperature": 0.2, "responseMimeType": "application/json"}})
+    text = _reply(r)["candidates"][0]["content"]["parts"][0]["text"]
     return json.loads(re.search(r"\{.*\}", text, re.S).group(0))
 
 
