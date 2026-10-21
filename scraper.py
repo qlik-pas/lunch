@@ -494,20 +494,47 @@ def _reply(r):
         raise RuntimeError(f"non-JSON reply ({r.headers.get('content-type')}): {r.text[:150]!r}")
 
 
+# The free tier is rate-limited and a model can be briefly overloaded (503), so a
+# call retries with a pause and then falls through to the next model. One shared
+# time budget keeps a bad day from stalling the whole scrape.
+GEMINI_MODELS = ["gemini-flash-latest", "gemini-flash-lite-latest", "gemini-2.5-flash"]
+TRANSLATE_BUDGET = 240          # seconds of waiting allowed per scraper run
+_waited = 0.0
+
+
+def _retry_delay(r, attempt):
+    """Seconds to wait before retrying: Google's own hint ("retryDelay": "17s") if given."""
+    m = re.search(r'"retryDelay":\s*"(\d+(?:\.\d+)?)s"', r.text)
+    return min(float(m.group(1)) + 1 if m else 5 * 2 ** attempt, 60)
+
+
 def _llm_json(system, payload):
     """One JSON-in / JSON-out model call; returns the parsed reply."""
     import requests
+    global _waited
     user = json.dumps(payload, ensure_ascii=False)
     key = os.environ.get("GEMINI_API_KEY")
     if not key:
         raise RuntimeError("no GEMINI_API_KEY")
-    model = os.environ.get("TRANSLATE_MODEL", "gemini-flash-latest")   # alias, so no model-id rot
-    r = requests.post(
-        f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
-        timeout=90, headers={"x-goog-api-key": key},
-        json={"systemInstruction": {"parts": [{"text": system}]},
-              "contents": [{"role": "user", "parts": [{"text": user}]}],
-              "generationConfig": {"temperature": 0.2, "responseMimeType": "application/json"}})
+    models = [os.environ["TRANSLATE_MODEL"]] if os.environ.get("TRANSLATE_MODEL") else GEMINI_MODELS
+    body = {"systemInstruction": {"parts": [{"text": system}]},
+            "contents": [{"role": "user", "parts": [{"text": user}]}],
+            "generationConfig": {"temperature": 0.2, "responseMimeType": "application/json"}}
+    r = None
+    for model in models:
+        for attempt in range(3):
+            r = requests.post(
+                f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+                timeout=90, headers={"x-goog-api-key": key}, json=body)
+            if r.status_code not in (429, 500, 503):
+                break
+            wait = _retry_delay(r, attempt)
+            if _waited + wait > TRANSLATE_BUDGET:
+                raise RuntimeError(f"gave up after waiting {_waited:.0f}s — HTTP {r.status_code}: {r.text[:100]!r}")
+            _waited += wait
+            time.sleep(wait)
+        if r.ok:
+            break
     text = _reply(r)["candidates"][0]["content"]["parts"][0]["text"]
     return json.loads(re.search(r"\{.*\}", text, re.S).group(0))
 
