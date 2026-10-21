@@ -179,6 +179,16 @@
     display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
     overflow:hidden;
   }
+  .reel-item .pname a{
+    background-image:linear-gradient(var(--hair-strong),var(--hair-strong));
+    background-size:100% 1px; background-repeat:no-repeat; background-position:0 100%;
+  }
+  .reel-item .pname a::after{content:"↗"; font-size:11px; color:var(--faint); margin-left:5px; transition:color .15s}
+  .reel-item .pname a:hover{
+    background-image:linear-gradient(hsl(var(--hue) 55% 45%),hsl(var(--hue) 55% 45%));
+    color:inherit;
+  }
+  .reel-item .pname a:hover::after{color:hsl(var(--hue) 55% 45%)}
   .picker-again{
     flex:none; align-self:stretch; display:flex; align-items:center;
     appearance:none; border:0; border-left:1px solid var(--hair); background:none;
@@ -760,11 +770,11 @@ function todaysPickPool(){
       const s = String(raw).trim();
       if (!s || /^bonus\s*:/i.test(s)) return;              // not a lunch choice
       const veg = s.match(/^vegetarisk[t]?\s*:\s*(.+)/i);
-      pool.push({ name: r.name, hue: hueFor(r.name), dish: veg ? veg[1] : s });
+      pool.push({ name: r.name, url: r.url, hue: hueFor(r.name), dish: veg ? veg[1] : s });
     });
   });
   // The fixed-menu places are on the wheel too — same every day, one entry each.
-  FIXED_PLACES.forEach(p => pool.push({ name: p.name, hue: hueFor(p.name), dish: p.blurb }));
+  FIXED_PLACES.forEach(p => pool.push({ name: p.name, url: p.url, hue: hueFor(p.name), dish: p.blurb }));
   return pool;
 }
 
@@ -773,7 +783,7 @@ function reelRow(p){
   return p
     ? `<div class="reel-item">` +
         `<span class="shield" aria-hidden="true" style="--hue:${p.hue}">${esc([...p.name][0] || "•")}</span>` +
-        `<span class="ptext"><span class="pname">${esc(p.name)}</span>${pdish(p.dish)}</span>` +
+        `<span class="ptext"><span class="pname" style="--hue:${p.hue}">${p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.name)}</a>` : esc(p.name)}</span>${pdish(p.dish)}</span>` +
       `</div>`
     : `<div class="reel-item"><span class="ptext"><span class="pname">Inget att slumpa</span>` +
       `${pdish("Ingen dagsmeny hittades för den här dagen")}</span></div>`;
