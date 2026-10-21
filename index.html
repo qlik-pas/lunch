@@ -288,6 +288,18 @@
   .fixed .shield{width:28px; height:28px; border-radius:8px; font-size:14px}
   .fixed .ftext{flex:1; min-width:0}
   .fixed .static-text{margin-top:1px}
+  /* same link treatment as the restaurant card titles: hairline underline + ↗,
+     picking up the place's own hue on hover */
+  .fixed .rname a{
+    background-image:linear-gradient(var(--hair-strong),var(--hair-strong));
+    background-size:100% 1px; background-repeat:no-repeat; background-position:0 100%;
+  }
+  .fixed .rname a::after{content:"↗"; font-size:11px; color:var(--faint); margin-left:5px; transition:color .15s}
+  .fixed .rname a:hover{
+    background-image:linear-gradient(hsl(var(--hue) 55% 45%),hsl(var(--hue) 55% 45%));
+    color:inherit;
+  }
+  .fixed .rname a:hover::after{color:hsl(var(--hue) 55% 45%)}
 
   /* ---- footer --------------------------------------------------------- */
   footer{
@@ -367,40 +379,41 @@ const SHORT = ["Mån","Tis","Ons","Tor","Fre"];
 const HUES = {
   "Restaurang Edison": 32, "Bricks Eatery": 350, "Smaka på Kina": 292,
   "Kantin": 155, "Eatery": 210,
-  /* fixed-menu places (below) */
+  /* newer places, spread over the gaps in the colour wheel */
+  "Troppo": 265, "Matstudio Kungsmarken": 196,
   "Bricks & Bones": 322, "Chop-chop": 182, "Delphi": 238, "Laziza": 80,
-  "Orvars burgers": 11, "Rekas": 105, "Troppo": 265,
-  "Sallads & Smoothies": 130, "Sweet Lemon Thai": 55,
+  "Orvars burgers": 11, "Rekas": 105, "Sallads & Smoothies": 130,
+  "Sweet Lemon Thai": 55, "Linnea Basilika": 307, "Mat och Harmoni": 224,
 };
 const hueFor = name => HUES[name] ??
   ([...name].reduce((h,c)=>(h*31 + c.charCodeAt(0))>>>0, 7) % 360);
 
 /* ---- Embedded snapshot (fallback only) --------------------------------- */
 let WEEK = {
-  "week": 39,
-  "range": "21–25 sep",
-  "dates": ["2026-09-21", "2026-09-22", "2026-09-23", "2026-09-24", "2026-09-25"],
+  "week": 43,
+  "range": "19–23 okt",
+  "dates": ["2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23"],
   "restaurants": [
     {
       "name": "Bricks Eatery",
       "url": "https://brickseatery.se/lunch",
       "menus": {
-        "Måndag": ["Potatis och purjolökssoppa med vitlöksbröd, färskostkräm, bakat ägg, potatischips och kruspersilja","Rödbetsrisotto med kyckling, rostade rödbetor, dragonolja, ruccola och picklad rödlök","Färsbiff med teriyakisås, ris, brynt kål, champinjoner och jordnötter"],
-        "Tisdag": ["Fylld pasta med tryffelgrädde, purjolök, brynt svamp, lagrad ost och bladspenat","Kyckling i vin med potatismos, syltlök, bacon, morot, champinjoner och kruspersilja","Mozzarella, tomatsås, Nduja ( krämig stark salami), basilika och kronärtskocka"],
-        "Onsdag": ["“Tofu med bambu”, soja, chili, ris, koriander och böngroddar","Stekt Multe med bön cassoulet, tomater, oliver och italiensk hårdost","Wokat fläsk i gojujangchili, ris, grönsaker, böngroddar och koriander","Mozzarella, tomatsås, Nduja ( krämig stark salami), basilika och kronärtskocka"],
-        "Torsdag": ["Okonomiyaki- japansk kålpannkaka med chilicoleslaw, sojabönor och BBQ-sås","Indisk “biff vindaloo” på högrev med ris, naanbröd, gurkraita, paprika och lök","Mozzarella, tomatsås, Nduja ( krämig stark salami), basilika och kronärtskocka","Bonus: äppelpaj med grädde"],
-        "Fredag": ["Falafelburgare med med rostad potatis, rökt chilimajonnäs, pickles och isbergssallad","Kroppkakor med lingon, kål, brynt smör, mandel och persilja","Friterad kycklingburgare (KFC- style) med rostad potatis, rökt chilimajonnäs, pickles och isbergssallad"]
+        "Måndag": ["Blomkålssoppa med vitlöksbröd, rostad blomkål, greveost, rostade fröer, krasse och liten dessert","Pannbiff med stekt lök, potatismos, timjansky, morot, rotselleri och persilja","Indisk curry med högrev, paprika, kikärtor, yoghurt ris och naanbröd"],
+        "Tisdag": ["Aranchinis (friterad risotto) med tomatsås, stekt svamp, spetskål, lagrad ost och torkade oliver","Nudelwok med kyckling, grönsaker, ostronsås, lime, krämigt ägg, chilirostade jordnötter och fisksås","Mozzarella, tomatsås och tryffelsalami & basilika"],
+        "Onsdag": ["“Mapo tofu” med sojafärs, champinjoner, salladslök, chili, fermenterad chili och jasminris","Stekt sill med potatismos, brynt smör och lingon","Tandoorikyckling med spenatgryta, kokosmjölk, ris, papadums och yoghurt","Mozzarella, tomatsås och tryffelsalami & basilika"],
+        "Torsdag": ["Okonomiyaki (japansk kål pannkaka), misomajonnäs, rostad lök, nori och ingefära","Raggmunk med stekt fläsk, lingon, råkostsallad och senapsvinaigrette","Mozzarella, tomatsås och tryffelsalami & basilika","Bonus: äppelpaj med grädde"],
+        "Fredag": ["Tariks falafelrulle med blandad sås, isbergssallad, rödlök, tomat, fefferoni och persilja","Pulled pork taco med bönor, chilimajonnäs, salsa, picklad rödlök, nachos och jalapeno","Ramen med kyckling, glasnudlar, räkchips, kål, svamp, ägg, vårlök och böngroddar"]
       }
     },
     {
       "name": "Eatery",
       "url": "https://www.eatery.se/lund/lunchmeny",
       "menus": {
-        "Måndag": ["Sticky koreansk kyckling med gochujang och soja, gurksallad, sesamris och salladslök","Färskostbakad hokifilé med betor, spenat, hasselnötter och brynt smör, dillkräm och koktpotatis","Indisk kokos och linsgryta med bakad pumpa, picklade rotfrukter, mynta yoghurt och basmatiris med nejlika och stjärnanis"],
-        "Tisdag": ["BBQ marinerad pluma med majskräm, tomatsallad och klyftpotatis, chilibéarnaise","Sesamstekt kungsfisk med sesammarinerad morot, krämig vittvinsås med miso och ingefära, potatismos med brynt smör","Dan dan nudlar med spicy vegfärs, jordnötter, salladslök och sesam","Bonus: något sött till kaffet"],
-        "Onsdag": ["Färsbiffar med krämig svampsås, rostad potatis, grönabönor med bakad lök och bacon","Vin och tomatbakad kummel med basilikapesto, marinerad paprika och zucchini, bakad potatis med gremolata","Majs och yoghurtplättar med pico de gallo, rostad sötpotatissallad och rökt paprikakräm"],
-        "Torsdag": ["Kyckling thai curry med kokos, röd curry, lime och ingefära, rostad broccoli och jasminris","Kungsfisk bakad i skaldjursfond med saffransås, dill picklad kålrot, potatis med gräslök, purjolök och smör","Krispig halloumiburgare med grön aioli, picklad gurka, sallad och klyftpotatis","Bonus: pannkakor, lättvispad grädde och hemmagjord sylt"],
-        "Fredag": ["Dansk fläskstekburgare med rödkål, örtmajo, äpple och rostad klyftpotatis","Panerad tilapia med remoulad, kokt potatis och picklade rotfrukter","Gnocchi med tomatsås sallad på oliver, kronärtskocka och spenat, ruccola och lagrad ost"]
+        "Måndag": ["Stekt kyckling grädde, soltorkad tomat, lagrad ost och potatismos","Ugnsbakad sej hollandaisesås, bakad spetskål, lagrad ost, potatis, lök och dill","Indisk linsgryta grönsaker och basmatiris"],
+        "Tisdag": ["Högrevschili chipotle, habanero och kakao, pico de gallo, gräddfil samt ris","Stekt kummel skagensås, picklad fänkål, kokt potatis och örtcrudité","Pasta grädde, svamp, soltorkade tomater, parmesan, zucchini och rucolasallad","Bonus: något sött till kaffet"],
+        "Onsdag": ["Pannbiff ölbrässerad lök, svamp och bacon, timjanssky, rostad potatis med fänkål och rosépeppar, inlagd gurka samt lingon","Dill- och vinbakad hokifilé aubergine, oliver och tomat, lagrad ost, rostad potatis samt tomatsås","Bakad butternutpumpa fetaost, svartris och pesto, fänkål samt grönkålssallad"],
+        "Torsdag": ["Nattbakad karré bakad tomat, potatisgratäng, skysås och béarnaisesås, picklad morotssallad","Bakad kungsfisk betor, kapris, dill och pepparrot, brynt smör med citron samt kokt potatis","Minestronesoppa sojafärs, vita bönor, tomat och svartkål, risoni samt gremolata","Ärtsoppa rimmad fläskbog","Bonus: pannkakor, lättvispad grädde och hemmagjord sylt"],
+        "Fredag": ["Friterad kyckling ranchdressing, coleslaw med fänkål och äpple, klyftpotatis med örtsalt samt friterad lök","Havets wallenbergare brynt smör, gröna ärtor med lök och dill samt kokt potatis med krasse och citron","Tortelloni med ricotta och spenat krämig tomat- och basilikasås, aubergine med ruccola, chili och vitlök"]
       }
     },
     {
@@ -408,8 +421,8 @@ let WEEK = {
       "url": "https://www.smakapakina.se/meny",
       "menus": {
         "Måndag": ["General Tsos kyckling (左宗棠鸡)","Fläsk med grönabönor (四季豆炒肉)","Snabbstekt blomkål (干锅花菜)"],
-        "Tisdag": ["Wokade kyckling med chili (双椒鸡丁)","Kamben med svartsojabönsås (豉汁排骨)","Snabbstekt spetskål (手撕包菜)"],
-        "Onsdag": ["Rött bräserat sidfläsk (红烧肉)","Biff i chiligryta (水煮牛肉)","Potatis strimlor med paprika (彩椒土豆丝)","Mapo Tofu (麻婆豆腐)"],
+        "Tisdag": ["Biff med tomat och ägg (番茄滑蛋牛肉)","Kryddig grillad kycklingvingar (辣烤鸡翅)","Snabbstekt spetskål (手撕包菜)"],
+        "Onsdag": ["Rött bräserat sidfläsk (红烧肉)","Wokade kyckling med chili (双椒鸡丁)","Potatis med inlagd chili(泡椒土豆丝)","Mapo Tofu (麻婆豆腐)"],
         "Torsdag": ["Ångkokt fläsk med senapskål (梅菜扣肉)","Spicy pot mix (麻辣香锅)","Homestyle tofu (家常豆腐)"],
         "Fredag": ["Sötsur fläsk med anannas (菠萝古老肉)","Rött bräserat lammribs (红焖羊排)","Selleri med cashewnötter och liljalök (腰果百合西芹)"]
       }
@@ -418,22 +431,45 @@ let WEEK = {
       "name": "Restaurang Edison",
       "url": "https://restaurangedison.se/lunch/",
       "menus": {
-        "Måndag": ["Tortellini/tomatsås/pesto/ruccola","Pannbiff/potatismos/lingon/gräddsås","Chiligryta/svartabönor/gräddfil/ris"],
-        "Tisdag": ["Okonomiyaki/sesammajo/nori/böngroddar","Lättrökt kyckling/äppleslaw/cidersky","Yakisoba/äggnudlar/picklad ingefära"],
-        "Onsdag": ["Linsgryta/lökchutney/naan/koriander","Fiskbiff/sandefjordsås/vaxbönor/potatis","Schnitzel/syrad kål/ris/tonkatsu"],
-        "Torsdag": ["Gulärtsbiff/saltgurka/vitlöksmajo/persilja","Rimmat fläsk/rotmos/persiljeskum/senap","Kycklingburgare/teriyakisås/sesamslaw/potatis"],
-        "Fredag": ["Smördegspizza/zucchini/lagrad ost/pinjenöt","Fläskestek/rödkål/äpplekompott/sockerstekt potatis","Bobotie/aubergine/mandel/gult ris"]
+        "Måndag": ["Blomkålscurry/ris/picklad lök","Pannbiff/stekt lök/potatisstomp/lingonsky","Kyckling/rödcurry/ris/böngrodd"],
+        "Tisdag": ["Risotto/bakad pumpa/svamp/ruccola","Fiskgryta/saffransaioli/brässerad fänkål","Pulled pork/brioche/soja/ingefärsgurka"],
+        "Onsdag": ["Ugnspannkaka/rökt rotselleri/färskost/lingon","Kotlett/lökcreme/bakat äpple/krispig grönkål","Panerad kyckling/jordnötssås/ris/gurkkimchi"],
+        "Torsdag": ["BetaBourguignon/potatispuré/syltlök/persilja","Havets wallenberg/potatispuré/brynt dillsmör/ärtor","FläskVindaloo/ris/rostad blomkål/chili"],
+        "Fredag": ["Samosas/stekt ris/tzatziki","Grillad kalv/3pepparmajo/pommes","Pasta/skinksås/rostade grönsaker/lagrad ost"]
       }
     },
     {
       "name": "Kantin",
       "url": "https://www.kantinlund.se/",
       "menus": {
-        "Måndag": ["Nattbakat högrev – potatisstomp – rostad beta – pickles – sky – rostad lök – ört","Vegetariskt: Bakad portabello – gröna linser – rostad beta – pickles – citronsmetana – örter"],
-        "Tisdag": ["Pluma – basilika beurre blanć – gröna ärtor – stjälkselleri – smetana – polkabeta – grön chili – frön – potatis","Vegetariskt: Bakad portabello – gröna linser – rostad beta – pickles – citronsmetana – örter"],
-        "Onsdag": ["Guajillo bakad kycklinglårfilé – hjärtsallad – sambal majo – tomat – pickles – friterad tortilla – potatis – koriander","Vegetariskt: Bakad portabello – gröna linser – rostad beta – pickles – citronsmetana – örter"],
-        "Torsdag": ["Råbiffstorsdag – Oxtartar – mozzarellacremé – tomater – lök – bönor – olivkrisp – ruccola","Vegetariskt: Bakad portabello – gröna linser – rostad beta – pickles – citronsmetana – örter"],
-        "Fredag": ["Skirtsteak – tryffelmajo – bakad tomat – bordelaisesås – örtrostad potatis","Vegetariskt: Bakad portabello – gröna linser – rostad beta – pickles – citronsmetana – örter"]
+        "Måndag": ["Pluma – het tomatsås – paprika – fetaost – ruccola – rostad lök – potatis","Vegetariskt: Gnocchi arrabiata – tomatsås – kronärtskocka – tomat – ruccola – frön – grana padano"],
+        "Tisdag": ["Sremska – dillpickle hot sauce – hjärtsallad – rostad lök – bakad tomat – potatis & senapsstomp","Vegetariskt: Gnocchi arrabiata – tomatsås – kronärtskocka – tomat – ruccola – frön – grana padano"],
+        "Onsdag": ["Nattbakat högrev – aioli – bakad tomat – rostad potatis – bunt morot – salviasky","Vegetariskt: Gnocchi arrabiata – tomatsås – kronärtskocka – tomat – ruccola – frön – grana padano"],
+        "Torsdag": ["råbiffstorsdag Oxtartar – tryffelaioli – potatiskrisp – grana padano – bakad tomat – silverlök – ruccola","Vegetariskt: Gnocchi arrabiata – tomatsås – kronärtskocka – tomat – ruccola – frön – grana padano"],
+        "Fredag": ["Helstekt ryggbiff – chimichurrimajo – rostad sötpotatis – pickles – sky – rostad lök – hjärtsallad","Vegetariskt: Gnocchi arrabiata – tomatsås – kronärtskocka – tomat – ruccola – frön – grana padano"]
+      }
+    },
+    {
+      "name": "Troppo",
+      "url": "https://www.troppo.se/lunch",
+      "weekly": true,
+      "menus": {
+        "Måndag": ["Kampong Style Hainanese Chicken – Rice steamed in chicken broth, tender chicken thigh, ginger, chili, garlic, cilantro, served with Kampong red sauce, chicken broth & fermented soybean/ginger dip - to keep you warm during the autumn chill.","Pad Thai Chicken – Stir-fried chicken, egg, tofu, garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, rice noodles, peanuts","VEG Pad Thai Double Style Tofu – Garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, choice to add an egg, peanuts."],
+        "Tisdag": ["Kampong Style Hainanese Chicken – Rice steamed in chicken broth, tender chicken thigh, ginger, chili, garlic, cilantro, served with Kampong red sauce, chicken broth & fermented soybean/ginger dip - to keep you warm during the autumn chill.","Pad Thai Chicken – Stir-fried chicken, egg, tofu, garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, rice noodles, peanuts","VEG Pad Thai Double Style Tofu – Garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, choice to add an egg, peanuts."],
+        "Onsdag": ["Kampong Style Hainanese Chicken – Rice steamed in chicken broth, tender chicken thigh, ginger, chili, garlic, cilantro, served with Kampong red sauce, chicken broth & fermented soybean/ginger dip - to keep you warm during the autumn chill.","Pad Thai Chicken – Stir-fried chicken, egg, tofu, garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, rice noodles, peanuts","VEG Pad Thai Double Style Tofu – Garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, choice to add an egg, peanuts."],
+        "Torsdag": ["Kampong Style Hainanese Chicken – Rice steamed in chicken broth, tender chicken thigh, ginger, chili, garlic, cilantro, served with Kampong red sauce, chicken broth & fermented soybean/ginger dip - to keep you warm during the autumn chill.","Pad Thai Chicken – Stir-fried chicken, egg, tofu, garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, rice noodles, peanuts","VEG Pad Thai Double Style Tofu – Garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, choice to add an egg, peanuts."],
+        "Fredag": ["Kampong Style Hainanese Chicken – Rice steamed in chicken broth, tender chicken thigh, ginger, chili, garlic, cilantro, served with Kampong red sauce, chicken broth & fermented soybean/ginger dip - to keep you warm during the autumn chill.","Pad Thai Chicken – Stir-fried chicken, egg, tofu, garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, rice noodles, peanuts","VEG Pad Thai Double Style Tofu – Garlic chives, sweet dried daikon, beansprouts, home made tamarind sauce, choice to add an egg, peanuts."]
+      }
+    },
+    {
+      "name": "Matstudio Kungsmarken",
+      "url": "https://www.matstudiokungsmarken.se/lunch/",
+      "menus": {
+        "Måndag": ["Kotlettrad med champinjon, picklad pumpa, rostad pumpafrö och brytböna","Vegetariskt: Variation på pumpa med linser, vispad brieost och rostad brysselkål"],
+        "Tisdag": ["Västerbottensostbakad lax med broccoli, blåmussla och örtsmörsås","Vegetariskt: Variation på pumpa med linser, vispad brieost och rostad brysselkål"],
+        "Onsdag": ["Fläskgryta med trattkantarell, dragon, varmrökt sidfläsk och smörbakad rotselleri","Vegetariskt: Variation på pumpa med linser, vispad brieost och rostad brysselkål"],
+        "Torsdag": ["“Kalops” på högrev med inlagd rödbeta, kokt potatis och persilja","Vegetariskt: Variation på pumpa med linser, vispad brieost och rostad brysselkål"],
+        "Fredag": ["Kycklingbröst från Knäred med råstekt potatis, soltorkad tomat, basilika och parmesan","Vegetariskt: Variation på pumpa med linser, vispad brieost och rostad brysselkål"]
       }
     }
   ]
@@ -443,17 +479,32 @@ let WEEK = {
 /* Hand-curated (not scraped): places with one standing menu rather than a
    dish of the day. Shown in the collapsed "Fast meny" section, and each one
    counts as a single entry in the "Vad blir det?" pick. Blurbs are kept in
-   the team's own words. `url` is optional — add one to make the name a link. */
+   the team's own words. `url` is the official site where one was found, else a
+   Google Maps search for the place — swap in the real site whenever you have it.
+   (Places that turn out to have a dish of the day belong in scraper.py instead —
+   Troppo started here and moved.) */
+const mapsUrl = q => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
 const FIXED_PLACES = [
-  { name: "Bricks & Bones",      blurb: "Kött-puck och bröd." },
-  { name: "Chop-chop",           blurb: "Chinese food menu." },
-  { name: "Delphi",              blurb: "Tony Starksauce och flygande tefat." },
-  { name: "Laziza",              blurb: "Our favourite Lebanese food buffet." },
-  { name: "Orvars burgers",      blurb: "Burgers & More." },
-  { name: "Rekas",               blurb: "Bórgars :V" },
-  { name: "Troppo",              blurb: "Hainanese chicken rice · Chicken Pad Thai · Tofu Pad Thai" },
-  { name: "Sallads & Smoothies", blurb: "Sallads. Also, smoothies." },
-  { name: "Sweet Lemon Thai",    blurb: "Thai Food menu." },
+  { name: "Bricks & Bones",      blurb: "Kött-puck och bröd.",
+    url: mapsUrl("Bricks & Bones Lund") },
+  { name: "Chop-chop",           blurb: "Chinese food menu.",
+    url: "https://chopchop.se/" },
+  { name: "Delphi",              blurb: "Tony Starksauce och flygande tefat.",
+    url: mapsUrl("Delphi restaurang Lund") },
+  { name: "Laziza",              blurb: "Our favourite Lebanese food buffet.",
+    url: "https://www.laziza.se/lunch/" },
+  { name: "Orvars burgers",      blurb: "Burgers & More.",
+    url: mapsUrl("Orvars burgers & more Lund") },
+  { name: "Rekas",               blurb: "Bórgars :V",
+    url: "https://rekas.se/lund/" },
+  { name: "Sallads & Smoothies", blurb: "Sallads. Also, smoothies.",
+    url: "https://ideon.se/news/saladsmoothies/" },
+  { name: "Sweet Lemon Thai",    blurb: "Thai Food menu.",
+    url: mapsUrl("Sweet Lemon Thai Kitchen Lund") },
+  { name: "Linnea Basilika",     blurb: "Asian Buffet · Chicken in Thai green curry · Crispy pork with pineapple & sweet chili · Spicy Thai basil chicken · Homemade spring rolls",
+    url: "https://www.linneabasilika.se/" },
+  { name: "Mat och Harmoni",     blurb: "Swedish meatballs & gravy · Chicken curry · Vegetarian meatballs",
+    url: "https://www.matochharmoni.se/" },
 ];
 
 /* ---- classification: full block vs demoted to "also open" ------------- */
@@ -462,6 +513,7 @@ const isBlank = v => !Array.isArray(v) || v.filter(x => String(x).trim()).length
 function classify(r){
   const filled = DAYS.map(d => r.menus?.[d]).filter(v => !isBlank(v));
   if (filled.length === 0) return { cat:"other", why:"ingen meny publicerad" };
+  if (r.weekly) return { cat:"place" };     // one menu for the week — a real menu, same each day
   const flat = filled.map(v => v.join(" | "));
   if (new Set(flat).size === 1 && filled.length >= 4)
     return { cat:"other", why:"samma meny varje dag", text: filled[0].join(" · ") };
@@ -835,7 +887,7 @@ function renderFixed(){
     const name = p.url
       ? `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.name)}</a>`
       : esc(p.name);
-    return `<li><span class="shield" aria-hidden="true" style="--hue:${hueFor(p.name)}">${esc([...p.name][0])}</span>` +
+    return `<li style="--hue:${hueFor(p.name)}"><span class="shield" aria-hidden="true">${esc([...p.name][0])}</span>` +
       `<span class="ftext"><span class="rname">${name}</span>` +
       `<span class="static-text">${esc(p.blurb)}</span></span></li>`;
   }).join("");

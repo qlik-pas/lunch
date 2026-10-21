@@ -21,6 +21,8 @@ Everything the redesign must keep working. The visual layer is free; this is not
     {
       "name": "Restaurang Edison",     // stable display name (used for colour keys)
       "url": "https://…",              // linked from the restaurant title
+      "weekly": true,                  // optional: ONE menu for the whole week (Troppo) —
+                                       // identical every day, but still a full card
       "menus": {
         "Måndag":  ["dish 1", "dish 2", "dish 3"],
         "Tisdag":  [ … ],
@@ -29,8 +31,9 @@ Everything the redesign must keep working. The visual layer is free; this is not
         "Fredag":  [ … ]
       }
     }
-    // exactly these five, in the order scraper.py's SOURCES list defines:
-    // "Bricks Eatery", "Eatery", "Smaka på Kina", "Restaurang Edison", "Kantin"
+    // the scraped places, in the order scraper.py's SOURCES list defines:
+    // "Bricks Eatery", "Eatery", "Smaka på Kina", "Restaurang Edison", "Kantin",
+    // "Troppo", "Matstudio Kungsmarken"
     // (render them in the order they arrive — don't re-sort)
   ],
   "errors": ["Eatery: …"]              // optional; present when a source failed
@@ -63,7 +66,8 @@ Everything the redesign must keep working. The visual layer is free; this is not
 
 Each restaurant is sorted into one of:
 
-1. **Full card** — has real menus that differ across days. The main content.
+1. **Full card** — has real menus that differ across days, or is flagged
+   `weekly` (one weekly menu, deliberately the same every day). The main content.
 2. **Demoted / "others"** — either:
    - no menu any day (`why: "ingen meny"`), or
    - the exact same menu every day for ≥4 days (`why: "samma varje dag"`),
@@ -78,11 +82,13 @@ between useful and noise.
 
 Separate from the five scraped restaurants: `FIXED_PLACES` in `index.html` is a
 hand-curated array of places with one standing menu instead of a dish of the
-day — `{ name, blurb, url? }`, blurbs kept verbatim in the team's own words
+day — `{ name, blurb, url }`, blurbs kept verbatim in the team's own words
 (some English, some jokes — don't translate or tidy them). They are static, so
 rendered once at load rather than per day. Two places they must show up:
 
-- a collapsed "Fast meny (N)" `<details>` — name, blurb, and the same
+- a collapsed "Fast meny (N)" `<details>` — name (a link: the official site
+  where one was found, otherwise a Google Maps search — keep the underline + ↗
+  so it reads as clickable), blurb, and the same
   hue-tinted initial shield used elsewhere (hues come from `HUES`, keyed by
   name, so the shield matches the pick card);
 - the "Vad blir det?" pick pool — one entry each (`dish` = the blurb), so the
@@ -115,7 +121,7 @@ a failed fetch sees a plausible current-ish menu.
 - [ ] Embedded snapshot kept and refreshed
 - [ ] Today-first; weekend → Monday + "Helg" note
 - [ ] All visible text in Swedish; `<html lang="sv">`
-- [ ] Five scraped restaurants, correct order, per-day menus
+- [ ] Seven scraped restaurants, correct order, per-day menus (`weekly` ones stay cards)
 - [ ] Fixed-menu places: collapsed list + included in the pick pool
 - [ ] `Vegetariskt:` and `Bonus:` lines visually distinct from lunch options
 - [ ] Two-tier restaurant classification (card vs demoted) preserved
