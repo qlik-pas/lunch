@@ -10,7 +10,7 @@ Eight more places with a standing menu rather than a dish of the day are listed
 by hand in `index.html` (`FIXED_PLACES`) — a collapsed "Fast meny" section, and
 all of them are on the "Vad blir det?" wheel.
 
-The "Copy todays choices" button (next to the day heading) copies the day's lunch to the clipboard as
+The "Copy today's lunch" button (next to the day heading) copies the day's lunch to the clipboard as
 a Slack-ready English post. The English dish names are produced in `scraper.py`
 (an `en` field per restaurant in `lt.json`) and only re-done when a menu changes:
 with Google Gemini (a free AI Studio key stored as the `GEMINI_API_KEY` repo
