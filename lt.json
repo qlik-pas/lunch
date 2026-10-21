@@ -8,7 +8,7 @@
     "2026-10-22",
     "2026-10-23"
   ],
-  "generated": "2026-10-19T08:01:35+00:00",
+  "generated": "2026-10-21T08:01:33+00:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -113,11 +113,31 @@
       "name": "Restaurang Edison",
       "url": "https://restaurangedison.se/lunch/",
       "menus": {
-        "Måndag": [],
-        "Tisdag": [],
-        "Onsdag": [],
-        "Torsdag": [],
-        "Fredag": []
+        "Måndag": [
+          "Blomkålscurry/ris/picklad lök",
+          "Pannbiff/stekt lök/potatisstomp/lingonsky",
+          "Kyckling/rödcurry/ris/böngrodd"
+        ],
+        "Tisdag": [
+          "Risotto/bakad pumpa/svamp/ruccola",
+          "Fiskgryta/saffransaioli/brässerad fänkål",
+          "Pulled pork/brioche/soja/ingefärsgurka"
+        ],
+        "Onsdag": [
+          "Ugnspannkaka/rökt rotselleri/färskost/lingon",
+          "Kotlett/lökcreme/bakat äpple/krispig grönkål",
+          "Panerad kyckling/jordnötssås/ris/gurkkimchi"
+        ],
+        "Torsdag": [
+          "BetaBourguignon/potatispuré/syltlök/persilja",
+          "Havets wallenberg/potatispuré/brynt dillsmör/ärtor",
+          "FläskVindaloo/ris/rostad blomkål/chili"
+        ],
+        "Fredag": [
+          "Samosas/stekt ris/tzatziki",
+          "Grillad kalv/3pepparmajo/pommes",
+          "Pasta/skinksås/rostade grönsaker/lagrad ost"
+        ]
       }
     },
     {
@@ -146,8 +166,5 @@
         ]
       }
     }
-  ],
-  "errors": [
-    "Restaurang Edison: sidan visar vecka 41, väntar på vecka 43"
   ]
 }
