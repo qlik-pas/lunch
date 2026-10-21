@@ -21,6 +21,8 @@ Everything the redesign must keep working. The visual layer is free; this is not
     {
       "name": "Restaurang Edison",     // stable display name (used for colour keys)
       "url": "https://…",              // linked from the restaurant title
+      "en": { "Måndag": ["short English dish name", …] },   // optional: same shape as menus, aligned
+                                       // 1:1 with the Swedish entries; feeds the share button
       "weekly": true,                  // optional: ONE menu for the whole week (Troppo) —
                                        // identical every day, but still a full card
       "menus": {
@@ -93,6 +95,24 @@ rendered once at load rather than per day. Two places they must show up:
   name, so the shield matches the pick card);
 - the "Vad blir det?" pick pool — one entry each (`dish` = the blurb), so the
   wheel can land on "go to Troppo", not just on a dish.
+
+## "Kopiera dagens utbud (EN)" (share text)
+
+A button above the footer that builds the day's lunch as a Slack-ready English
+post and puts it **on the clipboard** (so a plain Ctrl+V pastes it), with a
+preview underneath. Format: a `:ferris_wheel: Lunch wheel of the day:` header,
+then per place an `:emoji: Label:` line and its dishes joined with ` | `, places
+sorted by label (accents ignored). The `SLACK` map in `index.html` holds each
+place's emoji + short label (Bricks Eatery → "Bricks", Restaurang Edison →
+"Edison", Orvars burgers → "Örvars"). Rules a redesign must keep:
+
+- the clipboard write happens synchronously inside the click handler (browsers
+  refuse it otherwise) — never `await` a model/network call before it;
+- dishes come from `en` (translated at scrape time); a place without `en` falls
+  back to its Swedish text and is named in the status line ("Ej översatt än");
+- `Vegetariskt:` and `Bonus:` lines are left out (main dishes only), fixed-menu
+  blurbs go in verbatim (jokes and Swedish included), `·` becomes ` | `;
+- the preview is hidden again on day switch, like the pick result.
 
 ## Status indicator
 
