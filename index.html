@@ -203,25 +203,9 @@
   @keyframes spin{to{transform:rotate(360deg)}}
   @keyframes reel-loop{to{transform:translateY(var(--loop-dist))}}
   @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto}
     .picker-btn.spinning .spin-ico{animation:none}
     .picker-again.spinning{animation:none}
   }
-
-  /* ---- jump row: one shield per place, tap to scroll there ---------------- */
-  .jump{display:flex; margin:0 0 4px}
-  .jump[hidden]{display:none}
-  .jump a{
-    flex:1 1 0; max-width:40px; min-width:0; height:44px;
-    display:grid; place-items:center; text-decoration:none;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .jump a .shield{width:min(30px,calc(100% - 3px)); height:auto; aspect-ratio:1; border-radius:9px; transition:transform .15s ease}
-  .jump a:active .shield{transform:scale(.92)}
-  .jump a:focus-visible{outline:2px solid var(--ink); outline-offset:-2px; border-radius:10px}
-  .jump .jump-pick{color:var(--muted); font-size:18px; margin-left:auto}
-  html{scroll-behavior:smooth}
-  .place, .picker{scroll-margin-top:96px}
 
   /* ---- places --------------------------------------------------------- */
   .places{display:flex; flex-direction:column}
@@ -384,11 +368,9 @@
     <pre class="share-out" id="shareOut"></pre>
   </div>
 
-  <nav class="jump" id="jump" aria-label="Hoppa till restaurang" hidden></nav>
-
   <div class="places" id="places"></div>
 
-  <div class="picker" id="picker">
+  <div class="picker">
     <p class="picker-intro">
       <em>Svårt att bestämma sig?</em>
       <button class="picker-btn" id="pickBtn" type="button" aria-expanded="false" aria-controls="pickResult">
@@ -712,7 +694,7 @@ function render(){
   }
 
   const wrap = document.getElementById("places");
-  const others = [], jumps = [];
+  const others = [];
   wrap.innerHTML = "";
 
   WEEK.restaurants.forEach(r => {
@@ -727,7 +709,6 @@ function render(){
 
     const el = document.createElement("article");
     el.className = "place";
-    el.id = "place-" + jumps.length;
     el.style.setProperty("--hue", hueFor(r.name));
     el.innerHTML =
       `<div class="place-head">` +
@@ -736,11 +717,7 @@ function render(){
         `<span class="go" aria-hidden="true">↗</span>` +
       `</div>${body}`;
     wrap.appendChild(el);
-    jumps.push(`<a href="#${el.id}" aria-label="${esc(r.name)}" title="${esc(r.name)}"><span class="shield" style="--hue:${hueFor(r.name)}">${initial}</span></a>`);
   });
-  const jump = document.getElementById("jump");
-  jump.innerHTML = jumps.join("") + `<a class="jump-pick" href="#picker" aria-label="Vad blir det?" title="Vad blir det?">↻</a>`;
-  jump.hidden = jumps.length < 3;
 
   const list = document.getElementById("othersList");
   list.innerHTML = others.map(({r,info}) =>
