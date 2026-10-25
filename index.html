@@ -1037,34 +1037,52 @@ function utbudText(){
       const e = typeof en[i] === "string" ? en[i].trim() : "";
       if (e) items.push(e); else { items.push(s); fellBack = true; }
     });
-    if (!items.length){ places.push({ name: r.name, items: ["no menu yet"] }); return; }   // not published/updated yet
+    if (!items.length){ places.push({ name: r.name, url: r.url, items: ["no menu yet"] }); return; }   // not published/updated yet
     if (fellBack) untranslated.push((SLACK[r.name] || [, r.name])[1]);
-    places.push({ name: r.name, items });
+    places.push({ name: r.name, url: r.url, items });
   });
   /* Laziza's running joke: every Wednesday in an even ISO week. */
   const crispy = p => p.name === "Laziza" && selected === 2 && WEEK.week % 2 === 0;
-  const fixed = FIXED_PLACES.map(p => ({ name: p.name, items: crispy(p) ? ["CRISPY CHICKEN!"] : p.blurb.split(" · ") }));
+  const fixed = FIXED_PLACES.map(p => ({ name: p.name, url: p.url, items: crispy(p) ? ["CRISPY CHICKEN!"] : p.blurb.split(" · ") }));
 
-  /* Each group alphabetical by label; the standing-menu places go last. */
-  const lines = group => group.map(p => {
+  /* Each group alphabetical by label; the standing-menu places go last. Built twice:
+     plain text, and HTML where each place's name is a link to it — Teams keeps
+     the links (and Slack too) when the clipboard carries text/html. */
+  const rows = group => group.map(p => {
     const [emoji, label] = SLACK[p.name] || ["🍴", p.name];
-    return { key: sortKey(label), text: `${emoji} ${label}:\n${p.items.join(" | ")}` };
-  }).sort((a, b) => a.key.localeCompare(b.key, "en")).map(l => l.text);
-  return { text: ["🎡 Lunch wheel of the day:", ...lines(places), ...lines(fixed)].join("\n"), untranslated };
+    return { key: sortKey(label), p, head: `${emoji} ${label}`, dishes: p.items.join(" | ") };
+  }).sort((a, b) => a.key.localeCompare(b.key, "en"));
+  const all = [...rows(places), ...rows(fixed)], title = "🎡 Lunch wheel of the day:";
+  return {
+    text: [title, ...all.map(r => `${r.head}:\n${r.dishes}`)].join("\n"),
+    html: `<div>${title}</div>` + all.map(r => {
+      const head = r.p.url ? `<a href="${esc(r.p.url)}">${esc(r.head)}</a>` : esc(r.head);
+      return `<div>${head}:</div><div>${esc(r.dishes)}</div>`;
+    }).join(""),
+    untranslated,
+  };
 }
 
-/* navigator.clipboard needs a secure context (GitHub Pages is https); the
-   textarea fallback covers anything stricter. Called straight from the click so
-   the browser still counts it as a user gesture. */
-function copyToClipboard(text){
+/* Puts both flavours on the clipboard: text/html (clickable links, for Teams) and
+   text/plain. navigator.clipboard needs a secure context (GitHub Pages is https);
+   the copy-event fallback covers anything stricter. Called straight from the click
+   so the browser still counts it as a user gesture. */
+function copyToClipboard(text, html){
   const legacy = () => {
     const ta = document.createElement("textarea");
     ta.value = text; ta.setAttribute("readonly", "");
     ta.style.cssText = "position:fixed;top:-1000px;opacity:0";
     document.body.appendChild(ta); ta.select();
+    const onCopy = e => { e.clipboardData.setData("text/plain", text); e.clipboardData.setData("text/html", html); e.preventDefault(); };
+    document.addEventListener("copy", onCopy);
     let ok = false; try { ok = document.execCommand("copy"); } catch {}
-    ta.remove(); return ok;
+    document.removeEventListener("copy", onCopy); ta.remove(); return ok;
   };
+  if (navigator.clipboard?.write && window.ClipboardItem){
+    const blob = (t, type) => new Blob([t], { type });
+    return navigator.clipboard.write([new ClipboardItem({ "text/plain": blob(text, "text/plain"), "text/html": blob(html, "text/html") })])
+      .then(() => true, legacy);
+  }
   return navigator.clipboard?.writeText
     ? navigator.clipboard.writeText(text).then(() => true, legacy)
     : Promise.resolve(legacy());
@@ -1072,10 +1090,10 @@ function copyToClipboard(text){
 
 let shareTimer = null;
 document.getElementById("shareBtn").addEventListener("click", () => {
-  const { text, untranslated } = utbudText();
+  const { text, html, untranslated } = utbudText();
   const box = document.getElementById("shareResult"), out = document.getElementById("shareOut");
   const status = document.getElementById("shareStatus"), label = document.getElementById("shareBtnLabel");
-  copyToClipboard(text).then(ok => {
+  copyToClipboard(text, html).then(ok => {
     /* Nothing is shown on a clean copy — the button says "Copied ✓". The text
        only appears if the browser refused, so it can still be copied by hand. */
     const note = (ok ? "" : "Kunde inte kopiera automatiskt – markera texten nedan och kopiera själv. ")

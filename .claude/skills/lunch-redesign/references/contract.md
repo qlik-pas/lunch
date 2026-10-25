@@ -106,6 +106,7 @@ sorted by label (accents ignored). The `SLACK` map in `index.html` holds each
 place's emoji + short label (Bricks Eatery → "Bricks", Restaurang Edison →
 "Edison", Orvars burgers → "Örvars"). Rules a redesign must keep:
 
+- the clipboard carries **both** `text/plain` and `text/html`; in the HTML each place's emoji + label is a link to the place (scraped `url` / fixed-menu `url`), so Teams pastes clickable names. Falls back to a `copy`-event handler that sets both flavours;
 - the clipboard write happens synchronously inside the click handler (browsers
   refuse it otherwise) — never `await` a model/network call before it;
 - dishes come from `en` (translated at scrape time); a place without `en` falls
