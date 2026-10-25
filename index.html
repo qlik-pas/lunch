@@ -1083,9 +1083,12 @@ function copyToClipboard(text, html){
     return navigator.clipboard.write([new ClipboardItem({ "text/plain": blob(text, "text/plain"), "text/html": blob(html, "text/html") })])
       .then(() => true, legacy);
   }
+  /* No ClipboardItem (older Firefox/Safari): the copy-event route still carries both
+     flavours and runs synchronously in the click; plain writeText is the last resort. */
+  if (legacy()) return Promise.resolve(true);
   return navigator.clipboard?.writeText
-    ? navigator.clipboard.writeText(text).then(() => true, legacy)
-    : Promise.resolve(legacy());
+    ? navigator.clipboard.writeText(text).then(() => true, () => false)
+    : Promise.resolve(false);
 }
 
 let shareTimer = null;
