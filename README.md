@@ -21,6 +21,10 @@ If a restaurant redesigns its page and a parser finds nothing, the page text is
 handed to Gemini to read the menu out instead (only dishes whose words really
 appear on the page are accepted); lt.json's `errors` then says which parser to fix.
 
+## Tests
+`python tests/test_scraper.py` (offline) and `python tests/test_ui.py` (headless Chromium), plus
+`python tests/check_links.py` for dead links — see [tests/README.md](tests/README.md).
+
 ## Files
 - `index.html` — the page (fetches `lt.json`, falls back to a baked-in snapshot)
 - `scraper.py` — fetches the nine sources, writes `lt.json`
