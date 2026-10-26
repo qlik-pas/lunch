@@ -28,6 +28,18 @@ m=S.parse_matochharmoni(mh); check("matochharmoni",m["Måndag"]==["A","B","C"] a
 e=S._entry("Troppo","u",{"Måndag":["a"],"Tisdag":["a"],"Onsdag":["a"],"Torsdag":["a"],"Fredag":["a"]}); check("weekly flag",e.get("weekly") is True)
 e=S._entry("Kantin","u",S._empty()); check("not weekly",not e.get("weekly"))
 
+# closed weeks
+for txt,exp in [("Vi håller stängt v. 44",True),("Restaurangen är stängd denna vecka",True),("Semesterstängt",True),("Stängt vecka 44",True),
+                ("Vi har tyvärr stängt pga renovering",True),("Closed this week",True),
+                ("Lör–sön stängt",False),("Köket stänger 14:00",False),("Mån-fre 11-14\nLör stängt",False),("helg stängt",False)]:
+    check(f"says_closed {txt!r}",S.says_closed(txt)==exp)
+check("week_key",S.week_key(datetime.date(2026,10,26))=="2026-W44" and S.week_key(datetime.date(2027,1,4))=="2027-W01")
+check("closed flag",S._entry("X","u",S._empty(),closed=True).get("closed") is True and "closed" not in S._entry("X","u",S._empty()))
+import tempfile
+with tempfile.NamedTemporaryFile("w",suffix=".json",delete=False,encoding="utf-8") as f: f.write('{"2026-W44":["Smaka på Kina"],"junk":3}')
+check("load_closed",S.load_closed(f.name)=={"2026-W44":{"Smaka på Kina"}},S.load_closed(f.name)); os.unlink(f.name)
+check("load_closed missing",S.load_closed("/nonexistent.json")=={})
+
 # _previous_menus
 old={"week":43,"restaurants":[{"name":"A","menus":{"Måndag":["x"]}},{"name":"B","menus":{"Måndag":[]}}]}
 check("prev same week",list(S._previous_menus(old,43))==["A"]); check("prev other week",S._previous_menus(old,44)=={})

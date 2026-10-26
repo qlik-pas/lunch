@@ -389,8 +389,13 @@
   </details>
 
   <details class="others" id="others" hidden>
-    <summary><span id="othersLabel">Även öppet</span></summary>
+    <summary><span id="othersLabel">Meny inte uppdaterad</span></summary>
     <ul id="othersList"></ul>
+  </details>
+
+  <details class="others" id="closed" hidden>
+    <summary><span id="closedLabel">Stängt denna vecka</span></summary>
+    <ul id="closedList"></ul>
   </details>
 
   <footer>
@@ -624,10 +629,11 @@ const FIXED_PLACES = [
     url: "https://sweet-lemon.se" },
 ];
 
-/* ---- classification: full block vs demoted to "also open" ------------- */
+/* ---- classification: full block, "menu not updated", or closed --------- */
 const isBlank = v => !Array.isArray(v) || v.filter(x => String(x).trim()).length === 0;
 
 function classify(r){
+  if (r.closed) return { cat:"closed", why:"stängt denna vecka" };
   const filled = DAYS.map(d => r.menus?.[d]).filter(v => !isBlank(v));
   if (filled.length === 0) return { cat:"other", why:"ingen meny publicerad" };
   if (r.weekly) return { cat:"place" };     // one menu for the week — a real menu, same each day
@@ -694,11 +700,12 @@ function render(){
   }
 
   const wrap = document.getElementById("places");
-  const others = [];
+  const others = [], closed = [];
   wrap.innerHTML = "";
 
   WEEK.restaurants.forEach(r => {
     const info = classify(r);
+    if (info.cat === "closed"){ closed.push({ r, info }); return; }
     if (info.cat !== "place"){ others.push({ r, info }); return; }
 
     const dishes = Array.isArray(r.menus[day]) ? r.menus[day].filter(x => String(x).trim()) : [];
@@ -719,14 +726,16 @@ function render(){
     wrap.appendChild(el);
   });
 
-  const list = document.getElementById("othersList");
-  list.innerHTML = others.map(({r,info}) =>
+  const item = ({r,info}) =>
     `<li><span class="rname"><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a></span>` +
     `<span class="note">${esc(info.why)}</span>` +
-    (info.text ? `<span class="static-text">${esc(info.text)}</span>` : ``) + `</li>`
-  ).join("");
+    (info.text ? `<span class="static-text">${esc(info.text)}</span>` : ``) + `</li>`;
+  document.getElementById("othersList").innerHTML = others.map(item).join("");
   document.getElementById("others").hidden = others.length === 0;
-  document.getElementById("othersLabel").textContent = `Även öppet (${others.length})`;
+  document.getElementById("othersLabel").textContent = `Meny inte uppdaterad (${others.length})`;
+  document.getElementById("closedList").innerHTML = closed.map(item).join("");
+  document.getElementById("closed").hidden = closed.length === 0;
+  document.getElementById("closedLabel").textContent = `Stängt denna vecka (${closed.length})`;
 }
 
 function setStatus(live, note){

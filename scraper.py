@@ -447,14 +447,52 @@ SOURCES = [
 
 # One menu for the whole week, the same every day. lt.json marks these so the
 # page shows them as full cards instead of demoting "same every day" to the
-# collapsed "Även öppet" list (that rule is for places with no real daily menu).
+# collapsed "Meny inte uppdaterad" list (that rule is for places with no real daily menu).
 WEEKLY = {"Troppo"}
 
-def _entry(name, url, menus):
+def _entry(name, url, menus, closed=False):
     e = {"name": name, "url": url, "menus": menus}
     if name in WEEKLY:
         e["weekly"] = True
+    if closed:
+        e["closed"] = True
     return e
+
+
+# --------------------------------------------------------------------------- #
+# Closed weeks
+# --------------------------------------------------------------------------- #
+# A place that is shut for the week publishes no menu, which used to look like a
+# broken parser (an `errors` line plus a pointless Gemini call). Two ways in:
+#   1. closed.json — {"2026-W44": ["Smaka på Kina"]}, edited by hand. Wins always.
+#   2. The page itself says so. Only consulted when the parser found 0 dishes,
+#      and only on phrases about being shut for a period — a bare "stängt" is
+#      too often "Lör–sön stängt" in the opening hours.
+CLOSED_RE = re.compile(
+    r"\b(?:håller|har|är)\s+(?:\w+\s+)?stäng(?:t|d|da)\b"
+    r"|semesterstängt"
+    r"|stängt\s+(?:denna|hela|i\s+dag|idag|under|vecka|v\.?\s*\d|för|pga|p\.\s?g\.\s?a|tills|t\.\s?o\.\s?m|fr\.?o\.?m)"
+    r"|closed\s+(?:this|for|until|all)",
+    re.I)
+
+
+def week_key(today=None):
+    y, w, _ = (today or datetime.date.today()).isocalendar()
+    return f"{y}-W{w:02d}"
+
+
+def load_closed(path="closed.json"):
+    """{"2026-W44": ["Smaka på Kina"], ...}; a missing or broken file is just empty."""
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+        return {k: set(v) for k, v in data.items() if isinstance(v, list)}
+    except (OSError, ValueError, AttributeError):
+        return {}
+
+
+def says_closed(text):
+    return bool(CLOSED_RE.search(text or ""))
 
 
 # --------------------------------------------------------------------------- #
@@ -671,13 +709,20 @@ def build():
     old = _load_old()
     prev = _previous_menus(old, week)
     restaurants, errors = [], []
+    closed_now = load_closed().get(week_key(), set())
     for name, url, parser, kind in SOURCES:
+        if name in closed_now:                       # closed.json: don't even fetch
+            restaurants.append(_entry(name, url, _empty(), closed=True))
+            continue
         try:
             if kind == "rendered":
                 text = fetch_rendered_text(EATERY_MENU_URL)
             else:
                 text = fetch_html_text(url)
             menus = parser(text)
+            if not any(menus.values()) and says_closed(text):
+                restaurants.append(_entry(name, url, _empty(), closed=True))
+                continue
             if not any(menus.values()):
                 try:
                     menus = _llm_extract_menus(name, text)
