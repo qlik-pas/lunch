@@ -24,6 +24,19 @@ m=S.parse_linnea(lin); check("linnea",m["Måndag"]==["Rätt A","Rätt B"] and m[
 mh="Dagens rätt vecka 43\nMåndag\nA\nB\nC\nTisdag\nD\nVeckans pasta\nX"
 m=S.parse_matochharmoni(mh); check("matochharmoni",m["Måndag"]==["A","B","C"] and m["Tisdag"]==["D"],m)
 
+# Bryggan / Inspira, on the page text as captured in week 44
+HERE=os.path.dirname(os.path.abspath(__file__))
+t=open(os.path.join(HERE,"fixtures_bryggan.txt"),encoding="utf-8").read(); m=S.parse_bryggan(t)
+check("bryggan week",S.claimed_week(t)==44)
+check("bryggan 2 per day",all(len(m[d])==2 for d in S.DAYS),{d:len(m[d]) for d in S.DAYS})
+check("bryggan dishes",m["Måndag"][0].startswith("Grönsaksfrittata") and m["Fredag"][1].startswith("Wallenbergare") and not any("reservation" in x for v in m.values() for x in v),m["Fredag"])
+t=open(os.path.join(HERE,"fixtures_inspira.txt"),encoding="utf-8").read(); m=S.parse_inspira(t)
+check("inspira week",S.claimed_week(t)==44)
+check("inspira 4 per day",all(len(m[d])==4 for d in S.DAYS),{d:len(m[d]) for d in S.DAYS})
+check("inspira green is veg, garnish joined",m["Måndag"][0]=="Vegetariskt: Pasta Mafaldine Puttanesca – parmesan & ruccola" and m["Tisdag"][1]=="Stekt sill & potatismos – brynt smör, rårörda lingon, rödlök & dill",m["Måndag"][:2])
+check("inspira 'Asia|' without space",m["Tisdag"][2].startswith("Pho med kyckling"),m["Tisdag"][2])
+check("parsers empty on junk",not any(S.parse_bryggan("hej").values()) and not any(S.parse_inspira("hej").values()))
+
 # _entry / weekly
 e=S._entry("Troppo","u",{"Måndag":["a"],"Tisdag":["a"],"Onsdag":["a"],"Torsdag":["a"],"Fredag":["a"]}); check("weekly flag",e.get("weekly") is True)
 e=S._entry("Kantin","u",S._empty()); check("not weekly",not e.get("weekly"))

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Scrapes the eight Lund lunch sources and writes lt.json in the shape index.html
+Scrapes the Lund lunch sources and writes lt.json in the shape index.html
 expects: { week, range, dates[5], generated, restaurants:[{name,url,menus:{Day:[...]}}] }
 
 Sources:
@@ -12,6 +12,8 @@ Sources:
   Matstudio Kungsmarken https://www.matstudiokungsmarken.se/lunch/ (WP HTML)
   Mat och Harmoni    https://www.matochharmoni.se/#dagens  (WP HTML)
   Linnea Basilika    https://www.linneabasilika.se/lund-brunnshog/ (WP HTML)
+  Bryggan            https://mersmak.me/vara-stallen/bryggan/ (WP HTML)
+  Inspira            https://restauranginspira.se/#lunch   (WP HTML)
   Eatery             menu.pej.io TV/kiosk board — client-rendered, needs
                      headless Chromium (see fetch_rendered_text)
 
@@ -291,6 +293,54 @@ def parse_troppo(text):
     return menus
 
 
+# Bryggan (Mersmak): "LUNCHMENY v. 44", prices and what's included, then
+# Måndag…Fredag each followed by its dishes (a vegetarian and a meat dish, but
+# the page doesn't label which is which), ending at "Med reservation…".
+BRYGGAN_STOP = re.compile(r"^(med reservation|för allergener|vi har smarriga)", re.I)
+
+def parse_bryggan(text):
+    menus = _empty()
+    lines = _lines(text)
+    start = next((i for i, l in enumerate(lines) if re.match(r"lunchmeny\b", l, re.I)), None)
+    if start is None:
+        return menus
+    day = None
+    for l in lines[start + 1:]:
+        if BRYGGAN_STOP.match(l):
+            break
+        if l in DAYS:
+            day = l
+        elif day:
+            menus[day].append(l)
+    return menus
+
+
+# Inspira (Medicon Village): "Lunch", "vecka 44", a row of day tabs, then each
+# day with four lines "Green | Dish" / "Local | …" / "Asia | …" / "World | …",
+# each followed by a garnish line "x | y & z". Green is the vegetarian line.
+INSPIRA_DISH = re.compile(r"^(green|local|asia|world)\s*\|\s*(.+)$", re.I)
+
+def parse_inspira(text):
+    menus = _empty()
+    day, last = None, None
+    for l in _lines(text):
+        if re.fullmatch(r"konferens", l, re.I) and day:
+            break
+        if l in DAYS:
+            day, last = l, None
+            continue
+        m = INSPIRA_DISH.match(l)
+        if day and m:
+            dish = m.group(2).strip()
+            menus[day].append(("Vegetariskt: " if m.group(1).lower() == "green" else "") + dish)
+            last = len(menus[day]) - 1
+        elif day and last is not None:
+            garnish = re.sub(r"\s*\|\s*", ", ", l).strip()
+            menus[day][last] += f" – {garnish}"
+            last = None
+    return menus
+
+
 # Matstudio Kungsmarken: "Dagens v 43", then Måndag…Fredag each followed by
 # that day's dish (sometimes wrapped over two lines), then "Veckans gröda" —
 # the vegetarian dish, shown under every day like Kantin's. The à la carte
@@ -450,6 +500,8 @@ SOURCES = [
     ("Matstudio Kungsmarken", "https://www.matstudiokungsmarken.se/lunch/", parse_matstudio, "html"),
     ("Mat och Harmoni",   "https://www.matochharmoni.se/#dagens", parse_matochharmoni, "html"),
     ("Linnea Basilika",   "https://www.linneabasilika.se/lund-brunnshog/", parse_linnea, "html"),
+    ("Bryggan",           "https://mersmak.me/vara-stallen/bryggan/", parse_bryggan, "html"),
+    ("Inspira",           "https://restauranginspira.se/#lunch", parse_inspira,   "html"),
 ]
 
 # One menu for the whole week, the same every day. lt.json marks these so the

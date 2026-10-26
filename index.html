@@ -1015,10 +1015,12 @@ wirePress(document.getElementById("pickAgain"));
 const SLACK = {
   "Bricks Eatery": ["🧱", "Bricks"],
   "Bricks & Bones": ["🦴", "Bricks & Bones"],
+  "Bryggan": ["⚓", "Bryggan"],
   "Chop-chop": ["🥡", "Chop-chop"],
   "Delphi": ["🌯", "Delphi"],
   "Restaurang Edison": ["💡", "Edison"],
   "Eatery": ["🍽️", "Eatery"],
+  "Inspira": ["🌍", "Inspira"],
   "Kantin": ["👩🏾‍🍳", "Kantin"],
   "Laziza": ["🇱🇧", "Laziza"],
   "Linnea Basilika": ["🍜", "Linnea Basilika"],
@@ -1055,14 +1057,16 @@ function utbudText(){
   const crispy = p => p.name === "Laziza" && selected === 2 && WEEK.week % 2 === 0;
   const fixed = FIXED_PLACES.map(p => ({ name: p.name, url: p.url, items: crispy(p) ? ["CRISPY CHICKEN!"] : p.blurb.split(" · ") }));
 
-  /* Each group alphabetical by label; the standing-menu places go last. Built twice:
+  /* Scraped places in page order (scraper.py's SOURCES); the standing-menu places
+     follow, alphabetical by label. Built twice:
      plain text, and HTML where each place's name is a link to it — Teams keeps
      the links (and Slack too) when the clipboard carries text/html. */
   const rows = group => group.map(p => {
     const [emoji, label] = SLACK[p.name] || ["🍴", p.name];
     return { key: sortKey(label), p, head: `${emoji} ${label}`, dishes: p.items.join(" | ") };
-  }).sort((a, b) => a.key.localeCompare(b.key, "en"));
-  const all = [...rows(places), ...rows(fixed)], title = "🎡 Lunch wheel of the day:";
+  });
+  const alpha = rs => rs.sort((a, b) => a.key.localeCompare(b.key, "en"));
+  const all = [...rows(places), ...alpha(rows(fixed))], title = "🎡 Lunch wheel of the day:";
   return {
     text: [title, ...all.map(r => `${r.head}:\n${r.dishes}`)].join("\n"),
     html: `<div>${title}</div>` + all.map(r => {

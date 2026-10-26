@@ -156,7 +156,9 @@ with sync_playwright() as p:
     names=[h[2:].strip(" :") if not h.startswith("🍽") else h for h in heads[1:]]
     scraped=heads[1:1+N]; fixed=heads[1+N:]
     key=lambda s: re.sub(r"[̀-ͯ]","",__import__("unicodedata").normalize("NFD",re.sub(r"^\S+\s","",s))).lower()
-    t("share: scraped alphabetical", [key(x) for x in scraped]==sorted(key(x) for x in scraped), [key(x) for x in scraped])
+    SL=pg.evaluate("()=>Object.fromEntries(Object.entries(SLACK).map(([k,v])=>[k,v[1]]))")
+    page_order=[(SL.get(r["name"]) or r["name"]) for r in LT["restaurants"]]
+    t("share: scraped in page order", [re.sub(r"^\S+\s","",x).rstrip(":") for x in scraped]==page_order, scraped)
     t("share: fixed after scraped, alphabetical", [key(x) for x in fixed]==sorted(key(x) for x in fixed) and any("Delphi" in x for x in fixed), fixed)
     t("share: html links every place", len(re.findall(r'<a href="https?://[^"]+">',html))==N+len(FIXED), len(re.findall(r'<a href',html)))
     en=[x for r in LT["restaurants"] for x in r.get("en",{}).get("Onsdag",[])]

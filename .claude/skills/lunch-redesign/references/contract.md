@@ -150,7 +150,7 @@ a failed fetch sees a plausible current-ish menu.
 - [ ] Embedded snapshot kept and refreshed
 - [ ] Today-first; weekend → Monday + "Helg" note
 - [ ] All visible text in Swedish; `<html lang="sv">`
-- [ ] Nine scraped restaurants, correct order, per-day menus (`weekly` ones stay cards)
+- [ ] Eleven scraped restaurants, correct order, per-day menus (`weekly` ones stay cards)
 - [ ] Fixed-menu places: collapsed list + included in the pick pool
 - [ ] `Vegetariskt:` and `Bonus:` lines visually distinct from lunch options
 - [ ] Two-tier restaurant classification (card vs demoted) preserved
