@@ -1,0 +1,29 @@
+# Temporary: dumps the text scraper.py sees for two new places, so parsers can be written.
+name: Dump pages
+on:
+  push:
+    branches: [dump-pages]
+permissions:
+  contents: write
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install requests beautifulsoup4
+      - run: |
+          mkdir -p dump
+          python - <<'PY'
+          import scraper as S, requests
+          for name, url in [("bryggan","https://mersmak.me/vara-stallen/bryggan/"),("inspira","https://restauranginspira.se/")]:
+              try:
+                  open(f"dump/{name}.txt","w").write(S.fetch_html_text(url))
+                  open(f"dump/{name}.html","w").write(requests.get(url, headers=S.UA, timeout=30).text)
+              except Exception as e:
+                  open(f"dump/{name}.txt","w").write(f"ERROR {e}")
+          PY
+      - run: |
+          git config user.name lunch-bot; git config user.email lunch-bot@users.noreply.github.com
+          git add dump && git commit -m "dump pages" && git push
