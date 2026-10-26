@@ -8,7 +8,7 @@
     "2026-10-29",
     "2026-10-30"
   ],
-  "generated": "2026-10-26T09:23:49+00:00",
+  "generated": "2026-10-26T09:56:06+00:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -256,13 +256,60 @@
       "name": "Troppo",
       "url": "https://www.troppo.se/lunch",
       "menus": {
-        "Måndag": [],
-        "Tisdag": [],
-        "Onsdag": [],
-        "Torsdag": [],
-        "Fredag": []
+        "Måndag": [
+          "Masaman Curry – Overnight cooked chuck roll in Masaman curry, potatoes, pickled vegetables, peanuts, rice",
+          "Hong Kong Egg Noodles – Stir-fried Hong Kong style egg noodles, minced cockerel meatballs, pak choi, carrot, fried egg",
+          "Five Spice Tofu – Five spice tofu stew, pak choi, shiitake, oringi mushrooms, rice"
+        ],
+        "Tisdag": [
+          "Masaman Curry – Overnight cooked chuck roll in Masaman curry, potatoes, pickled vegetables, peanuts, rice",
+          "Hong Kong Egg Noodles – Stir-fried Hong Kong style egg noodles, minced cockerel meatballs, pak choi, carrot, fried egg",
+          "Five Spice Tofu – Five spice tofu stew, pak choi, shiitake, oringi mushrooms, rice"
+        ],
+        "Onsdag": [
+          "Masaman Curry – Overnight cooked chuck roll in Masaman curry, potatoes, pickled vegetables, peanuts, rice",
+          "Hong Kong Egg Noodles – Stir-fried Hong Kong style egg noodles, minced cockerel meatballs, pak choi, carrot, fried egg",
+          "Five Spice Tofu – Five spice tofu stew, pak choi, shiitake, oringi mushrooms, rice"
+        ],
+        "Torsdag": [
+          "Masaman Curry – Overnight cooked chuck roll in Masaman curry, potatoes, pickled vegetables, peanuts, rice",
+          "Hong Kong Egg Noodles – Stir-fried Hong Kong style egg noodles, minced cockerel meatballs, pak choi, carrot, fried egg",
+          "Five Spice Tofu – Five spice tofu stew, pak choi, shiitake, oringi mushrooms, rice"
+        ],
+        "Fredag": [
+          "Masaman Curry – Overnight cooked chuck roll in Masaman curry, potatoes, pickled vegetables, peanuts, rice",
+          "Hong Kong Egg Noodles – Stir-fried Hong Kong style egg noodles, minced cockerel meatballs, pak choi, carrot, fried egg",
+          "Five Spice Tofu – Five spice tofu stew, pak choi, shiitake, oringi mushrooms, rice"
+        ]
       },
-      "weekly": true
+      "weekly": true,
+      "en": {
+        "Måndag": [
+          "Massaman curry with chuck roll & peanuts",
+          "Stir-fried egg noodles with cockerel meatballs",
+          "Five spice tofu stew with mushrooms & rice"
+        ],
+        "Tisdag": [
+          "Massaman curry with chuck roll & peanuts",
+          "Stir-fried egg noodles with cockerel meatballs",
+          "Five spice tofu stew with mushrooms & rice"
+        ],
+        "Onsdag": [
+          "Massaman curry with chuck roll & peanuts",
+          "Stir-fried egg noodles with cockerel meatballs",
+          "Five spice tofu stew with mushrooms & rice"
+        ],
+        "Torsdag": [
+          "Massaman curry with chuck roll & peanuts",
+          "Stir-fried egg noodles with cockerel meatballs",
+          "Five spice tofu stew with mushrooms & rice"
+        ],
+        "Fredag": [
+          "Massaman curry with chuck roll & peanuts",
+          "Stir-fried egg noodles with cockerel meatballs",
+          "Five spice tofu stew with mushrooms & rice"
+        ]
+      }
     },
     {
       "name": "Matstudio Kungsmarken",
@@ -437,9 +484,122 @@
           "Grilled chicken skewers with homemade peanut sauce"
         ]
       }
+    },
+    {
+      "name": "Bryggan",
+      "url": "https://mersmak.me/vara-stallen/bryggan/",
+      "menus": {
+        "Måndag": [
+          "Grönsaksfrittata med örtbakad spetskål, oliver, rostad paprikacréme & rucola",
+          "Stekt kycklingfilé med kokt ris, currysås, ingefärabakad morot & spetskål"
+        ],
+        "Tisdag": [
+          "Selleriplätt med rostade rödbetor, getostcréme, rucola, rostade hasselnötter & persiljequinoa",
+          "Bräserad fläsksida med chili-rosmarinäpple, rostad potatis, skysås och picklad rödkål"
+        ],
+        "Onsdag": [
+          "Vegansk quinoa-spenattortelloni med caponata, rucola & pangrattata",
+          "Gulasch på fläskbog med kummin, persiljekvarg, saltgurka & potatisstomp"
+        ],
+        "Torsdag": [
+          "Auberginegryta med kikärtor, citronyoghurt, couscous, pickles & dukkah",
+          "Sprödbakad kolja med skarpsås, gröna ärtor, citron och kokt potatis"
+        ],
+        "Fredag": [
+          "Soja-bönbiff med BBQ-sås, rostad paprika, romansallad, riven cheddar & örtpotatis",
+          "Wallenbergare med skirat smör, gröna ärtor, potatispuré, lingon och hackad persilja"
+        ]
+      },
+      "en": {
+        "Måndag": [
+          "Vegetable frittata with cabbage & bell pepper cream",
+          "Fried chicken breast with rice & curry sauce"
+        ],
+        "Tisdag": [
+          "Celeriac fritter with roasted beets & goat cheese cream",
+          "Braised pork belly with chili-rosemary apple & potatoes"
+        ],
+        "Onsdag": [
+          "Vegan quinoa-spinach tortelloni with caponata",
+          "Pork shoulder goulash with cumin & potato mash"
+        ],
+        "Torsdag": [
+          "Aubergine stew with chickpeas, lemon yogurt & couscous",
+          "Crispy baked haddock with sharp sauce & potatoes"
+        ],
+        "Fredag": [
+          "Soy bean patty with BBQ sauce & cheddar",
+          "Wallenbergare with browned butter, peas & potato purée"
+        ]
+      }
+    },
+    {
+      "name": "Inspira",
+      "url": "https://restauranginspira.se/#lunch",
+      "menus": {
+        "Måndag": [
+          "Vegetariskt: Pasta Mafaldine Puttanesca – parmesan & ruccola",
+          "Inspiras kålpudding – gräddsås, lingon, kokt potatis & spetskålsallad",
+          "Pho med kyckling & risnudlar – Pak Choi, groddar & sojabönor",
+          "Kyckling Tagine – couscous, kryddig tomatsås, rostad mandel & zucchini"
+        ],
+        "Tisdag": [
+          "Vegetariskt: Chana masala – basmatiris & raita",
+          "Stekt sill & potatismos – brynt smör, rårörda lingon, rödlök & dill",
+          "Pho med kyckling & risnudlar – Pak Choi, groddar & sojabönor",
+          "Moqueca (brasiliansk fiskgryta) – scampi, basmatiris, lime & koriander"
+        ],
+        "Onsdag": [
+          "Vegetariskt: Vegetarisk gulasch – svamp, kumminyoghurt & saltgurka",
+          "Rödvinsbräserad oxkind & potatispuré – bakad morot, syrad rödkål & rödvinssås",
+          "Asiatisk kycklingfärsbiff – jasminris, gurksallad & gochujangmayo",
+          "Moqueca (brasiliansk fiskgryta – scampi, basmatiris, lime & koriander"
+        ],
+        "Torsdag": [
+          "Vegetariskt: Vårrullar – sötsur sås, jasminris & morotssallad",
+          "Senapsglacerad fläsksida – cidersås, rostad potatis & bakad lök",
+          "Asiatisk kycklingfärsbiff – jasminris, gurksallad & gochujangmayo",
+          "Pulled pork-burgare – sallad, coleslaw, BBQ-sås & pommes frites"
+        ],
+        "Fredag": [
+          "Vegetariskt: Rödbetsarancini – vit bönpuré, bakad kål & svamp",
+          "Lasagne – bakad tomat & lagrad ost",
+          "Yakiniku – jasminris, vårlök, sesam, misomayo & picklad rödkål",
+          "Pulled pork-burgare – sallad, coleslaw, BBQ-sås & pommes frites"
+        ]
+      },
+      "en": {
+        "Måndag": [
+          "Vegetarian: Pasta Mafaldine Puttanesca with parmesan",
+          "Cabbage pudding with cream sauce, lingonberries & potatoes",
+          "Chicken pho with rice noodles, pak choi & sprouts",
+          "Chicken tagine with couscous & roasted almonds"
+        ],
+        "Tisdag": [
+          "Vegetarian: Chana masala with basmati rice & raita",
+          "Fried herring with potato mash & browned butter",
+          "Chicken pho with rice noodles, pak choi & sprouts",
+          "Moqueca Brazilian fish stew with scampi & lime"
+        ],
+        "Onsdag": [
+          "Vegetarian: Mushroom goulash with cumin yogurt",
+          "Red wine braised ox cheek with potato purée & red wine sauce",
+          "Asian chicken mince patty with jasmine rice & gochujang mayo",
+          "Moqueca Brazilian fish stew with scampi & lime"
+        ],
+        "Torsdag": [
+          "Vegetarian: Spring rolls with sweet & sour sauce & jasmine rice",
+          "Mustard-glazed pork belly with cider sauce & roasted potatoes",
+          "Asian chicken mince patty with jasmine rice & gochujang mayo",
+          "Pulled pork burger with coleslaw & French fries"
+        ],
+        "Fredag": [
+          "Vegetarian: Beetroot arancini with white bean purée & cabbage",
+          "Lasagne with baked tomato & aged cheese",
+          "Yakiniku with jasmine rice, spring onion & misomayo",
+          "Pulled pork burger with coleslaw & French fries"
+        ]
+      }
     }
-  ],
-  "errors": [
-    "Troppo: sidan visar vecka 43, väntar på vecka 44"
   ]
 }
