@@ -8,7 +8,7 @@
     "2026-10-29",
     "2026-10-30"
   ],
-  "generated": "2026-10-26T08:45:48+00:00",
+  "generated": "2026-10-26T09:23:49+00:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -143,7 +143,8 @@
         "Onsdag": [],
         "Torsdag": [],
         "Fredag": []
-      }
+      },
+      "closed": true
     },
     {
       "name": "Restaurang Edison",
@@ -439,7 +440,6 @@
     }
   ],
   "errors": [
-    "Smaka på Kina: parsed 0 dishes (Gemini fallback: Gemini found no menu on the page)",
     "Troppo: sidan visar vecka 43, väntar på vecka 44"
   ]
 }
