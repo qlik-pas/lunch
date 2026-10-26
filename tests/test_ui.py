@@ -94,6 +94,7 @@ with sync_playwright() as p:
 
     # closed for the week -> own section, not "Meny inte uppdaterad"
     d=json.loads(json.dumps(LT))
+    for r in d["restaurants"]: r.pop("closed",None)                                   # independent of today's lt.json
     d["restaurants"][0]["menus"]={k:[] for k in DAYS}; d["restaurants"][0]["closed"]=True
     pg=page(route=lambda r: r.fulfill(status=200,content_type="application/json",body=json.dumps(d)))
     t("closed: own section, no card", pg.locator(".place").count()<=N-1 and pg.locator("#closed").is_visible()
@@ -172,6 +173,8 @@ with sync_playwright() as p:
     # no menu yet
     r=pg.evaluate("""()=>{WEEK.week=43; selected=2; WEEK.restaurants[0].menus['Onsdag']=[]; const t=utbudText().text.split('\\n'); const i=t.findIndex(l=>l.includes('Bricks:')); return t[i+1]}""")
     t("share: empty menu -> 'no menu yet'", r=="no menu yet", r)
+    r=pg.evaluate("""()=>{selected=2; WEEK.restaurants[0].closed=true; const t=utbudText().text.split('\\n'); const i=t.findIndex(l=>l.includes('Bricks:')); delete WEEK.restaurants[0].closed; return t[i+1]}""")
+    t("share: closed place -> 'closed this week'", r=="closed this week", r)
     # untranslated note
     pg.evaluate("""()=>{selected=2; delete WEEK.restaurants[1].en; }"""); pg.click("#shareBtn"); pg.wait_for_timeout(500)
     t("share: untranslated named in note", pg.locator("#shareResult").is_visible() and "Ej översatt" in pg.inner_text("#shareStatus"), pg.inner_text("#shareStatus") if pg.locator("#shareStatus").is_visible() else "hidden")
