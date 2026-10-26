@@ -21,6 +21,12 @@ If a restaurant redesigns its page and a parser finds nothing, the page text is
 handed to Gemini to read the menu out instead (only dishes whose words really
 appear on the page are accepted); lt.json's `errors` then says which parser to fix.
 
+A place that is shut for the week is shown under "Stängt denna vecka" instead
+of as an error. Either list it in `closed.json` (`{"2026-W44": ["Smaka på Kina"]}`,
+ISO week), or let the scraper notice it: when a parser finds 0 dishes and the
+page says e.g. "håller stängt", "semesterstängt" or "stängt vecka 44", the
+place is marked `closed` and Gemini isn't asked.
+
 ## Tests
 `python tests/test_scraper.py` (offline) and `python tests/test_ui.py` (headless Chromium), plus
 `python tests/check_links.py` for dead links — see [tests/README.md](tests/README.md).

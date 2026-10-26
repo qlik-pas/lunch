@@ -92,6 +92,17 @@ with sync_playwright() as p:
     t("classify: reasons shown", d["restaurants"][0]["name"] in txt and d["restaurants"][1]["name"] in txt and "Samma rätt" in txt, txt[:100])
     pg.context.close()
 
+    # closed for the week -> own section, not "Meny inte uppdaterad"
+    d=json.loads(json.dumps(LT))
+    d["restaurants"][0]["menus"]={k:[] for k in DAYS}; d["restaurants"][0]["closed"]=True
+    pg=page(route=lambda r: r.fulfill(status=200,content_type="application/json",body=json.dumps(d)))
+    t("closed: own section, no card", pg.locator(".place").count()<=N-1 and pg.locator("#closed").is_visible()
+      and "stängt denna vecka (1)" in pg.inner_text("#closedLabel").lower(), pg.inner_text("#closedLabel"))
+    pg.click("#closed summary"); pg.wait_for_timeout(150)
+    t("closed: not in 'Meny inte uppdaterad'", d["restaurants"][0]["name"] in pg.inner_text("#closed")
+      and (not pg.locator("#others").is_visible() or d["restaurants"][0]["name"] not in pg.inner_text("#others")))
+    pg.context.close()
+
     # ---- fixed list ------------------------------------------------------------------
     pg=page()
     t(f"fixed: label Fast meny ({len(FIXED)})", f"fast meny ({len(FIXED)})" in pg.inner_text("#fixedLabel").lower(), pg.inner_text("#fixedLabel"))

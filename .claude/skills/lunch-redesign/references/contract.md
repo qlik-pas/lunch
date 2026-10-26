@@ -119,7 +119,7 @@ place's emoji + short label (Bricks Eatery → "Bricks", Restaurang Edison →
 
 ## Mobile affordances
 
-- **Tap targets ≥ 44px** (the pick button, "Fast meny"/"Även öppet" summaries,
+- **Tap targets ≥ 44px** (the pick button, "Fast meny"/"Meny inte uppdaterad"/"Stängt denna vecka" summaries,
   each fixed-menu row); a card's whole header row (shield, name, ↗) is its link, via a
   stretched `::after`. The share button is 40px so it stays in line with the IDAG tag.
 
