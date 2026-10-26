@@ -160,7 +160,8 @@ with sync_playwright() as p:
     page_order=[(SL.get(r["name"]) or r["name"]) for r in LT["restaurants"]]
     t("share: scraped in page order", [re.sub(r"^\S+\s","",x).rstrip(":") for x in scraped]==page_order, scraped)
     t("share: fixed after scraped, alphabetical", [key(x) for x in fixed]==sorted(key(x) for x in fixed) and any("Delphi" in x for x in fixed), fixed)
-    t("share: html links every place", len(re.findall(r'<a href="https?://[^"]+">',html))==N+len(FIXED), len(re.findall(r'<a href',html)))
+    t("share: html links every place + title", len(re.findall(r'<a href="https?://[^"]+">',html))==1+N+len(FIXED), len(re.findall(r'<a href',html)))
+    t("share: title links to the lunch page", re.match(r'<div><a href="https://qlik-pas\.github\.io/lunch/">🎡',html) is not None, html[:120])
     en=[x for r in LT["restaurants"] for x in r.get("en",{}).get("Onsdag",[])]
     t("share: translated dishes are used", not en or any(x in txt for x in en[:5]))
     t("share: no Vegetariskt/Bonus lines", not re.search(r"^(Vegetariskt|Bonus)",txt,re.M))
