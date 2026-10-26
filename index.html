@@ -1067,9 +1067,10 @@ function utbudText(){
   });
   const alpha = rs => rs.sort((a, b) => a.key.localeCompare(b.key, "en"));
   const all = [...rows(places), ...alpha(rows(fixed))], title = "🎡 Lunch wheel of the day:";
+  const home = "https://qlik-pas.github.io/lunch/";   // the title links back here (fixed, so a local copy links to the live page)
   return {
     text: [title, ...all.map(r => `${r.head}:\n${r.dishes}`)].join("\n"),
-    html: `<div>${title}</div>` + all.map(r => {
+    html: `<div><a href="${home}">${esc(title)}</a></div>` + all.map(r => {
       const head = r.p.url ? `<a href="${esc(r.p.url)}">${esc(r.head)}</a>` : esc(r.head);
       return `<div>${head}:</div><div>${esc(r.dishes)}</div>`;
     }).join(""),
