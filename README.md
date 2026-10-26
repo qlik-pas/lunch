@@ -6,7 +6,7 @@ weekdays (Monday a few times through late morning, when the new week's menu
 lands, plus a midday pass Tue–Fri) and commits `lt.json` only when a menu
 actually changed; `index.html` renders whichever day it is.
 
-Eight more places with a standing menu rather than a dish of the day are listed
+Nine more places with a standing menu rather than a dish of the day are listed
 by hand in `index.html` (`FIXED_PLACES`) — a collapsed "Fast meny" section, and
 all of them are on the "Vad blir det?" wheel.
 
