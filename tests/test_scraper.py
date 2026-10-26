@@ -15,7 +15,7 @@ def check(name, cond, extra=""):
 # week_info / claimed_week
 w,dates,rng=S.week_info(datetime.date(2026,10,21)); check("week_info",(w,dates[0],dates[4],rng)==(43,"2026-10-19","2026-10-23","19–23 okt"),(w,dates,rng))
 w,dates,_=S.week_info(datetime.date(2026,10,25)); check("sunday still wk43",w==43 and dates[0]=="2026-10-19")
-for txt,exp in [("Vecka 43",43),("Meny V44",44),("Week 7",7),("Dagens v 43",43),("Måndag 19 okt",43),("Måndag, 17 Aug",None),("Vecka 99",None),("hej",None)]:
+for txt,exp in [("Vecka 43",43),("Meny V44",44),("Week 7",7),("Dagens v 43",43),("Måndag 19 okt",43),("Måndag, 17 Aug",None),("Vecka 99",None),("LUNCH WEEK 43-44, 2026",44),("Lunch week 43–44",44),("week 43-\n44, 2026",44),("Vecka 43 - 45",43),("Week 52-53",53),("hej",None)]:
     check(f"claimed_week {txt}",S.claimed_week(txt)==exp,S.claimed_week(txt))
 
 # parsers on synthetic text

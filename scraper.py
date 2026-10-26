@@ -54,6 +54,8 @@ WEEK_LABEL = re.compile(
     r"vecka\s*(\d{1,2})\b|meny\s*v\.?\s*(\d{1,2})\b|"
     r"\bweek\s*(\d{1,2})\b|dagens\s+v\.?\s*(\d{1,2})\b", re.I)
 
+WEEK_RANGE_END = re.compile(r"\s*[-–—]\s*(\d{1,2})\b")
+
 # No "Vecka N" label? A day header with a date ("Måndag 19 okt") says the same.
 DATED_DAY = re.compile(r"\b(?:måndag|tisdag|onsdag|torsdag|fredag)\s+(\d{1,2})\s+(" + "|".join(MONTHS_SV) + r")\b", re.I)
 
@@ -70,6 +72,11 @@ def claimed_week(text):
         except ValueError:
             return None
     n = int(next(g for g in m.groups() if g))
+    # A range ("Lunch week 43-44" — Troppo's menu runs Saturday to Friday) is
+    # for the later week: that's the one whose Monday–Friday it covers.
+    r = WEEK_RANGE_END.match(text, m.end())
+    if r and int(r.group(1)) == n + 1:
+        n = int(r.group(1))
     return n if 1 <= n <= 53 else None
 
 
