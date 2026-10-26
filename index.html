@@ -1037,6 +1037,7 @@ const sortKey = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerC
 function utbudText(){
   const day = DAYS[selected], places = [], untranslated = [];
   WEEK.restaurants.forEach(r => {
+    if (r.closed){ places.push({ name: r.name, url: r.url, items: ["closed this week"] }); return; }
     const sv = Array.isArray(r.menus?.[day]) ? r.menus[day] : [];
     const en = Array.isArray(r.en?.[day]) ? r.en[day] : [];
     const items = []; let fellBack = false;
