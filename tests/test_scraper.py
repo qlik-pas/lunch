@@ -77,6 +77,15 @@ r5=mk(); S._with_translations(r5,{},translate=bad_shape); check("bad shape -> no
 check("never raises on garbage",True)
 S._with_translations(mk(),{},translate=lambda s,p: "garbage")  # must not raise
 
+# en_full: own field and prompt, own cache, independent of en
+seen=[]
+def fake_full(sys_,payload): seen.append(sys_); return {n:{d:[f"FULL {x}" for x in v] for d,v in days.items()} for n,days in payload.items()}
+r=mk(); S._with_translations(r,{},translate=fake); S._with_translations(r,{},translate=fake_full,field="en_full")
+check("en_full set, en untouched", r[0]["en_full"]["Måndag"]==["FULL Köttbullar"] and r[0]["en"]["Måndag"]==["EN Köttbullar"], r[0])
+check("en_full uses the full prompt", seen and seen[0]==S.FULL_TRANSLATE_PROMPT and "faithfully" in seen[0])
+seen.clear(); r6=mk(); S._with_translations(r6,{"restaurants":r},translate=fake_full,field="en_full"); check("en_full cache hit", not seen and r6[0]["en_full"]==r[0]["en_full"])
+r7=mk(); S._with_translations(r7,{"restaurants":[{**x,"en_full":None} for x in r]},translate=boom,field="en_full"); check("en_full fail -> absent, no raise","en_full" not in r7[0])
+
 # _llm_json: retries/fallback with mocked requests
 import requests
 os.environ["GEMINI_API_KEY"]="k"; slept=[]; time.sleep=lambda s: slept.append(s)

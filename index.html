@@ -435,9 +435,9 @@ const SHORT = ["Mån","Tis","Ons","Tor","Fre"];
 
 /* ---- language (SV / EN) ---------------------------------------------------
    DAYS stays the data key (lt.json is keyed by Swedish day names); only what's
-   shown changes. Dishes come from lt.json's `en` (made at scrape time for the
-   copy button) — short names, so the English view is terser than the Swedish
-   one — and fall back to the Swedish line wherever a translation is missing.
+   shown changes. Dishes come from lt.json's `en_full` (the whole dish, made at
+   scrape time), else `en` (the copy button's short names), else the Swedish
+   line — chosen per line, so nothing is ever blank.
    The choice is a per-viewer convenience in localStorage. */
 const STR = {
   sv: {
@@ -476,12 +476,14 @@ try { if (localStorage.getItem("lang") === "en") LANG = "en"; } catch {}
 const T = () => STR[LANG];
 
 /* The dishes to show for one place and day: Swedish, or English line by line
-   (lt.json's `en` is aligned 1:1 with `menus`) with the Swedish as fallback. */
+   (`en_full` and `en` are aligned 1:1 with `menus`) with fallbacks. */
 function shownDishes(r, day){
   const sv = Array.isArray(r.menus?.[day]) ? r.menus[day] : [];
   if (LANG !== "en") return sv;
-  const en = Array.isArray(r.en?.[day]) ? r.en[day] : [];
-  return sv.map((x, i) => (typeof en[i] === "string" && en[i].trim()) ? en[i] : x);
+  const pick = f => Array.isArray(r[f]?.[day]) && r[f][day].length === sv.length ? r[f][day] : [];
+  const full = pick("en_full"), short = pick("en");
+  const ok = v => typeof v === "string" && v.trim();
+  return sv.map((x, i) => ok(full[i]) ? full[i] : ok(short[i]) ? short[i] : x);
 }
 
 /* The week range ("26–30 okt") comes from the scraper in Swedish; in English

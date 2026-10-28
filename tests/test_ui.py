@@ -123,6 +123,15 @@ with sync_playwright() as p:
     pg.click('.lang [data-lang="sv"]'); pg.wait_for_timeout(200)
     t("lang: back to SV restores Swedish", pg.inner_text("#dayHeading").strip()=="Onsdag" and pg.inner_text(".place .dishes li")==sv_first and "Live".upper() in pg.inner_text("#status").upper())
     pg.context.close()
+    # en_full preferred over en
+    d=json.loads(json.dumps(LT)); r0=d["restaurants"][0]
+    r0["en_full"]={k:[f"FULLTEXT {i}" for i,_ in enumerate(v)] for k,v in r0["menus"].items()}
+    pg=page(route=lambda r: r.fulfill(status=200,content_type="application/json",body=json.dumps(d)),
+            init="try{localStorage.setItem('lang','en')}catch(e){}")
+    t("lang: EN prefers en_full", not r0["menus"]["Onsdag"] or "FULLTEXT 0" in pg.locator(".place").first.inner_text(), pg.locator(".place").first.inner_text()[:80])
+    pg.click('.lang [data-lang="sv"]'); pg.wait_for_timeout(150)
+    t("lang: SV ignores en_full", "FULLTEXT" not in pg.locator(".place").first.inner_text())
+    pg.context.close()
     # missing translation -> Swedish line, no blank
     d=json.loads(json.dumps(LT)); d["restaurants"][0].pop("en",None)
     pg=page(route=lambda r: r.fulfill(status=200,content_type="application/json",body=json.dumps(d)),
