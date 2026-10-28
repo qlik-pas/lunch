@@ -56,8 +56,9 @@
     font-family:var(--serif); font-weight:500; font-size:15px;
     letter-spacing:.005em; color:var(--ink-soft);
   }
+  .masthead .mh-right{margin-left:auto; display:inline-flex; align-items:center; gap:12px}
   .masthead .status{
-    margin-left:auto; display:inline-flex; align-items:center; gap:7px;
+    display:inline-flex; align-items:center; gap:7px;
     font-size:11.5px; font-weight:500; letter-spacing:.06em; text-transform:uppercase;
     color:var(--faint);
   }
@@ -65,6 +66,16 @@
   .status.live{color:var(--veg)}
   .status.live .dot{background:var(--veg); box-shadow:0 0 0 3px color-mix(in srgb,var(--veg) 20%,transparent)}
   .status.stale .dot{background:var(--faint)}
+
+  /* SV / EN toggle — a two-segment switch next to the status */
+  .lang{display:inline-flex; border:1px solid var(--hair); border-radius:999px; padding:2px; align-self:center}
+  .lang button{
+    font:inherit; font-size:11.5px; font-weight:600; letter-spacing:.06em;
+    border:0; background:none; color:var(--faint); cursor:pointer;
+    min-width:40px; min-height:32px; padding:0 10px; border-radius:999px;
+  }
+  .lang button[aria-pressed="true"]{background:var(--ink); color:var(--bg)}
+  .lang button:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
 
   /* ---- day rail (sticky) --------------------------------------------------- */
   .railwrap{
@@ -346,11 +357,17 @@
 <body>
   <header class="masthead">
     <span class="wk" id="weeklabel">Dagens lunch</span>
+    <span class="mh-right">
     <span class="status stale" id="status"><span class="dot"></span><span id="statusText">Laddar…</span></span>
+    <span class="lang" role="group" aria-label="Språk / Language">
+      <button type="button" data-lang="sv" aria-pressed="true" lang="sv">SV</button>
+      <button type="button" data-lang="en" aria-pressed="false" lang="en">EN</button>
+    </span>
+    </span>
   </header>
 
   <div class="railwrap">
-    <div class="rail" id="rail" role="tablist" aria-label="Välj dag"></div>
+    <div class="rail" id="rail" role="tablist" aria-label="Välj dag" data-i18n-aria="pickDay"></div>
   </div>
 
   <div class="dayhead">
@@ -372,14 +389,14 @@
 
   <div class="picker">
     <p class="picker-intro">
-      <em>Svårt att bestämma sig?</em>
+      <em data-i18n="hardToChoose">Svårt att bestämma sig?</em>
       <button class="picker-btn" id="pickBtn" type="button" aria-expanded="false" aria-controls="pickResult">
-        <span class="spin-ico" aria-hidden="true">↻</span> Vad blir det?
+        <span class="spin-ico" aria-hidden="true">↻</span> <span data-i18n="whatsItGonnaBe">Vad blir det?</span>
       </button>
     </p>
     <div class="picker-result" id="pickResult" hidden>
       <div class="reel-mask" id="reelMask"><div class="reel" id="reel"></div></div>
-      <button class="picker-again" id="pickAgain" type="button" aria-label="Slumpa igen">↺</button>
+      <button class="picker-again" id="pickAgain" type="button" aria-label="Slumpa igen" data-i18n-aria="spinAgain">↺</button>
     </div>
   </div>
 
@@ -400,7 +417,7 @@
 
   <footer>
     <span id="genLine"></span>
-    <span>Skrapas varje vardagsmorgon · <a href="https://github.com/qlik-pas/lunch" target="_blank" rel="noopener">källkod</a></span>
+    <span><span data-i18n="scraped">Skrapas varje vardagsmorgon</span> · <a href="https://github.com/qlik-pas/lunch" target="_blank" rel="noopener" data-i18n="source">källkod</a></span>
   </footer>
 
 <script>
@@ -415,6 +432,70 @@
 
 const DAYS  = ["Måndag","Tisdag","Onsdag","Torsdag","Fredag"];
 const SHORT = ["Mån","Tis","Ons","Tor","Fre"];
+
+/* ---- language (SV / EN) ---------------------------------------------------
+   DAYS stays the data key (lt.json is keyed by Swedish day names); only what's
+   shown changes. Dishes come from lt.json's `en` (made at scrape time for the
+   copy button) — short names, so the English view is terser than the Swedish
+   one — and fall back to the Swedish line wherever a translation is missing.
+   The choice is a per-viewer convenience in localStorage. */
+const STR = {
+  sv: {
+    days: DAYS, short: SHORT, locale: "sv-SE",
+    week: (w, r) => `Vecka ${w}${r ? " · " + r : ""}`, todaysLunch: "Dagens lunch",
+    loading: "Laddar…", live: "Live", saved: "Sparad meny",
+    weekend: "Helg", showingMonday: "visar måndag", today: "Idag",
+    noDishToday: "Ingen dagsmeny idag", veg: "Grönt",
+    noMenu: "ingen meny publicerad", sameEveryDay: "samma meny varje dag", closedWhy: "stängt denna vecka",
+    notUpdated: n => `Meny inte uppdaterad (${n})`, closed: n => `Stängt denna vecka (${n})`, fixed: n => `Fast meny (${n})`,
+    checked: t => `Kontrollerad kl ${t}`, menuFrom: d => `menyn från ${d}`,
+    nothingToSpin: "Inget att slumpa", noDishFound: "Ingen dagsmeny hittades för den här dagen",
+    copyFailed: "Kunde inte kopiera automatiskt – markera texten nedan och kopiera själv.",
+    untranslated: l => `Ej översatt än: ${l}.`,
+    pickDay: "Välj dag", hardToChoose: "Svårt att bestämma sig?", whatsItGonnaBe: "Vad blir det?",
+    spinAgain: "Slumpa igen", scraped: "Skrapas varje vardagsmorgon", source: "källkod",
+  },
+  en: {
+    days: ["Monday","Tuesday","Wednesday","Thursday","Friday"], short: ["Mon","Tue","Wed","Thu","Fri"], locale: "en-GB",
+    week: (w, r) => `Week ${w}${r ? " · " + r : ""}`, todaysLunch: "Today's lunch",
+    loading: "Loading…", live: "Live", saved: "Saved menu",
+    weekend: "Weekend", showingMonday: "showing Monday", today: "Today",
+    noDishToday: "No dish of the day today", veg: "Veg",
+    noMenu: "no menu published", sameEveryDay: "same menu every day", closedWhy: "closed this week",
+    notUpdated: n => `Menu not updated (${n})`, closed: n => `Closed this week (${n})`, fixed: n => `Standing menu (${n})`,
+    checked: t => `Checked at ${t}`, menuFrom: d => `menu from ${d}`,
+    nothingToSpin: "Nothing to pick from", noDishFound: "No dish of the day found for this day",
+    copyFailed: "Couldn't copy automatically – select the text below and copy it yourself.",
+    untranslated: l => `Not translated yet: ${l}.`,
+    pickDay: "Pick a day", hardToChoose: "Can't decide?", whatsItGonnaBe: "What'll it be?",
+    spinAgain: "Spin again", scraped: "Scraped every weekday morning", source: "source",
+  },
+};
+let LANG = "sv";
+try { if (localStorage.getItem("lang") === "en") LANG = "en"; } catch {}
+const T = () => STR[LANG];
+
+/* The dishes to show for one place and day: Swedish, or English line by line
+   (lt.json's `en` is aligned 1:1 with `menus`) with the Swedish as fallback. */
+function shownDishes(r, day){
+  const sv = Array.isArray(r.menus?.[day]) ? r.menus[day] : [];
+  if (LANG !== "en") return sv;
+  const en = Array.isArray(r.en?.[day]) ? r.en[day] : [];
+  return sv.map((x, i) => (typeof en[i] === "string" && en[i].trim()) ? en[i] : x);
+}
+
+/* The week range ("26–30 okt") comes from the scraper in Swedish; in English
+   it's rebuilt from the dates. */
+function rangeText(){
+  if (LANG !== "en" || !WEEK.dates?.[0] || !WEEK.dates?.[4]) return WEEK.range;
+  try {
+    const a = new Date(WEEK.dates[0] + "T00:00:00"), b = new Date(WEEK.dates[4] + "T00:00:00");
+    const mon = d => d.toLocaleDateString("en-GB", { month: "short" });
+    return a.getMonth() === b.getMonth()
+      ? `${a.getDate()}–${b.getDate()} ${mon(b)}`
+      : `${a.getDate()} ${mon(a)}–${b.getDate()} ${mon(b)}`;
+  } catch { return WEEK.range; }
+}
 
 /* per-restaurant accent hue (falls back to a hash for unknown names) */
 const HUES = {
@@ -635,13 +716,13 @@ const FIXED_PLACES = [
 const isBlank = v => !Array.isArray(v) || v.filter(x => String(x).trim()).length === 0;
 
 function classify(r){
-  if (r.closed) return { cat:"closed", why:"stängt denna vecka" };
+  if (r.closed) return { cat:"closed", why:T().closedWhy };
   const filled = DAYS.map(d => r.menus?.[d]).filter(v => !isBlank(v));
-  if (filled.length === 0) return { cat:"other", why:"ingen meny publicerad" };
+  if (filled.length === 0) return { cat:"other", why:T().noMenu };
   if (r.weekly) return { cat:"place" };     // one menu for the week — a real menu, same each day
   const flat = filled.map(v => v.join(" | "));
   if (new Set(flat).size === 1 && filled.length >= 4)
-    return { cat:"other", why:"samma meny varje dag", text: filled[0].join(" · ") };
+    return { cat:"other", why:T().sameEveryDay, text: shownDishes(r, DAYS.find(d => !isBlank(r.menus?.[d]))).join(" · ") };
   return { cat:"place" };
 }
 
@@ -649,12 +730,12 @@ function classify(r){
 let selected = 0;
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const todayIndex = () => { const g = new Date().getDay(); return (g >= 1 && g <= 5) ? g - 1 : null; };
-const fmtDate = iso => { try { return new Date(iso + "T00:00:00").toLocaleDateString("sv-SE",{day:"numeric",month:"short"}); } catch { return ""; } };
+const fmtDate = iso => { try { return new Date(iso + "T00:00:00").toLocaleDateString(T().locale,{day:"numeric",month:"short"}); } catch { return ""; } };
 
 function dishItem(raw){
   const s = String(raw).trim().replace(/\s{2,}/g, " ");
-  let m = s.match(/^vegetarisk[t]?\s*:\s*(.+)/i);
-  if (m) return `<li class="veg"><span class="veg-chip">Grönt</span>${esc(m[1])}</li>`;
+  let m = s.match(/^(?:vegetarisk[t]?|vegetarian)\s*:\s*(.+)/i);
+  if (m) return `<li class="veg"><span class="veg-chip">${T().veg}</span>${esc(m[1])}</li>`;
   m = s.match(/^bonus\s*:\s*(.+)/i);
   if (m) return `<li class="treat"><span class="treat-chip">Bonus</span>${esc(m[1])}</li>`;
   return `<li>${esc(s)}</li>`;
@@ -670,9 +751,9 @@ function buildRail(){
     b.type = "button";
     b.setAttribute("role","tab");
     b.setAttribute("aria-selected", String(i === selected));
-    b.setAttribute("aria-label", d + (WEEK.dates?.[i] ? " " + fmtDate(WEEK.dates[i]) : ""));
+    b.setAttribute("aria-label", T().days[i] + (WEEK.dates?.[i] ? " " + fmtDate(WEEK.dates[i]) : ""));
     b.innerHTML =
-      `<span class="dow">${SHORT[i]}</span>` +
+      `<span class="dow">${T().short[i]}</span>` +
       `<span class="dnum">${WEEK.dates?.[i] ? fmtDate(WEEK.dates[i]) : ""}</span>` +
       `<span class="today-dot"></span>`;
     b.addEventListener("click", () => { selected = i; render(); });
@@ -684,19 +765,19 @@ function render(){
   const day = DAYS[selected], ti = todayIndex();
 
   document.getElementById("weeklabel").textContent =
-    WEEK.week ? `Vecka ${WEEK.week}${WEEK.range ? " · " + WEEK.range : ""}` : "Dagens lunch";
+    WEEK.week ? T().week(WEEK.week, rangeText()) : T().todaysLunch;
   document.querySelectorAll(".day").forEach((b,i) => b.setAttribute("aria-selected", String(i === selected)));
 
-  document.getElementById("dayHeading").textContent = day;
+  document.getElementById("dayHeading").textContent = T().days[selected];
   document.getElementById("pickResult").hidden = true;
   document.getElementById("shareResult").hidden = true;
   document.getElementById("pickBtn").setAttribute("aria-expanded", "false");
   const sub = document.getElementById("daySub");
   const dateStr = WEEK.dates?.[selected] ? fmtDate(WEEK.dates[selected]) : "";
   if (ti === null && selected === 0){
-    sub.className = "subnote"; sub.innerHTML = `<span class="tag">Helg</span><span class="date">visar måndag</span>`;
+    sub.className = "subnote"; sub.innerHTML = `<span class="tag">${T().weekend}</span><span class="date">${T().showingMonday}</span>`;
   } else if (ti === selected){
-    sub.className = "subnote today"; sub.innerHTML = `<span class="tag">Idag</span><span class="date">${dateStr}</span>`;
+    sub.className = "subnote today"; sub.innerHTML = `<span class="tag">${T().today}</span><span class="date">${dateStr}</span>`;
   } else {
     sub.className = "subnote"; sub.innerHTML = `<span class="date">${dateStr}</span>`;
   }
@@ -710,10 +791,10 @@ function render(){
     if (info.cat === "closed"){ closed.push({ r, info }); return; }
     if (info.cat !== "place"){ others.push({ r, info }); return; }
 
-    const dishes = Array.isArray(r.menus[day]) ? r.menus[day].filter(x => String(x).trim()) : [];
+    const dishes = shownDishes(r, day).filter(x => String(x).trim());
     const body = dishes.length
       ? `<ul class="dishes">${dishes.map(dishItem).join("")}</ul>`
-      : `<p class="empty-today">Ingen dagsmeny idag</p>`;
+      : `<p class="empty-today">${T().noDishToday}</p>`;
     const initial = esc([...r.name][0] || "•");
 
     const el = document.createElement("article");
@@ -734,28 +815,31 @@ function render(){
     (info.text ? `<span class="static-text">${esc(info.text)}</span>` : ``) + `</li>`;
   document.getElementById("othersList").innerHTML = others.map(item).join("");
   document.getElementById("others").hidden = others.length === 0;
-  document.getElementById("othersLabel").textContent = `Meny inte uppdaterad (${others.length})`;
+  document.getElementById("othersLabel").textContent = T().notUpdated(others.length);
   document.getElementById("closedList").innerHTML = closed.map(item).join("");
   document.getElementById("closed").hidden = closed.length === 0;
-  document.getElementById("closedLabel").textContent = `Stängt denna vecka (${closed.length})`;
+  document.getElementById("closedLabel").textContent = T().closed(closed.length);
 }
 
-function setStatus(live, note){
+let statusKey = "loading", checkedIso = null;   // remembered so a language switch can redraw them
+function setStatus(live, key){
+  statusKey = key;
   const s = document.getElementById("status");
   s.className = "status " + (live ? "live" : "stale");
-  document.getElementById("statusText").textContent = note;
+  document.getElementById("statusText").textContent = T()[key];
 }
 
 function setChecked(menuIso){
   /* The live fetch just succeeded, so "now" is when the menu was last checked.
      `generated` is when the menu content last changed — usually Monday, and
      that's fine for a weekly menu, so only spell it out when it's not today. */
-  const now = new Date();
-  let line = `Kontrollerad kl ${now.toLocaleTimeString("sv-SE",{hour:"2-digit",minute:"2-digit"})}`;
+  if (checkedIso === null) checkedIso = { menu: menuIso, at: new Date() };
+  const now = checkedIso.at, loc = T().locale;
+  let line = T().checked(now.toLocaleTimeString(loc,{hour:"2-digit",minute:"2-digit"}));
   try {
-    const menu = new Date(menuIso);
+    const menu = new Date(checkedIso.menu);
     if (!isNaN(menu) && menu.toDateString() !== now.toDateString())
-      line += ` · menyn från ${menu.toLocaleDateString("sv-SE",{weekday:"short",day:"numeric",month:"short"})}`;
+      line += " · " + T().menuFrom(menu.toLocaleDateString(loc,{weekday:"short",day:"numeric",month:"short"}));
   } catch {}
   document.getElementById("genLine").textContent = line;
 }
@@ -795,11 +879,10 @@ function raceLanding(reel, transitionMs, onDone){
 function todaysPickPool(){
   const day = DAYS[selected], pool = [];
   WEEK.restaurants.forEach(r => {
-    const dishes = Array.isArray(r.menus[day]) ? r.menus[day] : [];
-    dishes.forEach(raw => {
+    shownDishes(r, day).forEach(raw => {
       const s = String(raw).trim();
       if (!s || /^bonus\s*:/i.test(s)) return;              // not a lunch choice
-      const veg = s.match(/^vegetarisk[t]?\s*:\s*(.+)/i);
+      const veg = s.match(/^(?:vegetarisk[t]?|vegetarian)\s*:\s*(.+)/i);
       pool.push({ name: r.name, url: r.url, hue: hueFor(r.name), dish: veg ? veg[1] : s });
     });
   });
@@ -815,8 +898,8 @@ function reelRow(p){
         `<span class="shield" aria-hidden="true" style="--hue:${p.hue}">${esc([...p.name][0] || "•")}</span>` +
         `<span class="ptext"><span class="pname" style="--hue:${p.hue}">${p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.name)}</a>` : esc(p.name)}</span>${pdish(p.dish)}</span>` +
       `</div>`
-    : `<div class="reel-item"><span class="ptext"><span class="pname">Inget att slumpa</span>` +
-      `${pdish("Ingen dagsmeny hittades för den här dagen")}</span></div>`;
+    : `<div class="reel-item"><span class="ptext"><span class="pname">${T().nothingToSpin}</span>` +
+      `${pdish(T().noDishFound)}</span></div>`;
 }
 
 /* Lay the reel out flat (no transition) showing exactly one row, and report
@@ -1117,8 +1200,8 @@ document.getElementById("shareBtn").addEventListener("click", () => {
   copyToClipboard(text, html).then(ok => {
     /* Nothing is shown on a clean copy — the button says "Copied ✓". The text
        only appears if the browser refused, so it can still be copied by hand. */
-    const note = (ok ? "" : "Kunde inte kopiera automatiskt – markera texten nedan och kopiera själv. ")
-      + (untranslated.length ? `Ej översatt än: ${untranslated.join(", ")}.` : "");
+    const note = (ok ? "" : T().copyFailed + " ")
+      + (untranslated.length ? T().untranslated(untranslated.join(", ")) : "");
     status.textContent = note.trim();
     status.hidden = !note;
     out.textContent = text;
@@ -1133,7 +1216,7 @@ document.getElementById("shareBtn").addEventListener("click", () => {
 
 /* Static, so rendered once rather than on every day switch. */
 function renderFixed(){
-  document.getElementById("fixedLabel").textContent = `Fast meny (${FIXED_PLACES.length})`;
+  document.getElementById("fixedLabel").textContent = T().fixed(FIXED_PLACES.length);
   document.getElementById("fixedList").innerHTML = FIXED_PLACES.map(p => {
     const name = p.url
       ? `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.name)}</a>`
@@ -1144,6 +1227,23 @@ function renderFixed(){
   }).join("");
 }
 renderFixed();
+
+/* ---- language switch ------------------------------------------------------ */
+function applyLang(){
+  document.documentElement.lang = LANG;
+  document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = T()[el.dataset.i18n]; });
+  document.querySelectorAll("[data-i18n-aria]").forEach(el => { el.setAttribute("aria-label", T()[el.dataset.i18nAria]); });
+  document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === LANG)));
+  document.getElementById("statusText").textContent = T()[statusKey];
+  if (checkedIso) setChecked();
+}
+document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => {
+  if (b.dataset.lang === LANG) return;
+  LANG = b.dataset.lang;
+  try { localStorage.setItem("lang", LANG); } catch {}
+  applyLang(); buildRail(); render(); renderFixed();
+}));
+applyLang();
 
 /* ---- boot ----------------------------------------------------------------- */
 async function boot(){
@@ -1158,13 +1258,13 @@ async function boot(){
     if (Array.isArray(data.restaurants) && data.restaurants.length){
       WEEK = data;
       buildRail(); render();
-      setStatus(true, "Live");
+      setStatus(true, "live");
       setChecked(WEEK.generated);
       return;
     }
     throw new Error("tomt svar");
   } catch (e) {
-    setStatus(false, "Sparad meny");
+    setStatus(false, "saved");
   }
 }
 boot();
