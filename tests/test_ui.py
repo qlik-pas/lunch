@@ -112,9 +112,9 @@ with sync_playwright() as p:
     t("lang: EN switches page", pg.get_attribute("html","lang")=="en" and pg.inner_text("#dayHeading").strip()=="Wednesday"
       and pg.inner_text("#weeklabel").startswith(f"Week {LT['week']}") and "today" in pg.inner_text("#daySub").lower()
       and pg.inner_text(".day:nth-child(1) .dow").strip().lower()=="mon", (pg.inner_text("#dayHeading"),pg.inner_text("#weeklabel")))
-    en_wed={x for r in LT["restaurants"] for x in r.get("en",{}).get("Onsdag",[])}
+    en_wed={x for r in LT["restaurants"] for f in ("en_full","en") for x in (r.get(f) or {}).get("Onsdag",[])}
     shown=[re.sub(r"^(Veg|Bonus)\n","",x).strip() for x in pg.locator(".place .dishes li").all_inner_texts()]
-    t("lang: EN dishes from lt.json en", not en_wed or any(x in en_wed or re.sub(r"^Vegetarian:\s*","",e)==x for x in shown for e in en_wed), shown[:3])
+    t("lang: EN dishes from lt.json en_full/en", not en_wed or any(x in en_wed or re.sub(r"^Vegetarian:\s*","",e)==x for x in shown for e in en_wed), shown[:3])
     t("lang: static labels translated", "can't decide" in pg.inner_text(".picker-intro").lower() and "standing menu" in pg.inner_text("#fixedLabel").lower()
       and "scraped every weekday" in pg.inner_text("footer").lower() and pg.get_attribute("#rail","aria-label")=="Pick a day")
     t("lang: no page errors", not pg.errs, pg.errs)
@@ -133,7 +133,7 @@ with sync_playwright() as p:
     t("lang: SV ignores en_full", "FULLTEXT" not in pg.locator(".place").first.inner_text())
     pg.context.close()
     # missing translation -> Swedish line, no blank
-    d=json.loads(json.dumps(LT)); d["restaurants"][0].pop("en",None)
+    d=json.loads(json.dumps(LT)); d["restaurants"][0].pop("en",None); d["restaurants"][0].pop("en_full",None)
     pg=page(route=lambda r: r.fulfill(status=200,content_type="application/json",body=json.dumps(d)),
             init="try{localStorage.setItem('lang','en')}catch(e){}")
     first=pg.locator(".place").first
