@@ -17,6 +17,11 @@ with Google Gemini (a free AI Studio key stored as the `GEMINI_API_KEY` repo
 secret). If it doesn't answer, the
 button falls back to the Swedish text. Places with a standing menu are listed last. Run the workflow manually with *retranslate* ticked to redo them all.
 
+The SV/EN switch in the header shows the page in English. The scraper makes
+a second, faithful translation of every dish for it (`en_full` in `lt.json`,
+cached like `en`); a line without one falls back to the short `en` name, then
+to the Swedish. The choice is remembered per browser.
+
 If a restaurant redesigns its page and a parser finds nothing, the page text is
 handed to Gemini to read the menu out instead (only dishes whose words really
 appear on the page are accepted); lt.json's `errors` then says which parser to fix.

@@ -104,6 +104,43 @@ with sync_playwright() as p:
       and (not pg.locator("#others").is_visible() or d["restaurants"][0]["name"] not in pg.inner_text("#others")))
     pg.context.close()
 
+    # ---- language toggle --------------------------------------------------------------
+    pg=page()
+    t("lang: SV by default", pg.get_attribute("html","lang")=="sv" and pg.get_attribute('.lang [data-lang="sv"]',"aria-pressed")=="true")
+    sv_first=pg.inner_text(".place .dishes li")
+    pg.click('.lang [data-lang="en"]'); pg.wait_for_timeout(200)
+    t("lang: EN switches page", pg.get_attribute("html","lang")=="en" and pg.inner_text("#dayHeading").strip()=="Wednesday"
+      and pg.inner_text("#weeklabel").startswith(f"Week {LT['week']}") and "today" in pg.inner_text("#daySub").lower()
+      and pg.inner_text(".day:nth-child(1) .dow").strip().lower()=="mon", (pg.inner_text("#dayHeading"),pg.inner_text("#weeklabel")))
+    en_wed={x for r in LT["restaurants"] for x in r.get("en",{}).get("Onsdag",[])}
+    shown=[re.sub(r"^(Veg|Bonus)\n","",x).strip() for x in pg.locator(".place .dishes li").all_inner_texts()]
+    t("lang: EN dishes from lt.json en", not en_wed or any(x in en_wed or re.sub(r"^Vegetarian:\s*","",e)==x for x in shown for e in en_wed), shown[:3])
+    t("lang: static labels translated", "can't decide" in pg.inner_text(".picker-intro").lower() and "standing menu" in pg.inner_text("#fixedLabel").lower()
+      and "scraped every weekday" in pg.inner_text("footer").lower() and pg.get_attribute("#rail","aria-label")=="Pick a day")
+    t("lang: no page errors", not pg.errs, pg.errs)
+    pg.reload(); pg.wait_for_selector(".place"); pg.wait_for_timeout(400)
+    t("lang: EN remembered after reload", pg.inner_text("#dayHeading").strip()=="Wednesday" and pg.get_attribute('.lang [data-lang="en"]',"aria-pressed")=="true")
+    pg.click('.lang [data-lang="sv"]'); pg.wait_for_timeout(200)
+    t("lang: back to SV restores Swedish", pg.inner_text("#dayHeading").strip()=="Onsdag" and pg.inner_text(".place .dishes li")==sv_first and "Live".upper() in pg.inner_text("#status").upper())
+    pg.context.close()
+    # en_full preferred over en
+    d=json.loads(json.dumps(LT)); r0=d["restaurants"][0]
+    r0["en_full"]={k:[f"FULLTEXT {i}" for i,_ in enumerate(v)] for k,v in r0["menus"].items()}
+    pg=page(route=lambda r: r.fulfill(status=200,content_type="application/json",body=json.dumps(d)),
+            init="try{localStorage.setItem('lang','en')}catch(e){}")
+    t("lang: EN prefers en_full", not r0["menus"]["Onsdag"] or "FULLTEXT 0" in pg.locator(".place").first.inner_text(), pg.locator(".place").first.inner_text()[:80])
+    pg.click('.lang [data-lang="sv"]'); pg.wait_for_timeout(150)
+    t("lang: SV ignores en_full", "FULLTEXT" not in pg.locator(".place").first.inner_text())
+    pg.context.close()
+    # missing translation -> Swedish line, no blank
+    d=json.loads(json.dumps(LT)); d["restaurants"][0].pop("en",None)
+    pg=page(route=lambda r: r.fulfill(status=200,content_type="application/json",body=json.dumps(d)),
+            init="try{localStorage.setItem('lang','en')}catch(e){}")
+    first=pg.locator(".place").first
+    want=[x for x in d["restaurants"][0]["menus"]["Onsdag"] if x.strip()]
+    t("lang: untranslated place falls back to Swedish", not want or " ".join(first.locator("li").first.inner_text().split()).removeprefix("Veg ").removeprefix("Grönt ") in [" ".join(re.sub(r"^(Vegetariskt|Bonus)\s*:\s*","",w).split()) for w in want], first.inner_text()[:80])
+    pg.context.close()
+
     # ---- fixed list ------------------------------------------------------------------
     pg=page()
     t(f"fixed: label Fast meny ({len(FIXED)})", f"fast meny ({len(FIXED)})" in pg.inner_text("#fixedLabel").lower(), pg.inner_text("#fixedLabel"))

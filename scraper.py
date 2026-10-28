@@ -579,6 +579,22 @@ Rules:
 - The input is JSON {"<restaurant>": {"<day>": ["line", ...], ...}, ...}. Reply with JSON only, the same structure: exactly the restaurant names, day keys and list lengths you were given."""
 
 
+# The page's English view shows the whole dish, so it gets its own, faithful
+# translation (`en_full`) next to the short Slack names (`en`). Same cache and
+# batching; one more model call when a menu changes. If it fails, the page
+# falls back to `en`, then to the Swedish line.
+FULL_TRANSLATE_PROMPT = """You translate restaurant lunch-menu lines (Swedish, sometimes English, sometimes with Chinese characters) into English for the English version of a lunch web page.
+
+Rules:
+- One output line per input line, same order. Never merge, drop, or add lines.
+- Translate the whole line faithfully: every component, side, sauce and garnish. Don't shorten or summarise, and don't add anything that isn't there.
+- Keep the line's own punctuation and separators (commas, " – ", " / ", " | "). Keep "&" where the original has it; otherwise write "and".
+- Keep proper names and well-known dish names (Mapo tofu, Pad Thai, Wallenbergare, raggmunk, kalops, Västerbotten); you may add a short gloss in parentheses for a Swedish classic, e.g. "Raggmunk (potato pancakes)".
+- Drop Chinese characters. A line already in English stays as it is.
+- A line starting "Vegetariskt:" becomes "Vegetarian: ..."; "Bonus:" stays "Bonus: ...".
+- The input is JSON {"<restaurant>": {"<day>": ["line", ...], ...}, ...}. Reply with JSON only, the same structure: exactly the restaurant names, day keys and list lengths you were given."""
+
+
 def _reply(r):
     """The response body as JSON, or an error that says what actually came back
     (an endpoint that answers 200 "OK" in text/plain would otherwise surface as
@@ -644,10 +660,12 @@ def _llm_json(system, payload):
     raise RuntimeError("no model answered — " + "; ".join(problems[-4:]))
 
 
-def _with_translations(restaurants, old, translate=_llm_json):
-    """Attach `en` to each restaurant — reused from `old` when its menus are
-    unchanged, otherwise freshly translated. Never raises. Everything that needs
-    translating goes in ONE model call (the free tier rate-limits per request)."""
+def _with_translations(restaurants, old, translate=_llm_json, field="en", prompt=None):
+    """Attach `field` ("en": short Slack names, "en_full": the whole dish) to each
+    restaurant — reused from `old` when its menus are unchanged, otherwise freshly
+    translated. Never raises. Everything that needs translating goes in ONE model
+    call (the free tier rate-limits per request)."""
+    prompt = prompt or (FULL_TRANSLATE_PROMPT if field == "en_full" else TRANSLATE_PROMPT)
     prev = {r["name"]: r for r in old.get("restaurants", [])}
     force = bool(os.environ.get("FORCE_TRANSLATE"))
     cached, fresh, failed, todo = [], [], [], {}
@@ -656,8 +674,8 @@ def _with_translations(restaurants, old, translate=_llm_json):
         if not src:
             continue
         p = prev.get(r["name"])
-        if p and p.get("en") and p.get("menus") == r["menus"] and not force:
-            r["en"] = p["en"]
+        if p and p.get(field) and p.get("menus") == r["menus"] and not force:
+            r[field] = p[field]
             cached.append(r["name"])
         else:
             # a weekly menu is the same list every day — translate it once
@@ -666,7 +684,7 @@ def _with_translations(restaurants, old, translate=_llm_json):
     got_all, call_error = {}, None
     if todo:
         try:
-            got_all = translate(TRANSLATE_PROMPT, {n: ask for n, (_, ask) in todo.items()})
+            got_all = translate(prompt, {n: ask for n, (_, ask) in todo.items()})
         except Exception as e:
             call_error = f"{type(e).__name__}: {str(e)[:160]}"
     for name, (r, ask) in todo.items():
@@ -684,14 +702,14 @@ def _with_translations(restaurants, old, translate=_llm_json):
                     en[d] = [x.strip() for x in out]
             if not en:
                 raise ValueError("reply didn't match the menu shape")
-            r["en"] = en
+            r[field] = en
             fresh.append(name)
         except Exception as e:
             failed.append(name if call_error else f"{name} ({e})")
             p = prev.get(name)
-            if p and p.get("en") and p.get("menus") == r["menus"]:
-                r["en"] = p["en"]                    # a failed *re*translate mustn't wipe good text
-    print(f"English: {len(cached)} cached, {len(fresh)} translated"
+            if p and p.get(field) and p.get("menus") == r["menus"]:
+                r[field] = p[field]                  # a failed *re*translate mustn't wipe good text
+    print(f"English ({field}): {len(cached)} cached, {len(fresh)} translated"
           + (f", {len(failed)} failed: {failed}" if failed else "")
           + (f" — {call_error}" if call_error else ""))
     return restaurants
@@ -797,7 +815,8 @@ def build():
             errors.append(f"{name}: {e}" + (" (kept previous)" if kept else ""))
             restaurants.append(_entry(name, url, kept or _empty()))
 
-    _with_translations(restaurants, old)
+    _with_translations(restaurants, old)                     # short names, for the copy button
+    _with_translations(restaurants, old, field="en_full")    # whole dishes, for the page's EN view
 
     out = {
         "week": week, "range": rng, "dates": dates,
