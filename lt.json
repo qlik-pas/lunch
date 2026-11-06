@@ -8,7 +8,7 @@
     "2026-11-05",
     "2026-11-06"
   ],
-  "generated": "2026-11-02T08:46:43+00:00",
+  "generated": "2026-11-06T09:03:11+00:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -113,8 +113,7 @@
         "Tisdag": [
           "Stekt kyckling pepparsås, stekt svamp, lök och savojkål, potatismos och gulbetscrudité",
           "Teriyakibakad hokifilé mango- och chilisallad, sesam- och limemajonnäs och basmatiris med kokos",
-          "Gnocchi rosso tomat, ruccola, vegetarisk chorizoströssel och grädde",
-          "Bonus: något sött till kaffet"
+          "Gnocchi rosso tomat, ruccola, vegetarisk chorizoströssel och grädde"
         ],
         "Onsdag": [
           "Nattbakad karré honungsrostade rotfrukter, gräddsås, rostad dragonpotatis och gelé",
@@ -125,8 +124,7 @@
           "Cashewkyckling rostad paprika, krispig lök, pak choi, jasminris och chilipasta",
           "Gremolatabakad kungsfisk rostad zucchinisallad, friterad kapris, potatismos och citron- och krassekräm",
           "Tandoori masala på oumph! kikärtor, tomat, yoghurt, mynta och basmatiris",
-          "Ärtsoppa rimmad bog",
-          "Bonus: pannkakor, lättvispad grädde och hemmagjord sylt"
+          "Ärtsoppa rimmad bog"
         ],
         "Fredag": [
           "Katsu sando japansk schnitzelsandwich, katsumajonnäs, kålsallad, picklad lök och rostad klyftpotatis",
@@ -136,62 +134,58 @@
       },
       "en": {
         "Måndag": [
-          "Minced beef with soy, ginger & sesame",
-          "Baked pollack with dill cucumber & chive sauce",
-          "Baked cauliflower with romesco & almonds"
+          "Minced beef with soy, ginger & sesame with mint salad & jasmine rice",
+          "Baked saithe with dill cucumber, chives sauce, mash & parsnip",
+          "Baked cauliflower with romesco, aged cheese, roasted almonds & couscous"
         ],
         "Tisdag": [
-          "Chicken with pepper sauce & savoy cabbage",
-          "Teriyaki hoki with mango salad & lime mayo",
-          "Gnocchi rosso with tomato & vegetarian chorizo",
-          "Bonus: something sweet for the coffee"
+          "Fried chicken with pepper sauce, mushrooms, cabbage, mash & yellow beet crudité",
+          "Teriyaki-baked hoki with mango-chili salad, sesame-lime mayo & coconut basmati",
+          "Gnocchi rosso with tomato, arugula, vegetarian chorizo & cream"
         ],
         "Onsdag": [
-          "Slow-baked pork neck with root vegetables & cream sauce",
-          "Baked Alaska pollock with horseradish & brown butter",
-          "Potato & pumpkin patty with feta & bulgur"
+          "Slow-baked pork neck with honey-roasted root vegetables, cream sauce & potatoes",
+          "Baked alaska pollock with horseradish, browned butter, pea salad & potatoes",
+          "Potato & pumpkin patties with feta, bulgur, chickpea salad & ginger mayo"
         ],
         "Torsdag": [
-          "Cashew chicken with roasted pepper & jasmine rice",
-          "Gremolata-baked redfish with potato mash",
-          "Tandoori masala with oumph! & chickpeas",
-          "Pea soup with cured pork",
-          "Bonus: pancakes with whipped cream & jam"
+          "Cashew chicken with roasted peppers, crispy onions, pak choi & jasmine rice",
+          "Gremolata-baked kingfish with zucchini salad, fried capers & mash",
+          "Tandoori masala with oumph!, chickpeas, tomato, yogurt & basmati rice",
+          "Pea soup with cured pork shoulder"
         ],
         "Fredag": [
-          "Katsu sando with katsu mayo & slaw",
-          "Tagliatelle with seafood sauce & smoked salmon",
-          "Chili sin carne with nachos & pickled onion"
+          "Katsu sando Japanese schnitzel sandwich with katsu mayo, coleslaw & potato wedges",
+          "Tagliatelle with creamy seafood sauce, cold-smoked salmon & pickled fennel",
+          "Chili sin carne with nachos, jalapeno, pickled red onion & rice"
         ]
       },
       "en_full": {
         "Måndag": [
-          "Fried minced beef with soy, ginger, chili and sesame, mint, peanut, sprout and lime salad, and jasmine rice with roasted sesame seeds",
-          "Baked saithe, dill cucumber, chives sauce, mashed potatoes and parsnip",
-          "Baked cauliflower, romesco salsa, aged cheese, roasted almond, cress and couscous salad"
+          "Fried minced beef with soy, ginger, chili and sesame salad with mint, peanuts, sprouts and lime and jasmine rice with roasted sesame seeds",
+          "Baked saithe dill cucumber, chives sauce, mashed potatoes and parsnip",
+          "Baked cauliflower romesco salsa, aged cheese, roasted almond, cress and couscous salad"
         ],
         "Tisdag": [
-          "Fried chicken, pepper sauce, fried mushrooms, onion and savoy cabbage, mashed potatoes and yellow beet crudité",
-          "Teriyaki-baked hake fillet, mango and chili salad, sesame and lime mayonnaise, and basmati rice with coconut",
-          "Gnocchi rosso, tomato, arugula, vegetarian chorizo crumble and cream",
-          "Bonus: something sweet with the coffee"
+          "Fried chicken pepper sauce, fried mushrooms, onion and savoy cabbage, mashed potatoes and yellow beet crudité",
+          "Teriyaki baked hoki fillet mango and chili salad, sesame and lime mayonnaise and basmati rice with coconut",
+          "Gnocchi rosso tomato, arugula, vegetarian chorizo crumble and cream"
         ],
         "Onsdag": [
-          "Night-baked pork neck, honey-roasted root vegetables, cream sauce, roasted tarragon potatoes and jelly",
-          "Baked alaska pollock, horseradish, browned butter, pea salad and potatoes with fennel and dill",
-          "Potato and pumpkin patty, salad cheese, bulgur with chickpeas and bell pepper, ginger mayonnaise and cress"
+          "Slow-baked pork neck honey-roasted root vegetables, cream sauce, roasted tarragon potatoes and jelly",
+          "Baked alaska pollock horseradish, browned butter, pea salad and potatoes with fennel and dill",
+          "Potato and pumpkin patty salad cheese, bulgur with chickpeas and bell pepper, ginger mayonnaise and cress"
         ],
         "Torsdag": [
-          "Cashew chicken, roasted bell pepper, crispy onion, pak choi, jasmine rice and chili paste",
-          "Gremolata-baked redfish, roasted zucchini salad, fried capers, mashed potatoes and lemon and cress cream",
-          "Tandoori masala on oumph!, chickpeas, tomato, yogurt, mint and basmati rice",
-          "Pea soup, cured pork shoulder",
-          "Bonus: pancakes, lightly whipped cream and homemade jam"
+          "Cashew chicken roasted bell pepper, crispy onion, pak choi, jasmine rice and chili paste",
+          "Gremolata baked kingfish roasted zucchini salad, fried capers, mashed potatoes and lemon and cress cream",
+          "Tandoori masala with oumph! chickpeas, tomato, yogurt, mint and basmati rice",
+          "Pea soup cured shoulder"
         ],
         "Fredag": [
           "Katsu sando Japanese schnitzel sandwich, katsu mayonnaise, cabbage salad, pickled onion and roasted potato wedges",
-          "Tagliatelle with creamy seafood sauce, cold-smoked salmon, pickled fennel and onion crisp",
-          "Chili sin carne, nachos, jalapeño, pickled red onion, roasted corn and rice"
+          "Tagliatelle with creamy seafood sauce cold-smoked salmon, pickled fennel and onion crisp",
+          "Chili sin carne nachos, jalapeño, pickled red onion, roasted corn and rice"
         ]
       }
     },
