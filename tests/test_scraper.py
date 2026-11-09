@@ -35,6 +35,11 @@ check("inspira week",S.claimed_week(t)==44)
 check("inspira 4 per day",all(len(m[d])==4 for d in S.DAYS),{d:len(m[d]) for d in S.DAYS})
 check("inspira green is veg, garnish joined",m["Måndag"][0]=="Vegetariskt: Pasta Mafaldine Puttanesca – parmesan & ruccola" and m["Tisdag"][1]=="Stekt sill & potatismos – brynt smör, rårörda lingon, rödlök & dill",m["Måndag"][:2])
 check("inspira 'Asia|' without space",m["Tisdag"][2].startswith("Pho med kyckling"),m["Tisdag"][2])
+t=open(os.path.join(HERE,"fixtures_inspira_theme.txt"),encoding="utf-8").read(); m=S.parse_inspira(t)
+check("inspira theme day: heading 'Mårtens Afton Tisdag' starts Tuesday",all(len(m[d])==4 for d in S.DAYS),{d:len(m[d]) for d in S.DAYS})
+check("inspira theme day: themed dish kept with its label",m["Tisdag"][1]=="Mårtens Afton: Kalkonbröst & rödkål – äppelkompott, Pommes Parisienne & sviskongräddsås",m["Tisdag"])
+check("inspira theme day: Monday untouched",m["Måndag"][3]=="Saltimbocca – saffransris, tomatsås, zucchini & oliver",m["Måndag"])
+check("inspira: garnish line never becomes a dish",not any(x[:1].islower() for v in m.values() for x in v))
 check("parsers empty on junk",not any(S.parse_bryggan("hej").values()) and not any(S.parse_inspira("hej").values()))
 
 # _entry / weekly
