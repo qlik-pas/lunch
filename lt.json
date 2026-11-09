@@ -8,7 +8,7 @@
     "2026-11-12",
     "2026-11-13"
   ],
-  "generated": "2026-11-09T08:26:22+00:00",
+  "generated": "2026-11-09T10:16:18+00:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -46,27 +46,27 @@
         "Måndag": [
           "Filled pasta with lemon cream & dragon oil",
           "Chicken with mushroom sauce & roasted root vegetables",
-          "Creole stew with pork chop, spicy sausage & rice"
+          "Creole stew with pork chop, sausage & rice"
         ],
         "Tisdag": [
-          "Crispy risotto patty with tomato sauce & aged cheese",
-          "Sichuan chicken kung pao with peanuts & rice",
-          "Mozzarella pizza with tomato sauce, bacon & onion"
+          "Crispy risotto patty with tomato sauce & cheese",
+          "Sichuan Kung Pao chicken with peanuts & rice",
+          "Mozzarella, tomato sauce, bacon, onion & black pepper"
         ],
         "Onsdag": [
           "Vegetable patty with wok noodles & sweet chili",
-          "Venison stew with potato mash & mushrooms",
+          "Venison stew with mashed potatoes & mushrooms",
           "Sesame-fried redfish with chili cabbage & rice",
-          "Mozzarella pizza with tomato sauce, bacon & onion"
+          "Mozzarella, tomato sauce, bacon, onion & black pepper"
         ],
         "Torsdag": [
-          "Indian Aloo Gobi with cauliflower, potatoes & naan",
-          "Fried chicken club fillet with dragon sauce & mash",
-          "Mozzarella pizza with tomato sauce, bacon & onion",
+          "Aloo Gobi with cauliflower, potatoes & naan",
+          "Fried chicken fillet with dragon sauce & mash",
+          "Mozzarella, tomato sauce, bacon, onion & black pepper",
           "Bonus: apple pie with cream"
         ],
         "Fredag": [
-          "Vegetable wok with chili, fried egg & pickles",
+          "Vegetable wok with soy, chili & fried egg",
           "Matjes herring with potatoes, sour cream & brown butter",
           "Tonkatsu Japanese schnitzel with miso mayo & rice"
         ]
@@ -136,31 +136,31 @@
       },
       "en": {
         "Måndag": [
-          "Paprika- & garlic-baked chicken with honey chorizo",
-          "Panko-breaded hake with tartar sauce & boiled potatoes",
-          "Creamy mushroom pasta with spinach & aged cheese"
+          "Paprika & garlic-baked chicken with honey chorizo",
+          "Pan-breaded hake with tartar sauce & potatoes",
+          "Creamy mushroom pasta with spinach & cheese"
         ],
         "Tisdag": [
-          "Patties in dijonnaise with potato mash & pickled cucumber",
-          "Sej masala with basmati rice, mint & turmeric cauliflower",
+          "Patties with Dijon cream sauce & mashed potatoes",
+          "Sej Masala with basmati rice, mint & lemon",
           "Roasted beets with baked goat cheese & hazelnuts",
           "Bonus: something sweet for the coffee"
         ],
         "Onsdag": [
-          "Buffalo chicken with cheese cream, roasted potatoes & slaw",
-          "Västerbotten-gratinized redfish with herb cream & potato stomp",
-          "Halloumi stroganoff with cucumber salad & basmati rice"
+          "Buffalo chicken with jalapeño cheese & potatoes",
+          "Västerbotten-gratinized redfish with herb butter",
+          "Halloumi Stroganoff with cucumber salad & rice"
         ],
         "Torsdag": [
-          "Beef stroganoff with sour cream & basmati rice",
-          "Baked seith with buttered tomato sauce & potatoes",
-          "Pad kra pao with veggie mince, basil & fried egg",
+          "Beef Stroganoff with sour cream & basmati rice",
+          "Baked saithe with buttered tomato sauce & potatoes",
+          "Pad Kra Pao with veggie mince, basil & egg",
           "Pea soup with cured pork",
-          "Bonus: pancakes with whipped cream & homemade jam"
+          "Bonus: pancakes with whipped cream & jam"
         ],
         "Fredag": [
-          "Thyme-, honey- & soy-marinated pork loin with potato gratin",
-          "Baked seith with lemongrass, ginger, chili & soy dip",
+          "Thyme & honey pork loin with potato gratin",
+          "Baked saithe with lemongrass, ginger & chili",
           "Pinsa with taleggio, pesto & sunflower seeds"
         ]
       },
@@ -229,29 +229,29 @@
       "en": {
         "Måndag": [
           "Crispy salted chicken",
-          "Beijing pork strips",
+          "Peking pork strips",
           "Yuxiang eggplant"
         ],
         "Tisdag": [
           "Kung Pao chicken",
-          "Sweet & sour spare ribs",
-          "Stir-fried pointed cabbage with glass noodles"
+          "Sweet & sour pork ribs",
+          "Quick-fried pointed cabbage with glass noodles"
         ],
         "Onsdag": [
           "Red-braised pork belly",
-          "Chicken in chili oil sauce",
+          "Chicken with chili oil sauce",
           "Baked pumpkin with salted duck egg yolk",
-          "Spinach with tofu strips"
+          "Spinach with tofu"
         ],
         "Torsdag": [
-          "Farmer's stir-fried pork",
+          "Farmer's fried pork",
           "Steamed fish",
-          "Stir-fried pak choi with shiitake"
+          "Quick-fried pak choi with shiitake"
         ],
         "Fredag": [
           "Chili chicken",
-          "Beef with oyster sauce, onion & bell pepper",
-          "Stir-fried champignon mushrooms"
+          "Beef with oyster sauce & peppers",
+          "Quick-fried button mushrooms"
         ]
       },
       "en_full": {
@@ -315,24 +315,24 @@
       },
       "en": {
         "Måndag": [
-          "Lufsa potato cake with lingonberries & brown butter",
-          "Meatballs with potato purée, cream sauce & lingonberries",
+          "Potato flatbread with smoked celeriac & brown butter",
+          "Meatballs with potato puree, cream sauce & lingonberries",
           "Goulash with sour cream, pickles & rice"
         ],
         "Tisdag": [
           "Pointed cabbage with miso, pear & lime",
           "Crispy pork chop with Skåne potatoes & red wine jus",
-          "Chicken Biryani with peas, carrot & chili"
+          "Chicken Biryani with peas, carrots & chili"
         ],
         "Onsdag": [
-          "Onion & cheddar pie with herb crème & seeds",
-          "Cured fish with cauliflower purée & almonds",
-          "Schnitzel with red wine jus & herb butter"
+          "Onion & cheddar pie with herb cream & seeds",
+          "Cured fish with cauliflower puree & almond",
+          "Schnitzel with red wine jus, green beans & herb butter"
         ],
         "Torsdag": [
           "Breaded tofu with tartar sauce & mushy peas",
           "Pea soup with pork, mustard & pancake",
-          "Chicken Tonkatsu with cabbage salad & rice"
+          "Chicken Tonkatsu with cabbage salad, rice & cilantro"
         ],
         "Fredag": [
           "Pumpkin stew with beluga lentils, coconut & leek",
@@ -395,24 +395,24 @@
       },
       "en": {
         "Måndag": [
-          "Chicken thigh fillet with potatoes & parmesan mayo",
-          "Vegetarian: Lentil stew with sweet potato, coconut & sriracha"
+          "Chicken thigh fillet with parmesan mayo & mozzarella",
+          "Vegetarian: Lentil stew with sweet potato, coconut & feta"
         ],
         "Tisdag": [
-          "Ramen with pork belly, noodles, egg & soy beans",
-          "Vegetarian: Lentil stew with sweet potato, coconut & sriracha"
+          "Ramen with pork belly, noodles, egg & bean sprouts",
+          "Vegetarian: Lentil stew with sweet potato, coconut & feta"
         ],
         "Onsdag": [
-          "Slow-baked ox cheek with potato stomp & roasted carrot",
-          "Vegetarian: Lentil stew with sweet potato, coconut & sriracha"
+          "Slow-baked ox cheek with potato mash & roasted carrots",
+          "Vegetarian: Lentil stew with sweet potato, coconut & feta"
         ],
         "Torsdag": [
-          "Beef tartar Thursday with harissa mayo & potato crisp",
-          "Vegetarian: Lentil stew with sweet potato, coconut & sriracha"
+          "Beef tartar with harissa mayo, baked tomato & crisps",
+          "Vegetarian: Lentil stew with sweet potato, coconut & feta"
         ],
         "Fredag": [
-          "Slow-baked beef brisket with sweet potato, coleslaw & BBQ",
-          "Vegetarian: Lentil stew with sweet potato, coconut & sriracha"
+          "Slow-baked brisket with sweet potato, coleslaw & BBQ",
+          "Vegetarian: Lentil stew with sweet potato, coconut & feta"
         ]
       },
       "en_full": {
@@ -471,29 +471,29 @@
       "weekly": true,
       "en": {
         "Måndag": [
-          "Egg noodle soup with grilled chicken & boiled egg",
-          "Spicy Pad Kaprao with minced beef, chili & holy basil",
-          "Dragon Cake with stir-fried winter radish & sriracha"
+          "Kuay Tiaw Kai Yang noodle soup with grilled chicken",
+          "Spicy Pad Kaprao with minced beef, basil & egg",
+          "Dragon Cake with winter radish, bean sprouts & sriracha"
         ],
         "Tisdag": [
-          "Egg noodle soup with grilled chicken & boiled egg",
-          "Spicy Pad Kaprao with minced beef, chili & holy basil",
-          "Dragon Cake with stir-fried winter radish & sriracha"
+          "Kuay Tiaw Kai Yang noodle soup with grilled chicken",
+          "Spicy Pad Kaprao with minced beef, basil & egg",
+          "Dragon Cake with winter radish, bean sprouts & sriracha"
         ],
         "Onsdag": [
-          "Egg noodle soup with grilled chicken & boiled egg",
-          "Spicy Pad Kaprao with minced beef, chili & holy basil",
-          "Dragon Cake with stir-fried winter radish & sriracha"
+          "Kuay Tiaw Kai Yang noodle soup with grilled chicken",
+          "Spicy Pad Kaprao with minced beef, basil & egg",
+          "Dragon Cake with winter radish, bean sprouts & sriracha"
         ],
         "Torsdag": [
-          "Egg noodle soup with grilled chicken & boiled egg",
-          "Spicy Pad Kaprao with minced beef, chili & holy basil",
-          "Dragon Cake with stir-fried winter radish & sriracha"
+          "Kuay Tiaw Kai Yang noodle soup with grilled chicken",
+          "Spicy Pad Kaprao with minced beef, basil & egg",
+          "Dragon Cake with winter radish, bean sprouts & sriracha"
         ],
         "Fredag": [
-          "Egg noodle soup with grilled chicken & boiled egg",
-          "Spicy Pad Kaprao with minced beef, chili & holy basil",
-          "Dragon Cake with stir-fried winter radish & sriracha"
+          "Kuay Tiaw Kai Yang noodle soup with grilled chicken",
+          "Spicy Pad Kaprao with minced beef, basil & egg",
+          "Dragon Cake with winter radish, bean sprouts & sriracha"
         ]
       },
       "en_full": {
@@ -551,24 +551,24 @@
       },
       "en": {
         "Måndag": [
-          "Bacon-wrapped meatloaf with sun-dried tomato & feta cream",
-          "Vegetarian: Gotland lentils with tomato, feta cream & kale"
+          "Bacon-wrapped meatloaf with sun-dried tomato & feta",
+          "Vegetarian: Gotland lentils with tomato, feta & kale"
         ],
         "Tisdag": [
           "Baked ling with soy-pickled carrot & wasabi butter",
-          "Vegetarian: Gotland lentils with tomato, feta cream & kale"
+          "Vegetarian: Gotland lentils with tomato, feta & kale"
         ],
         "Onsdag": [
-          "Beef chuck stew with potato purée, onion & pork belly",
-          "Vegetarian: Gotland lentils with tomato, feta cream & kale"
+          "Beef chuck stew with potato puree, onion & pork belly",
+          "Vegetarian: Gotland lentils with tomato, feta & kale"
         ],
         "Torsdag": [
           "Turkey thigh fillet with mushroom sauce & apple cream",
-          "Vegetarian: Gotland lentils with tomato, feta cream & kale"
+          "Vegetarian: Gotland lentils with tomato, feta & kale"
         ],
         "Fredag": [
-          "Butcher steak with herb butter & parmesan potatoes",
-          "Vegetarian: Gotland lentils with tomato, feta cream & kale"
+          "Butcher's steak with herb butter & parmesan potatoes",
+          "Vegetarian: Gotland lentils with tomato, feta & kale"
         ]
       },
       "en_full": {
@@ -626,28 +626,28 @@
       },
       "en": {
         "Måndag": [
-          "Rosemary-roasted pork loin with cream sauce & fried potatoes",
-          "Cabbage pudding with gravy, fried potatoes & lingonberries",
+          "Rosemary pork loin with cream sauce & fried potatoes",
+          "Cabbage pudding with gravy, potatoes & lingonberries",
           "Penne with blue cheese sauce & broccoli"
         ],
         "Tisdag": [
-          "Breaded plaice fillet with tartar sauce & lemon potatoes",
-          "Cabbage pudding with gravy, fried potatoes & lingonberries",
-          "Carrot patty with tartar sauce & lemon potatoes"
+          "Breaded plaice fillet with tartar sauce & potatoes",
+          "Cabbage pudding with gravy, potatoes & lingonberries",
+          "Carrot patty with tartar sauce & potatoes"
         ],
         "Onsdag": [
-          "Beef patty with BBQ sauce, coleslaw & potato wedges",
-          "Cabbage pudding with gravy, fried potatoes & lingonberries",
-          "Veggie patty with BBQ sauce, coleslaw & potato wedges"
+          "Beef patty with BBQ sauce, coleslaw & wedges",
+          "Cabbage pudding with gravy, potatoes & lingonberries",
+          "Veggie patty with BBQ sauce, coleslaw & wedges"
         ],
         "Torsdag": [
-          "Herb-roasted chicken fillet with green pepper sauce & gratin",
-          "Fried herring with potato mash, drawn butter & lingonberries",
-          "Green pea patty with potato mash & drawn butter"
+          "Herb chicken fillet with green pepper sauce & gratin",
+          "Fried herring with mashed potatoes & lingonberries",
+          "Green pea patty with mashed potatoes & lingonberries"
         ],
         "Fredag": [
-          "Pork medallion with béarnaise, red wine jus & roasted potatoes",
-          "Fried herring with potato mash, drawn butter & lingonberries",
+          "Pork medallion with béarnaise, red wine sauce & potatoes",
+          "Fried herring with mashed potatoes & lingonberries",
           "Veggie schnitzel with béarnaise & roasted potatoes"
         ]
       },
@@ -716,33 +716,33 @@
       },
       "en": {
         "Måndag": [
-          "Chicken fillet with pineapple & cauliflower in Thai yellow curry",
-          "Wok chicken fillet with spicy Thai basil",
-          "Wok pork loin with ginger & vegetables",
+          "Chicken with pineapple & cauliflower in yellow curry",
+          "Stir-fried chicken with spicy Thai basil",
+          "Stir-fried pork loin with ginger & vegetables",
           "Grilled Asian-style hot wings"
         ],
         "Tisdag": [
-          "Chicken fillet with string beans in panang curry",
-          "Wok striploin with mushrooms & bamboo shoots",
-          "Garlic-marinated chicken fillet with black pepper & basil",
+          "Chicken fillet with green beans in Panang curry",
+          "Stir-fried beef with mushrooms & bamboo shoots",
+          "Garlic-marinated chicken with black pepper & basil",
           "Grilled chicken skewers with homemade peanut sauce"
         ],
         "Onsdag": [
-          "Chicken fillet with zucchini in hot Thai green curry",
-          "Wok minced mixed meat with spicy Thai basil",
-          "Wok chicken fillet with roasted cashews & vegetables",
-          "Homemade spring rolls with minced meat, vermicelli & herbs"
+          "Chicken with zucchini in green Thai curry",
+          "Stir-fried minced meat with spicy Thai basil",
+          "Stir-fried chicken with cashews & vegetables",
+          "Homemade spring rolls with minced meat & vermicelli"
         ],
         "Torsdag": [
-          "Chicken fillet with potatoes in creamy massaman curry",
-          "Garlic-marinated striploin with black pepper & basil",
-          "Wok chicken fillet with ginger & vegetables",
+          "Chicken with potatoes in creamy Massaman curry",
+          "Garlic-marinated beef with black pepper & basil",
+          "Stir-fried chicken with ginger & vegetables",
           "Grilled Asian-style hot wings"
         ],
         "Fredag": [
-          "Chicken fillet with eggplant in spicy Thai red curry",
-          "Wok giant prawns with spicy Thai basil",
-          "Wok chicken fillet with pineapple in sweet & sour sauce",
+          "Chicken with eggplant in spicy red Thai curry",
+          "Stir-fried king prawns with spicy Thai basil",
+          "Stir-fried chicken with pineapple in sweet & sour sauce",
           "Grilled chicken skewers with homemade peanut sauce"
         ]
       },
@@ -806,24 +806,24 @@
       },
       "en": {
         "Måndag": [
-          "Salt-baked celeriac with cauliflower purée, brown butter & quinoa",
-          "Chicken steak with spicy tomato sauce, bulgur & chickpea mash"
+          "Salt-baked celeriac with cauliflower puree & quinoa",
+          "Chicken steak with spicy tomato sauce & bulgur"
         ],
         "Tisdag": [
-          "Quorn in sweet-sour dill sauce with potatoes & carrots",
-          "Veal meatloaf with olives, sun-dried tomato & roasted potatoes"
+          "Quorn in sweet-sour dill sauce with potatoes",
+          "Veal meatloaf with olives, sun-dried tomato & potato"
         ],
         "Onsdag": [
-          "Mushroom crêpes with roasted parsnip, truffle mayo & pumpkin seeds",
-          "Breaded hake fillet with remoulade, carrots & boiled potatoes"
+          "Mushroom crepes with roasted parsnip & truffle mayo",
+          "Breaded hake fillet with remoulade & potatoes"
         ],
         "Torsdag": [
-          "Zucchini-carrot patty with risoni, broccoli & basil aioli",
-          "Beef bourguignon with bacon, mushrooms & potato stomp"
+          "Zucchini & carrot fritter with risoni & mozzarella",
+          "Beef Bourguignon with bacon, mushrooms & mash"
         ],
         "Fredag": [
-          "Baked cauliflower with bulgur, zucchini, egg & hazelnut rouille",
-          "Roasted pork neck with cheddar cabbage salad & chili jus"
+          "Baked cauliflower with bulgur, egg & hazelnut rouille",
+          "Roast pork neck with cheddar cabbage salad & potato"
         ]
       },
       "en_full": {
@@ -857,12 +857,14 @@
           "Vegetariskt: SötpotatisDal – basmatiris & yoghurt smaksatt med indiska pickles",
           "Pytt Bellman – äggulekräm, rödbetor & persilja",
           "Kyckling Satay – jordnötssås, jasminris & smashgurka",
-          "Saltimbocca – saffransris, tomatsås, zucchini & oliver",
+          "Saltimbocca – saffransris, tomatsås, zucchini & oliver"
+        ],
+        "Tisdag": [
           "Vegetariskt: Stekt Pannoumi – pumpapuré, svamp, grönkål & rostad potatis",
+          "Mårtens Afton: Kalkonbröst & rödkål – äppelkompott, Pommes Parisienne & sviskongräddsås",
           "Kyckling Satay – jordnötssås, jasminris & smashgurka",
           "Fish & chips – panerad fisk, pommes, tartarsås, citron & mushy peas"
         ],
-        "Tisdag": [],
         "Onsdag": [
           "Vegetariskt: Lo Mein-nudlar – Teriyaki, tofu & broccoli",
           "Oxfärsbiff – svampsås, rosenkål, rårörda lingon & rostad potatis",
@@ -884,34 +886,49 @@
       },
       "en": {
         "Måndag": [
-          "Vegetarian: Sweet potato dal with basmati rice & pickle yogurt",
+          "Vegetarian: Sweet potato dal with basmati rice & yoghurt",
           "Pytt Bellman hash with egg yolk cream & beets",
-          "Chicken Satay with peanut sauce, jasmine rice & smashed cucumber",
-          "Saltimbocca with saffron rice, tomato sauce & olives",
-          "Vegetarian: Fried Halloumi with pumpkin purée & kale",
-          "Chicken Satay with peanut sauce, jasmine rice & smashed cucumber",
+          "Chicken Satay with peanut sauce, jasmine rice & cucumber",
+          "Saltimbocca with saffron rice, tomato sauce & olives"
+        ],
+        "Tisdag": [
+          "Vegetarian: Fried Pannoumi with pumpkin puree & kale",
+          "Turkey breast with red cabbage, apple & prune sauce",
+          "Chicken Satay with peanut sauce, jasmine rice & cucumber",
           "Fish & chips with tartar sauce & mushy peas"
         ],
         "Onsdag": [
           "Vegetarian: Lo Mein noodles with teriyaki, tofu & broccoli",
-          "Beef patty with mushroom sauce, brussels sprouts & potatoes",
-          "Tonkatsu curry with jasmine rice, slaw & coriander",
+          "Beef patty with mushroom sauce, sprouts & potatoes",
+          "Tonkatsu curry with jasmine rice & cabbage salad",
           "Fish & chips with tartar sauce & mushy peas"
         ],
         "Torsdag": [
           "Vegetarian: Huevos Rancheros with rice & pickled chili",
-          "Chicken in curry sauce with rice & apple-cabbage salad",
-          "Tonkatsu curry with jasmine rice, slaw & coriander",
-          "Inspira's BBQ pork neck with creamed corn & wedges"
+          "Chicken in curry sauce with rice & apple salad",
+          "Tonkatsu curry with jasmine rice & cabbage salad",
+          "BBQ pork shoulder with creamed corn & wedges"
         ],
         "Fredag": [
-          "Vegetarian: Lasagne with tomato salad & aged cheese",
-          "Pluma pork with béarnaise, green beans & roasted potatoes",
-          "Pad kra pao with minced beef, jasmine rice & fried egg",
-          "Inspira's BBQ pork neck with creamed corn & wedges"
+          "Vegetarian lasagna with tomato salad & aged cheese",
+          "Pluma with béarnaise, green beans & roasted potatoes",
+          "Pad Kra Pao with minced beef, jasmine rice & egg",
+          "BBQ pork shoulder with creamed corn & wedges"
         ]
       },
       "en_full": {
+        "Måndag": [
+          "Vegetarian: SötpotatisDal – basmatiris & yoghurt smaksatt med indiska pickles",
+          "Pytt Bellman – äggulekräm, rödbetor & persilja",
+          "Kyckling Satay – jordnötssås, jasminris & smashgurka",
+          "Saltimbocca – saffransris, tomatsås, zucchini & oliver"
+        ],
+        "Tisdag": [
+          "Vegetarian: Stekt Pannoumi – pumpapuré, svamp, grönkål & rostad potatis",
+          "Mårtens Afton: Kalkonbröst & rödkål – äppelkompott, Pommes Parisienne & sviskongräddsås",
+          "Kyckling Satay – jordnötssås, jasminris & smashgurka",
+          "Fish & chips – panerad fisk, pommes, tartarsås, citron & mushy peas"
+        ],
         "Onsdag": [
           "Vegetarian: Lo Mein-nudlar – Teriyaki, tofu & broccoli",
           "Oxfärsbiff – svampsås, rosenkål, rårörda lingon & rostad potatis",
