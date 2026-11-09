@@ -318,7 +318,14 @@ def parse_bryggan(text):
 # Inspira (Medicon Village): "Lunch", "vecka 44", a row of day tabs, then each
 # day with four lines "Green | Dish" / "Local | …" / "Asia | …" / "World | …",
 # each followed by a garnish line "x | y & z". Green is the vegetarian line.
+# On theme days the heading and one label change ("Mårtens Afton Tisdag", then
+# "Mårtens Afton | Kalkonbröst & rödkål" in place of Local), so a heading is any
+# short line ending in a day name, and an unknown "Label | Dish" counts as a dish
+# when a dish is due (not right after one) and the label is capitalised —
+# garnish lines start in lower case. The theme dish keeps its label.
 INSPIRA_DISH = re.compile(r"^(green|local|asia|world)\s*\|\s*(.+)$", re.I)
+INSPIRA_OTHER = re.compile(r"^([A-ZÅÄÖ][^|]{0,30}?)\s*\|\s*(.+)$")
+INSPIRA_DAY = re.compile(r"^(?:[^|]{0,30}\s)?(" + "|".join(DAYS) + r")$", re.I)
 
 def parse_inspira(text):
     menus = _empty()
@@ -326,15 +333,22 @@ def parse_inspira(text):
     for l in _lines(text):
         if re.fullmatch(r"konferens", l, re.I) and day:
             break
-        if l in DAYS:
-            day, last = l, None
+        d = INSPIRA_DAY.match(l)
+        if d:
+            day, last = d.group(1).capitalize(), None
+            continue
+        if not day:
             continue
         m = INSPIRA_DISH.match(l)
-        if day and m:
+        o = None if m or last is not None else INSPIRA_OTHER.match(l)
+        if m:
             dish = m.group(2).strip()
             menus[day].append(("Vegetariskt: " if m.group(1).lower() == "green" else "") + dish)
             last = len(menus[day]) - 1
-        elif day and last is not None:
+        elif o:
+            menus[day].append(f"{o.group(1).strip()}: {o.group(2).strip()}")
+            last = len(menus[day]) - 1
+        elif last is not None:
             garnish = re.sub(r"\s*\|\s*", ", ", l).strip()
             menus[day][last] += f" – {garnish}"
             last = None
