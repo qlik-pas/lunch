@@ -256,7 +256,7 @@ with sync_playwright() as p:
         pg.click('.layout button[data-layout="list"]'); pg.wait_for_timeout(1800)
         t(f"layout toggle {tag}: back to list, no errors", pg.evaluate("getComputedStyle(document.getElementById('places')).display")!="grid" and not pg.errs, pg.errs)
         pg.context.close()
-    # TV mode: one place at a time, every 30 s, arrows/dots/Esc, not remembered
+    # TV mode: one place at a time, every 15 s, arrows/dots/Esc, not remembered
     day="Onsdag"; withd=[r["name"] for r in LT["restaurants"] if [x for x in r["menus"][day] if x.strip()]]
     pg=page(w=1600,h=900)
     pg.click('.layout button[data-layout="kiosk"]'); pg.wait_for_timeout(300)
@@ -265,8 +265,8 @@ with sync_playwright() as p:
     t("tv: opens, shows a place with dishes", pg.locator("#kiosk").is_visible() and n0 in withd and pg.locator("#kStage .dishes li").count()>0, n0)
     t("tv: one dot per full card with dishes today, no more than places", 1<dots<=len(withd), (dots,len(withd)))
     t("tv: day is today", pg.inner_text("#kDay").strip().lower()=="onsdag")
-    pg.clock.run_for(30500); pg.wait_for_timeout(1200); n1=name()
-    t("tv: moves on after 30 s", n1!=n0 and n1 in withd, (n0,n1))
+    pg.clock.run_for(15500); pg.wait_for_timeout(1200); n1=name()
+    t("tv: moves on after 15 s", n1!=n0 and n1 in withd, (n0,n1))
     pg.keyboard.press("ArrowLeft"); pg.wait_for_timeout(1200)
     t("tv: ← goes back", name()==n0, name())
     pg.click("#kDots button:nth-child(3)"); pg.wait_for_timeout(1200)

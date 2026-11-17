@@ -134,7 +134,7 @@ From 900px a three-segment switch next to SV/EN offers **Lista**, **Rutnät** an
   View Transitions → instant switch.
 - TV mode is *not* remembered. It covers the page (`#kiosk`), asks for full
   screen, and shows today's full cards that have dishes one at a time, moving
-  on every 30 s with a countdown bar; ←/→/space and the dots jump, Esc or ✕
+  on every 15 s with a countdown bar; ←/→/space and the dots jump, Esc or ✕
   (or leaving full screen) exits. It re-reads lt.json every 10 minutes and
   follows the weekday. Cursor and ✕ hide after 3 s idle.
 
