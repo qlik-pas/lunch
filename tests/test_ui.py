@@ -278,6 +278,10 @@ with sync_playwright() as p:
     pg.reload(); pg.wait_for_selector(".place"); pg.wait_for_timeout(300)
     t("tv: not remembered after reload", not pg.locator("#kiosk").is_visible())
     pg.context.close()
+    # opened from the grid: the grid's card rules must not leak into TV mode
+    pg=page(w=1600,h=900,init="localStorage.setItem('layout','grid')"); pg.click('.layout button[data-layout="kiosk"]'); pg.wait_for_timeout(300)
+    fs=pg.evaluate("[parseFloat(document.querySelector('.k-slide').style.fontSize), parseFloat(getComputedStyle(document.querySelector('#kStage li')).fontSize)]")
+    t("tv from grid: dishes scale with the slide", fs[0]>=40 and abs(fs[0]-fs[1])<1, fs); pg.context.close()
     pg=page(w=1600,h=900,reduced=True); pg.click('.layout button[data-layout="kiosk"]'); pg.wait_for_timeout(200)
     n0=pg.inner_text("#kStage .k-name"); pg.keyboard.press("ArrowRight"); pg.wait_for_timeout(100)
     t("tv reduced: switches instantly", pg.inner_text("#kStage .k-name")!=n0 and not pg.errs, pg.errs); pg.context.close()
