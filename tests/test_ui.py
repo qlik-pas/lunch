@@ -240,6 +240,25 @@ with sync_playwright() as p:
         sb=pg.eval_on_selector("#shareBtn","e=>{const r=e.getBoundingClientRect();return [r.right<=innerWidth, r.height]}")
         t(f"layout {w}px: no horizontal scroll, share btn inside", not hs and sb[0], (hs,sb))
         pg.context.close()
+    # list / grid toggle: hidden on phones, a real multi-column grid on wide screens, remembered
+    pg=page(w=390); t("layout toggle: hidden on phone", not pg.locator(".layout").is_visible()); pg.context.close()
+    cols="getComputedStyle(document.getElementById('places')).gridTemplateColumns.split(' ').filter(Boolean).length"
+    for reduced in (False, True):
+        pg=page(w=1280,h=900,reduced=reduced); tag="reduced" if reduced else "animated"
+        t(f"layout toggle {tag}: visible on desktop, list by default", pg.locator(".layout").is_visible() and pg.evaluate("getComputedStyle(document.getElementById('places')).display")!="grid")
+        pg.click('.layout button[data-layout="grid"]'); pg.wait_for_timeout(1800)
+        t(f"layout toggle {tag}: grid has 3+ columns, one card per place", pg.evaluate(cols)>=3 and pg.locator(".place").count()==N, pg.evaluate(cols))
+        t(f"layout toggle {tag}: transition names cleared", pg.evaluate("[...document.querySelectorAll('[style*=view-transition-name]')].filter(e=>e.style.viewTransitionName).length")==0)
+        pg.click(".day:nth-child(2)"); pg.wait_for_timeout(150)
+        t(f"layout toggle {tag}: day switch keeps grid", pg.evaluate(cols)>=3 and pg.inner_text("#dayHeading").strip().lower()=="tisdag")
+        pg.reload(); pg.wait_for_selector(".place"); pg.wait_for_timeout(300)
+        t(f"layout toggle {tag}: remembered after reload", pg.get_attribute('.layout button[data-layout="grid"]',"aria-pressed")=="true" and pg.evaluate(cols)>=3)
+        pg.click('.layout button[data-layout="list"]'); pg.wait_for_timeout(1800)
+        t(f"layout toggle {tag}: back to list, no errors", pg.evaluate("getComputedStyle(document.getElementById('places')).display")!="grid" and not pg.errs, pg.errs)
+        pg.context.close()
+    pg=page(w=600,init="localStorage.setItem('layout','grid')")
+    t("layout toggle: stored grid ignored on narrow screens", pg.evaluate("getComputedStyle(document.getElementById('places')).display")!="grid" and not pg.evaluate("document.documentElement.scrollWidth>innerWidth"))
+    pg.context.close()
     pg=page(scheme="dark"); bg=pg.evaluate("getComputedStyle(document.body).backgroundColor"); t("dark: dark background", sum(map(int,re.findall(r"\d+",bg)[:3]))<200, bg)
     pg.context.close()
     pg=page(scheme="light"); bg=pg.evaluate("getComputedStyle(document.body).backgroundColor"); t("light: light background", sum(map(int,re.findall(r"\d+",bg)[:3]))>600, bg); pg.context.close()
