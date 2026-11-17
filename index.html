@@ -422,7 +422,7 @@
 
   /* ---- TV mode (full screen, one place at a time) --------------------------
      The third segment of the layout switch. Covers the page, asks the browser
-     for full screen, and shows today's places one by one, moving on every 30 s
+     for full screen, and shows today's places one by one, moving on every 15 s
      (←/→ or the dots to jump, Esc or ✕ to leave). Meant for a screen on a wall,
      so the type is sized off the viewport and the cursor hides when idle. */
   body.kiosk-on{overflow:hidden}
@@ -491,7 +491,7 @@
     display:block; height:100%; width:100%; transform-origin:left; scale:0 1;
     background:hsl(var(--hue) 55% 52%);
   }
-  .k-progress span.run{animation:k-bar var(--k-ms, 30000ms) linear both}
+  .k-progress span.run{animation:k-bar var(--k-ms, 15000ms) linear both}
   @keyframes k-bar{to{scale:1 1}}
 
   /* changing place: the old one drifts left and blurs out, the new one comes in from the right */
@@ -1483,10 +1483,10 @@ applyLayout();
 /* ---- TV mode -----------------------------------------------------------------
    Not remembered: it needs a click to go full screen anyway, and a reload
    should land on the normal page. While on, it rotates through today's full
-   cards that have dishes (same classification as the page), every 30 s, and
+   cards that have dishes (same classification as the page), every 15 s, and
    re-reads lt.json every 10 minutes so a screen left on all week follows the
    days. */
-const KIOSK_MS = 30000, KIOSK_REFRESH_MS = 10 * 60 * 1000;
+const KIOSK_MS = 15000, KIOSK_REFRESH_MS = 10 * 60 * 1000;
 const K = { on:false, i:0, timer:null, refresh:null, idle:null, fs:false };
 const $ = id => document.getElementById(id);
 
