@@ -274,6 +274,7 @@
     padding:9px 0 9px 20px; position:relative;
     font-size:15.5px; line-height:1.5; color:var(--ink-soft);
     border-top:1px solid color-mix(in srgb,var(--hair) 60%,transparent);
+    overflow-wrap:break-word;   /* last resort for a long word with no break in it */
   }
   .dishes li:first-child{border-top:0}
   .dishes li::before{
@@ -307,7 +308,7 @@
   .others summary::after{content:"+"; margin-left:auto; font-size:14px; transition:transform .18s}
   .others[open] summary::after{transform:rotate(45deg)}
   .others ul{list-style:none; margin:14px 0 0; padding:0; display:flex; flex-direction:column; gap:12px}
-  .others li{font-size:13.5px; line-height:1.5}
+  .others li{font-size:13.5px; line-height:1.5; overflow-wrap:break-word; min-width:0}
   .others .rname{font-family:var(--serif); font-weight:500; font-size:15px}
   .others .rname a{text-decoration:none}
   .others .note{color:var(--faint); margin-left:8px}
@@ -809,13 +810,18 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">"
 const todayIndex = () => { const g = new Date().getDay(); return (g >= 1 && g <= 5) ? g - 1 : null; };
 const fmtDate = iso => { try { return new Date(iso + "T00:00:00").toLocaleDateString(T().locale,{day:"numeric",month:"short"}); } catch { return ""; } };
 
+/* Escaped dish text with a line-break opportunity after each "/": Edison writes
+   "Lasagne/jordärtskocka/rotselleri/spenat" — one unbreakable word that would
+   push a 320px screen sideways. */
+const escDish = s => esc(s).replace(/\//g, "/<wbr>");
+
 function dishItem(raw){
   const s = String(raw).trim().replace(/\s{2,}/g, " ");
   let m = s.match(/^(?:vegetarisk[t]?|vegetarian)\s*:\s*(.+)/i);
-  if (m) return `<li class="veg"><span class="veg-chip">${T().veg}</span>${esc(m[1])}</li>`;
+  if (m) return `<li class="veg"><span class="veg-chip">${T().veg}</span>${escDish(m[1])}</li>`;
   m = s.match(/^bonus\s*:\s*(.+)/i);
-  if (m) return `<li class="treat"><span class="treat-chip">Bonus</span>${esc(m[1])}</li>`;
-  return `<li>${esc(s)}</li>`;
+  if (m) return `<li class="treat"><span class="treat-chip">Bonus</span>${escDish(m[1])}</li>`;
+  return `<li>${escDish(s)}</li>`;
 }
 
 function buildRail(){
