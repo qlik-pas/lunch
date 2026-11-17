@@ -282,6 +282,14 @@ with sync_playwright() as p:
     pg.reload(); pg.wait_for_selector(".place"); pg.wait_for_timeout(300)
     t("tv: not remembered after reload", not pg.locator("#kiosk").is_visible())
     pg.context.close()
+    # started from another day's tab: shows that day, not today
+    pg=page(w=1600,h=900); pg.click(".day:nth-child(4)"); pg.wait_for_timeout(150)
+    pg.click('.layout button[data-layout="kiosk"]'); pg.wait_for_timeout(300)
+    thu=[r["name"] for r in LT["restaurants"] if [x for x in r["menus"]["Torsdag"] if x.strip()]]
+    kn=pg.inner_text("#kStage .k-name").strip(); kr=next(r for r in LT["restaurants"] if r["name"]==kn)
+    t("tv from Thursday tab: shows Thursday", pg.inner_text("#kDay").strip().lower()=="torsdag" and "idag" not in pg.inner_text("#kDate").lower()
+      and pg.locator("#kStage .dishes li").count()==len([x for x in kr["menus"]["Torsdag"] if x.strip()]), (pg.inner_text("#kDay"),kn))
+    pg.context.close()
     # opened from the grid: the grid's card rules must not leak into TV mode
     pg=page(w=1600,h=900,init="localStorage.setItem('layout','grid')"); pg.click('.layout button[data-layout="kiosk"]'); pg.wait_for_timeout(300)
     fs=pg.evaluate("[parseFloat(document.querySelector('.k-slide').style.fontSize), parseFloat(getComputedStyle(document.querySelector('#kStage li')).fontSize)]")

@@ -1494,13 +1494,14 @@ applyLayout();
    Not remembered: it needs a click to go full screen anyway, and a reload
    should land on the normal page. While on, it rotates through today's full
    cards that have dishes (same classification as the page), every 15 s, and
-   re-reads lt.json every 10 minutes so a screen left on all week follows the
-   days. */
+   re-reads lt.json every 10 minutes. It shows the day whose tab is selected;
+   started on today's tab it follows the date, so a screen left on all week
+   moves on by itself. */
 const KIOSK_MS = 15000, KIOSK_REFRESH_MS = 10 * 60 * 1000;
 /* Text is drawn at this share of the largest size that would fit: filling
    the screen edge to edge was too much. */
 const KIOSK_SCALE = 0.7;
-const K = { on:false, i:0, timer:null, refresh:null, idle:null, fs:false };
+const K = { on:false, i:0, timer:null, refresh:null, idle:null, fs:false, followToday:false };
 const $ = id => document.getElementById(id);
 
 function kioskPlaces(){
@@ -1579,15 +1580,16 @@ function kioskWake(){
 
 async function kioskRefresh(){
   await loadLive();
+  /* only a screen started on today's tab moves on to the next day by itself */
   const ti = todayIndex();
-  if (ti !== null && ti !== selected){ selected = ti; render(); kioskShow(0, true); }
+  if (K.followToday && ti !== null && ti !== selected){ selected = ti; render(); kioskShow(0, true); }
 }
 
 function enterKiosk(){
   if (K.on) return;
   K.on = true;
-  const ti = todayIndex();
-  if (ti !== null && ti !== selected){ selected = ti; render(); }
+  /* shows the day whose tab is selected; if that's today, it follows the date */
+  K.followToday = selected === todayIndex() || (todayIndex() === null && selected === 0);   /* weekend → Monday counts too */
   document.body.classList.add("kiosk-on");
   $("kiosk").hidden = false;
   document.querySelector('.layout button[data-layout="kiosk"]').setAttribute("aria-pressed", "true");
