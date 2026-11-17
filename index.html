@@ -420,9 +420,90 @@
   ::view-transition-old(*.card){animation-duration:.28s}
   @keyframes card-in{from{opacity:0; filter:blur(4px)} to{opacity:1; filter:none}}
 
+  /* ---- TV mode (full screen, one place at a time) --------------------------
+     The third segment of the layout switch. Covers the page, asks the browser
+     for full screen, and shows today's places one by one, moving on every 30 s
+     (←/→ or the dots to jump, Esc or ✕ to leave). Meant for a screen on a wall,
+     so the type is sized off the viewport and the cursor hides when idle. */
+  body.kiosk-on{overflow:hidden}
+  .kiosk[hidden]{display:none}
+  .kiosk{
+    position:fixed; inset:0; z-index:50;
+    display:grid; grid-template-rows:auto 1fr auto;
+    padding:clamp(20px, 3.2vw, 56px) clamp(24px, 5vw, 96px) clamp(18px, 2.6vw, 44px);
+    color:var(--ink);
+    background:
+      radial-gradient(70vmax 55vmax at 88% 8%, color-mix(in srgb, hsl(var(--hue) 62% 50%) 15%, transparent), transparent 70%),
+      radial-gradient(60vmax 45vmax at 0% 100%, color-mix(in srgb, hsl(var(--hue) 62% 50%) 7%, transparent), transparent 70%),
+      var(--bg);
+  }
+  .kiosk.idle, .kiosk.idle *{cursor:none}
+  .k-top{display:flex; align-items:baseline; gap:18px}
+  .k-day{font-family:var(--serif); font-size:clamp(1.4rem, 2.4vw, 2.6rem); line-height:1.1}
+  .k-date{color:var(--muted); font-size:clamp(.9rem, 1.2vw, 1.25rem); font-variant-numeric:tabular-nums}
+  .k-exit{
+    margin-left:auto; align-self:center; appearance:none; cursor:pointer;
+    border:1px solid var(--hair-strong); background:var(--surface); color:var(--ink);
+    width:44px; height:44px; border-radius:50%; font-size:16px;
+    transition:opacity .4s ease;
+  }
+  .k-exit:focus-visible, .k-dots button:focus-visible{outline:2px solid var(--ink); outline-offset:3px}
+  .kiosk.idle .k-exit{opacity:0}
+
+  .k-stage{view-transition-name:kslide; display:flex; align-items:center; min-height:0; overflow:hidden}
+  .k-slide{position:relative; width:100%; max-width:1400px}
+  .k-mark{
+    position:absolute; right:-.04em; top:50%; translate:0 -54%; z-index:-1;
+    font-family:var(--serif); font-weight:500; line-height:1; font-size:clamp(14rem, 34vw, 38rem);
+    color:hsl(var(--hue) 55% 50%); opacity:.07; pointer-events:none; user-select:none;
+  }
+  .k-head{display:flex; align-items:center; gap:clamp(14px, 1.6vw, 28px); margin-bottom:clamp(16px, 2.4vw, 40px)}
+  .k-head .shield{width:clamp(44px, 4.4vw, 80px); height:clamp(44px, 4.4vw, 80px); border-radius:clamp(12px, 1.2vw, 22px); font-size:clamp(1.4rem, 2.4vw, 2.6rem)}
+  .k-name{
+    font-family:var(--serif); font-weight:500; letter-spacing:-.015em; margin:0;
+    font-size:clamp(2.4rem, 5.6vw, 6.4rem); line-height:1.02;
+  }
+  .k-name a{text-decoration:none}
+  .kiosk .dishes li{
+    font-size:clamp(1.15rem, 2.1vw, 2.35rem); line-height:1.35; color:var(--ink);
+    padding:clamp(10px, 1.2vw, 20px) 0 clamp(10px, 1.2vw, 20px) clamp(24px, 2.2vw, 40px);
+    max-width:46ch;
+  }
+  .kiosk .dishes li::before{width:clamp(7px, .7vw, 12px); height:clamp(7px, .7vw, 12px); top:calc(clamp(10px, 1.2vw, 20px) + .55em); translate:0 -50%}
+  .kiosk .veg-chip, .kiosk .treat-chip{font-size:.42em; padding:.2em .55em .1em; vertical-align:.3em; margin-right:.6em}
+  .k-empty{font-family:var(--serif); font-style:italic; color:var(--muted); font-size:clamp(1.4rem, 2.6vw, 2.8rem)}
+
+  .k-bottom{display:flex; align-items:center; gap:16px 28px; flex-wrap:wrap; padding-top:14px}
+  .k-dots{display:flex; gap:6px}
+  .k-dots button{
+    appearance:none; border:0; cursor:pointer; padding:0; background:none;
+    width:28px; height:28px; display:grid; place-items:center;
+  }
+  .k-dots button::before{
+    content:""; width:9px; height:9px; border-radius:50%;
+    background:hsl(var(--hue) 50% 55%); opacity:.3; transition:opacity .3s, scale .3s;
+  }
+  .k-dots button[aria-current="true"]::before{opacity:1; scale:1.35}
+  .k-next{margin-left:auto; color:var(--muted); font-size:clamp(.85rem, 1.15vw, 1.2rem)}
+  .k-next b{font-family:var(--serif); font-weight:500; color:var(--ink-soft)}
+  .k-progress{position:absolute; left:0; right:0; bottom:0; height:4px; background:color-mix(in srgb, var(--ink) 6%, transparent)}
+  .k-progress span{
+    display:block; height:100%; width:100%; transform-origin:left; scale:0 1;
+    background:hsl(var(--hue) 55% 52%);
+  }
+  .k-progress span.run{animation:k-bar var(--k-ms, 30000ms) linear both}
+  @keyframes k-bar{to{scale:1 1}}
+
+  /* changing place: the old one drifts left and blurs out, the new one comes in from the right */
+  ::view-transition-old(kslide){animation:k-out .55s cubic-bezier(.4,0,.2,1) both}
+  ::view-transition-new(kslide){animation:k-in .75s cubic-bezier(.2,.8,.2,1) .12s both}
+  @keyframes k-out{to{opacity:0; transform:translateX(-5%); filter:blur(8px)}}
+  @keyframes k-in{from{opacity:0; transform:translateX(7%); filter:blur(8px)}}
+
   @keyframes rise{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
   @media (prefers-reduced-motion: reduce){
     .place{animation:none}
+    .k-progress span.run{animation:none; scale:0 1}
     *{transition-duration:.01ms !important}
   }
 </style>
@@ -435,6 +516,7 @@
     <span class="layout" role="group" aria-label="Layout" data-i18n-aria="layout">
       <button type="button" data-layout="list" aria-pressed="true" aria-label="Lista" data-i18n-aria="layoutList"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 3.5h12M2 8h12M2 12.5h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg></button>
       <button type="button" data-layout="grid" aria-pressed="false" aria-label="Rutnät" data-i18n-aria="layoutGrid"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1.3" fill="currentColor"/><rect x="9" y="2" width="5" height="5" rx="1.3" fill="currentColor"/><rect x="2" y="9" width="5" height="5" rx="1.3" fill="currentColor"/><rect x="9" y="9" width="5" height="5" rx="1.3" fill="currentColor"/></svg></button>
+      <button type="button" data-layout="kiosk" aria-pressed="false" aria-label="TV-läge" data-i18n-aria="layoutKiosk"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 5.5V2h3.5M10.5 2H14v3.5M14 10.5V14h-3.5M5.5 14H2v-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button>
     </span>
     <span class="lang" role="group" aria-label="Språk / Language">
       <button type="button" data-lang="sv" aria-pressed="true" lang="sv"><svg class="flag" viewBox="0 0 16 10" aria-hidden="true"><rect width="16" height="10" fill="#006AA7"/><path d="M5 0h2v10H5zM0 4h16v2H0z" fill="#FECC00"/></svg>SV</button>
@@ -497,6 +579,19 @@
     <span><span data-i18n="scraped">Skrapas varje vardagsmorgon</span> · <a href="https://github.com/qlik-pas/lunch" target="_blank" rel="noopener" data-i18n="source">källkod</a></span>
   </footer>
 
+  <section class="kiosk" id="kiosk" hidden aria-label="TV-läge" data-i18n-aria="layoutKiosk">
+    <div class="k-top">
+      <span class="k-day" id="kDay"></span><span class="k-date" id="kDate"></span>
+      <button class="k-exit" id="kExit" type="button" aria-label="Avsluta TV-läge" data-i18n-aria="kioskExit">✕</button>
+    </div>
+    <div class="k-stage" id="kStage" aria-live="polite"></div>
+    <div class="k-bottom">
+      <div class="k-dots" id="kDots"></div>
+      <div class="k-next" id="kNext"></div>
+    </div>
+    <div class="k-progress" aria-hidden="true"><span id="kBar"></span></div>
+  </section>
+
 <script>
 /* ===========================================================================
    Today-first lunch board for five Lund places.
@@ -531,7 +626,8 @@ const STR = {
     untranslated: l => `Ej översatt än: ${l}.`,
     pickDay: "Välj dag", hardToChoose: "Svårt att bestämma sig?", whatsItGonnaBe: "Vad blir det?",
     spinAgain: "Slumpa igen", scraped: "Skrapas varje vardagsmorgon", source: "källkod",
-    layout: "Visning", layoutList: "Lista", layoutGrid: "Rutnät",
+    layout: "Visning", layoutList: "Lista", layoutGrid: "Rutnät", layoutKiosk: "TV-läge",
+    kioskExit: "Avsluta TV-läge", kioskNext: n => `Sedan: ${n}`,
   },
   en: {
     days: ["Monday","Tuesday","Wednesday","Thursday","Friday"], short: ["Mon","Tue","Wed","Thu","Fri"], locale: "en-GB",
@@ -547,7 +643,8 @@ const STR = {
     untranslated: l => `Not translated yet: ${l}.`,
     pickDay: "Pick a day", hardToChoose: "Can't decide?", whatsItGonnaBe: "What'll it be?",
     spinAgain: "Spin again", scraped: "Scraped every weekday morning", source: "source",
-    layout: "Layout", layoutList: "List", layoutGrid: "Grid",
+    layout: "Layout", layoutList: "List", layoutGrid: "Grid", layoutKiosk: "TV mode",
+    kioskExit: "Leave TV mode", kioskNext: n => `Next: ${n}`,
   },
 };
 let LANG = "sv";
@@ -1380,8 +1477,131 @@ function setLayout(next){
   vt.finished.finally(() => nameParts(false));
 }
 document.querySelectorAll(".layout button").forEach(b =>
-  b.addEventListener("click", () => setLayout(b.dataset.layout)));
+  b.addEventListener("click", () => b.dataset.layout === "kiosk" ? enterKiosk() : setLayout(b.dataset.layout)));
 applyLayout();
+
+/* ---- TV mode -----------------------------------------------------------------
+   Not remembered: it needs a click to go full screen anyway, and a reload
+   should land on the normal page. While on, it rotates through today's full
+   cards that have dishes (same classification as the page), every 30 s, and
+   re-reads lt.json every 10 minutes so a screen left on all week follows the
+   days. */
+const KIOSK_MS = 30000, KIOSK_REFRESH_MS = 10 * 60 * 1000;
+const K = { on:false, i:0, timer:null, refresh:null, idle:null, fs:false };
+const $ = id => document.getElementById(id);
+
+function kioskPlaces(){
+  const day = DAYS[selected];
+  return WEEK.restaurants
+    .filter(r => classify(r).cat === "place")
+    .map(r => ({ r, dishes: shownDishes(r, day).filter(x => String(x).trim()) }))
+    .filter(p => p.dishes.length);
+}
+
+function kioskPaint(list){
+  const kiosk = $("kiosk"), p = list[K.i];
+  const dateStr = WEEK.dates?.[selected] ? fmtDate(WEEK.dates[selected]) : "";
+  $("kDay").textContent = T().days[selected];
+  $("kDate").textContent = (todayIndex() === selected ? T().today + " · " : "") + dateStr;
+  if (!p){
+    kiosk.style.setProperty("--hue", 40);
+    $("kStage").innerHTML = `<p class="k-empty">${T().noDishFound}</p>`;
+    $("kDots").innerHTML = ""; $("kNext").textContent = "";
+    return;
+  }
+  const hue = hueFor(p.r.name), initial = esc([...p.r.name][0] || "•");
+  kiosk.style.setProperty("--hue", hue);
+  $("kStage").innerHTML =
+    `<div class="k-slide" style="--hue:${hue}">` +
+      `<span class="k-mark" aria-hidden="true">${initial}</span>` +
+      `<div class="k-head"><span class="shield" aria-hidden="true">${initial}</span>` +
+      `<h2 class="k-name"><a href="${esc(p.r.url)}" target="_blank" rel="noopener">${esc(p.r.name)}</a></h2></div>` +
+      `<ul class="dishes">${p.dishes.map(dishItem).join("")}</ul>` +
+    `</div>`;
+  $("kDots").innerHTML = list.map((q, j) =>
+    `<button type="button" style="--hue:${hueFor(q.r.name)}" aria-label="${esc(q.r.name)}"${j === K.i ? ` aria-current="true"` : ""} data-i="${j}"></button>`
+  ).join("");
+  const next = list[(K.i + 1) % list.length];
+  $("kNext").innerHTML = list.length > 1 ? T().kioskNext(`<b>${esc(next.r.name)}</b>`) : "";
+  /* restart the countdown bar */
+  const bar = $("kBar");
+  bar.classList.remove("run"); void bar.offsetWidth;
+  bar.style.setProperty("--k-ms", KIOSK_MS + "ms");
+  if (list.length > 1) bar.classList.add("run");
+}
+
+function kioskShow(i, animate){
+  if (!K.on) return;
+  const list = kioskPlaces();
+  K.i = list.length ? ((i % list.length) + list.length) % list.length : 0;
+  clearTimeout(K.timer);
+  const paint = () => kioskPaint(list);
+  if (animate && !reduceMotion && document.startViewTransition && list.length > 1) document.startViewTransition(paint);
+  else paint();
+  if (list.length > 1) K.timer = setTimeout(() => kioskShow(K.i + 1, true), KIOSK_MS);
+}
+
+function kioskWake(){
+  const kiosk = $("kiosk");
+  kiosk.classList.remove("idle");
+  clearTimeout(K.idle);
+  K.idle = setTimeout(() => kiosk.classList.add("idle"), 3000);
+}
+
+async function kioskRefresh(){
+  await loadLive();
+  const ti = todayIndex();
+  if (ti !== null && ti !== selected){ selected = ti; render(); kioskShow(0, true); }
+}
+
+function enterKiosk(){
+  if (K.on) return;
+  K.on = true;
+  const ti = todayIndex();
+  if (ti !== null && ti !== selected){ selected = ti; render(); }
+  document.body.classList.add("kiosk-on");
+  $("kiosk").hidden = false;
+  document.querySelector('.layout button[data-layout="kiosk"]').setAttribute("aria-pressed", "true");
+  K.fs = false;
+  try {
+    const req = document.documentElement.requestFullscreen?.();
+    if (req) req.then(() => { K.fs = true; }).catch(() => {});
+  } catch {}
+  kioskShow(0, false);
+  kioskWake();
+  K.refresh = setInterval(kioskRefresh, KIOSK_REFRESH_MS);
+  $("kExit").focus({ preventScroll:true });
+}
+
+function exitKiosk(){
+  if (!K.on) return;
+  K.on = false;
+  clearTimeout(K.timer); clearTimeout(K.idle); clearInterval(K.refresh);
+  $("kiosk").hidden = true;
+  document.body.classList.remove("kiosk-on");
+  const btn = document.querySelector('.layout button[data-layout="kiosk"]');
+  btn.setAttribute("aria-pressed", "false");
+  if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
+  K.fs = false;
+  btn.focus({ preventScroll:true });
+}
+
+$("kExit").addEventListener("click", exitKiosk);
+$("kDots").addEventListener("click", e => {
+  const b = e.target.closest("button[data-i]");
+  if (b) kioskShow(+b.dataset.i, true);
+});
+$("kiosk").addEventListener("pointermove", kioskWake);
+document.addEventListener("keydown", e => {
+  if (!K.on) return;
+  if (e.key === "Escape") exitKiosk();
+  else if (e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); kioskShow(K.i + 1, true); kioskWake(); }
+  else if (e.key === "ArrowLeft"){ e.preventDefault(); kioskShow(K.i - 1, true); kioskWake(); }
+});
+/* Esc in real full screen is eaten by the browser, which just leaves full screen */
+document.addEventListener("fullscreenchange", () => {
+  if (!document.fullscreenElement && K.on && K.fs) exitKiosk();
+});
 
 /* ---- boot ----------------------------------------------------------------- */
 async function boot(){
@@ -1389,6 +1609,11 @@ async function boot(){
   selected = ti === null ? 0 : ti;
   buildRail(); render();
 
+  await loadLive();
+}
+
+/* Fetch lt.json; on success swap it in and redraw, else keep what's shown. */
+async function loadLive(){
   try {
     const res = await fetch("lt.json", { cache: "no-store" });
     if (!res.ok) throw new Error(res.status);
@@ -1397,12 +1622,13 @@ async function boot(){
       WEEK = data;
       buildRail(); render();
       setStatus(true, "live");
-      setChecked(WEEK.generated);
-      return;
+      checkedIso = null; setChecked(WEEK.generated);
+      return true;
     }
     throw new Error("tomt svar");
   } catch (e) {
-    setStatus(false, "saved");
+    if (statusKey !== "live") setStatus(false, "saved");
+    return false;
   }
 }
 boot();

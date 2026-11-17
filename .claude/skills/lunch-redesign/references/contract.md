@@ -123,6 +123,21 @@ place's emoji + short label (Bricks Eatery → "Bricks", Restaurang Edison →
   each fixed-menu row); a card's whole header row (shield, name, ↗) is its link, via a
   stretched `::after`. The share button is 40px so it stays in line with the IDAG tag.
 
+## Layout switch (wide screens) and TV mode
+
+From 900px a three-segment switch next to SV/EN offers **Lista**, **Rutnät** and
+**TV-läge**. Below 900px it is hidden and the page is always the list.
+
+- List/grid is remembered in localStorage (`layout`); switching animates with a
+  View Transition (cards named only for the duration, staggered — first card
+  leads into the grid, last card leads back to the list). Reduced motion or no
+  View Transitions → instant switch.
+- TV mode is *not* remembered. It covers the page (`#kiosk`), asks for full
+  screen, and shows today's full cards that have dishes one at a time, moving
+  on every 30 s with a countdown bar; ←/→/space and the dots jump, Esc or ✕
+  (or leaving full screen) exits. It re-reads lt.json every 10 minutes and
+  follows the weekday. Cursor and ✕ hide after 3 s idle.
+
 ## Status indicator
 
 Three states, currently a coloured dot + label in the header:
