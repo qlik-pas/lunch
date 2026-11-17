@@ -466,7 +466,9 @@
     color:hsl(var(--hue) 55% 50%); opacity:.07; pointer-events:none; user-select:none;
   }
   /* the dishes are the point on a wall screen: the name is only 1.5x them */
-  .k-head{display:flex; align-items:center; gap:.5em; margin-bottom:.45em}
+  /* The heading has its own fixed size (screen width only), so the name is the
+     same size on every place; only the dishes are fitted by kioskFit(). */
+  .k-head{display:flex; align-items:center; gap:.5em; margin-bottom:.6em; font-size:clamp(26px, 2.9vw, 64px)}
   .k-head .shield{width:1.7em; height:1.7em; border-radius:.45em; font-size:.9em}
   .k-name{
     font-family:var(--serif); font-weight:500; letter-spacing:-.015em; margin:0;
