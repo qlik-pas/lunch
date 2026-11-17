@@ -271,6 +271,8 @@ with sync_playwright() as p:
     t("tv: ← goes back", name()==n0, name())
     pg.click("#kDots button:nth-child(3)"); pg.wait_for_timeout(1200)
     t("tv: dot jumps", pg.get_attribute("#kDots button:nth-child(3)","aria-current")=="true")
+    fit=pg.evaluate("(()=>{const s=document.querySelector('.k-slide'),st=document.getElementById('kStage');return [parseFloat(s.style.fontSize), s.scrollHeight<=st.clientHeight && s.scrollWidth<=st.clientWidth]})()")
+    t("tv: text scaled up to fit the stage", fit[0]>=40 and fit[1], fit)
     pg.keyboard.press("Escape"); pg.wait_for_timeout(300)
     t("tv: Esc leaves, page usable, no errors", not pg.locator("#kiosk").is_visible() and pg.locator(".place").first.is_visible() and not pg.errs, pg.errs)
     pg.reload(); pg.wait_for_selector(".place"); pg.wait_for_timeout(300)
