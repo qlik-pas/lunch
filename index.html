@@ -413,8 +413,11 @@
   ::view-transition-old(*), ::view-transition-new(*){
     height:100%; object-fit:none; object-position:left top;
   }
-  ::view-transition-group(*.card){overflow:clip; border-radius:var(--radius)}
+  /* opaque while moving, so cards crossing each other don't show through */
+  ::view-transition-group(*.card){overflow:clip; border-radius:var(--radius); background:var(--bg)}
   ::view-transition-new(*.card){animation-name:card-in}
+  /* old picture leaves quickly so old and new aren't both half-visible for long */
+  ::view-transition-old(*.card){animation-duration:.28s}
   @keyframes card-in{from{opacity:0; filter:blur(4px)} to{opacity:1; filter:none}}
 
   @keyframes rise{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
@@ -1345,8 +1348,9 @@ function applyLayout(){
 }
 
 let vtStyle = null;
-function nameParts(on){
+function nameParts(on, toList){
   const cards = [...document.querySelectorAll(".place")];
+  const n = cards.length;
   cards.forEach((el, i) => {
     el.style.viewTransitionName = on ? `card-${i}` : "";
     el.style.viewTransitionClass = on ? "card" : "";
@@ -1357,8 +1361,11 @@ function nameParts(on){
   });
   if (on){
     if (!vtStyle){ vtStyle = document.createElement("style"); document.head.appendChild(vtStyle); }
+    /* Into the grid the first card leads; back to the list the last one does,
+       so the cards heading far down get out of the way before the first ones
+       widen over them. */
     vtStyle.textContent = cards.map((_, i) =>
-      `::view-transition-group(card-${i}),::view-transition-old(card-${i}),::view-transition-new(card-${i}){animation-delay:${i * 35}ms}`
+      `::view-transition-group(card-${i}),::view-transition-old(card-${i}),::view-transition-new(card-${i}){animation-delay:${(toList ? n - 1 - i : i) * 35}ms}`
     ).join("");
   }
 }
@@ -1368,7 +1375,7 @@ function setLayout(next){
   LAYOUT = next;
   try { localStorage.setItem("layout", LAYOUT); } catch {}
   if (reduceMotion || !document.startViewTransition){ applyLayout(); return; }
-  nameParts(true);
+  nameParts(true, LAYOUT === "list");
   const vt = document.startViewTransition(applyLayout);
   vt.finished.finally(() => nameParts(false));
 }
