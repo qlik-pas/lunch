@@ -465,18 +465,19 @@
     font-family:var(--serif); font-weight:500; line-height:1; font-size:clamp(14rem, 34vw, 38rem);
     color:hsl(var(--hue) 55% 50%); opacity:.07; pointer-events:none; user-select:none;
   }
-  .k-head{display:flex; align-items:center; gap:.6em; margin-bottom:.7em}
-  .k-head .shield{width:2em; height:2em; border-radius:.5em; font-size:1.1em}
+  /* the dishes are the point on a wall screen: the name is only 1.5x them */
+  .k-head{display:flex; align-items:center; gap:.5em; margin-bottom:.45em}
+  .k-head .shield{width:1.7em; height:1.7em; border-radius:.45em; font-size:.9em}
   .k-name{
     font-family:var(--serif); font-weight:500; letter-spacing:-.015em; margin:0;
-    font-size:2.3em; line-height:1.02;
+    font-size:1.5em; line-height:1.05;
   }
   .k-name a{text-decoration:none}
   .kiosk .dishes li{
-    font-size:1em; line-height:1.3; color:var(--ink);
-    padding:.42em 0 .42em 1.05em; max-width:40ch;
+    font-size:1em; line-height:1.22; color:var(--ink);
+    padding:.3em 0 .3em 1em; max-width:44ch;
   }
-  .kiosk .dishes li::before{width:.3em; height:.3em; left:.1em; top:calc(.42em + .65em); translate:0 -50%}
+  .kiosk .dishes li::before{width:.3em; height:.3em; left:.1em; top:calc(.3em + .61em); translate:0 -50%}
   .kiosk .veg-chip, .kiosk .treat-chip{font-size:.42em; padding:.2em .55em .1em; vertical-align:.3em; margin-right:.6em}
   .k-empty{font-family:var(--serif); font-style:italic; color:var(--muted); font-size:clamp(1.6rem, 3.4vw, 4rem)}
 
@@ -1539,13 +1540,13 @@ function kioskPaint(list){
 }
 
 /* Largest slide font-size (px) at which the slide fits the stage, by binary
-   search; capped so a one-dish place doesn't turn into a billboard. */
+   search; capped (~1/7 of the screen height) so a one-dish place stays readable. */
 function kioskFit(){
   const stage = $("kStage"), slide = stage.querySelector(".k-slide");
   if (!slide || !stage.clientHeight) return;
   const room = stage.clientHeight * 0.94;   /* a little air above and below */
   const fits = px => { slide.style.fontSize = px + "px"; return slide.scrollHeight <= room && slide.scrollWidth <= stage.clientWidth; };
-  let lo = 14, hi = Math.max(lo, Math.min(110, innerWidth / 24));
+  let lo = 14, hi = Math.max(lo, Math.min(160, innerWidth / 15, innerHeight / 7));
   if (fits(hi)) return;
   for (let k = 0; k < 9; k++){ const mid = (lo + hi) / 2; if (fits(mid)) lo = mid; else hi = mid; }
   fits(Math.floor(lo));
