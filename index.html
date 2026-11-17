@@ -1495,6 +1495,9 @@ applyLayout();
    re-reads lt.json every 10 minutes so a screen left on all week follows the
    days. */
 const KIOSK_MS = 15000, KIOSK_REFRESH_MS = 10 * 60 * 1000;
+/* Text is drawn at this share of the largest size that would fit: filling
+   the screen edge to edge was too much. */
+const KIOSK_SCALE = 0.7;
 const K = { on:false, i:0, timer:null, refresh:null, idle:null, fs:false };
 const $ = id => document.getElementById(id);
 
@@ -1547,9 +1550,9 @@ function kioskFit(){
   const room = stage.clientHeight * 0.94;   /* a little air above and below */
   const fits = px => { slide.style.fontSize = px + "px"; return slide.scrollHeight <= room && slide.scrollWidth <= stage.clientWidth; };
   let lo = 14, hi = Math.max(lo, Math.min(160, innerWidth / 15, innerHeight / 7));
-  if (fits(hi)) return;
-  for (let k = 0; k < 9; k++){ const mid = (lo + hi) / 2; if (fits(mid)) lo = mid; else hi = mid; }
-  fits(Math.floor(lo));
+  if (fits(hi)) lo = hi;
+  else for (let k = 0; k < 9; k++){ const mid = (lo + hi) / 2; if (fits(mid)) lo = mid; else hi = mid; }
+  slide.style.fontSize = Math.max(14, Math.floor(lo * KIOSK_SCALE)) + "px";
 }
 addEventListener("resize", () => { if (K.on) kioskFit(); });
 document.fonts?.ready.then(() => { if (K.on) kioskFit(); });

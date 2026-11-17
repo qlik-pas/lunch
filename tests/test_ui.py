@@ -272,7 +272,7 @@ with sync_playwright() as p:
     pg.click("#kDots button:nth-child(3)"); pg.wait_for_timeout(1200)
     t("tv: dot jumps", pg.get_attribute("#kDots button:nth-child(3)","aria-current")=="true")
     fit=pg.evaluate("(()=>{const s=document.querySelector('.k-slide'),st=document.getElementById('kStage');return [parseFloat(s.style.fontSize), s.scrollHeight<=st.clientHeight && s.scrollWidth<=st.clientWidth]})()")
-    t("tv: text scaled up to fit the stage", fit[0]>=40 and fit[1], fit)
+    t("tv: text scaled to fit the stage", fit[0]>=28 and fit[1], fit)
     pg.keyboard.press("Escape"); pg.wait_for_timeout(300)
     t("tv: Esc leaves, page usable, no errors", not pg.locator("#kiosk").is_visible() and pg.locator(".place").first.is_visible() and not pg.errs, pg.errs)
     pg.reload(); pg.wait_for_selector(".place"); pg.wait_for_timeout(300)
@@ -281,7 +281,7 @@ with sync_playwright() as p:
     # opened from the grid: the grid's card rules must not leak into TV mode
     pg=page(w=1600,h=900,init="localStorage.setItem('layout','grid')"); pg.click('.layout button[data-layout="kiosk"]'); pg.wait_for_timeout(300)
     fs=pg.evaluate("[parseFloat(document.querySelector('.k-slide').style.fontSize), parseFloat(getComputedStyle(document.querySelector('#kStage li')).fontSize)]")
-    t("tv from grid: dishes scale with the slide", fs[0]>=40 and abs(fs[0]-fs[1])<1, fs); pg.context.close()
+    t("tv from grid: dishes scale with the slide", fs[0]>=28 and abs(fs[0]-fs[1])<1, fs); pg.context.close()
     pg=page(w=1600,h=900,reduced=True); pg.click('.layout button[data-layout="kiosk"]'); pg.wait_for_timeout(200)
     n0=pg.inner_text("#kStage .k-name"); pg.keyboard.press("ArrowRight"); pg.wait_for_timeout(100)
     t("tv reduced: switches instantly", pg.inner_text("#kStage .k-name")!=n0 and not pg.errs, pg.errs); pg.context.close()
