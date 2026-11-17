@@ -351,6 +351,71 @@
   footer a{color:var(--muted); text-decoration:none; border-bottom:1px solid var(--hair); display:inline-block; padding:8px 4px 2px; margin:-8px -4px -2px}
   footer a:hover{color:var(--ink)}
 
+  /* ---- list / grid toggle (wide screens only) -------------------------------
+     A phone always gets the list. From 900px a two-segment switch next to the
+     language toggle lays the places out as a card grid; the choice is a
+     per-viewer convenience in localStorage. Switching animates with a View
+     Transition: every card glides from its old box to its new one, staggered. */
+  .layout{display:none; border:1px solid var(--hair); border-radius:999px; padding:2px; align-self:center}
+  .layout button{
+    border:0; background:none; color:var(--faint); cursor:pointer;
+    min-width:40px; min-height:32px; padding:0 11px; border-radius:999px;
+    display:inline-flex; align-items:center; justify-content:center;
+    transition:background .18s ease, color .18s ease;
+  }
+  .layout button svg{width:15px; height:15px; flex:none}
+  .layout button:hover{color:var(--ink)}
+  .layout button[aria-pressed="true"]{background:var(--ink); color:var(--bg)}
+  .layout button:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
+
+  @media (min-width:900px){
+    .layout{display:inline-flex}
+    body.grid{max-width:1240px; padding-inline:32px}
+    body.grid .railwrap{margin-inline:-32px; padding-inline:32px}
+    body.grid .rail{max-width:640px}
+    body.grid .places{
+      display:grid; gap:18px; align-items:stretch;
+      grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+    }
+    body.grid .place,
+    body.grid .place:first-child{
+      padding:18px 20px 12px;
+      background:var(--surface);
+      border:1px solid var(--hair); border-radius:var(--radius);
+      /* the place's own hue as a top edge */
+      box-shadow:inset 0 3px 0 hsl(var(--hue) 55% 52%), 0 1px 2px rgba(28,27,25,.04);
+      transition:translate .25s cubic-bezier(.2,.7,.3,1), box-shadow .25s ease, border-color .25s ease;
+    }
+    /* `translate`, not `transform`: the entrance animation's fill holds transform */
+    body.grid .place:hover{
+      translate:0 -3px; border-color:var(--hair-strong);
+      box-shadow:inset 0 3px 0 hsl(var(--hue) 55% 52%), 0 18px 34px -22px rgba(28,27,25,.45);
+    }
+    body.grid .place-head{margin-bottom:6px}
+    body.grid .place-head h2{font-size:1.16rem}
+    body.grid .dishes li{font-size:14.5px; padding-block:8px}
+    body.grid .dishes li::before{top:15px}
+  }
+  @media (min-width:900px) and (prefers-color-scheme: dark){
+    body.grid .place, body.grid .place:first-child{
+      box-shadow:inset 0 3px 0 hsl(var(--hue) 50% 58%), 0 1px 2px rgba(0,0,0,.3);
+    }
+    body.grid .place:hover{
+      box-shadow:inset 0 3px 0 hsl(var(--hue) 50% 58%), 0 18px 34px -20px rgba(0,0,0,.85);
+    }
+  }
+
+  /* the switch itself: snapshots are cropped, not stretched, so text never squashes */
+  ::view-transition-group(*){
+    animation-duration:.6s; animation-timing-function:cubic-bezier(.2,.8,.2,1);
+  }
+  ::view-transition-old(*), ::view-transition-new(*){
+    height:100%; object-fit:none; object-position:left top;
+  }
+  ::view-transition-group(*.card){overflow:clip; border-radius:var(--radius)}
+  ::view-transition-new(*.card){animation-name:card-in}
+  @keyframes card-in{from{opacity:0; filter:blur(4px)} to{opacity:1; filter:none}}
+
   @keyframes rise{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
   @media (prefers-reduced-motion: reduce){
     .place{animation:none}
@@ -363,6 +428,10 @@
     <span class="wk" id="weeklabel">Dagens lunch</span>
     <span class="mh-right">
     <span class="status stale" id="status"><span class="dot"></span><span id="statusText">Laddar…</span></span>
+    <span class="layout" role="group" aria-label="Layout" data-i18n-aria="layout">
+      <button type="button" data-layout="list" aria-pressed="true" aria-label="Lista" data-i18n-aria="layoutList"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 3.5h12M2 8h12M2 12.5h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg></button>
+      <button type="button" data-layout="grid" aria-pressed="false" aria-label="Rutnät" data-i18n-aria="layoutGrid"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1.3" fill="currentColor"/><rect x="9" y="2" width="5" height="5" rx="1.3" fill="currentColor"/><rect x="2" y="9" width="5" height="5" rx="1.3" fill="currentColor"/><rect x="9" y="9" width="5" height="5" rx="1.3" fill="currentColor"/></svg></button>
+    </span>
     <span class="lang" role="group" aria-label="Språk / Language">
       <button type="button" data-lang="sv" aria-pressed="true" lang="sv"><svg class="flag" viewBox="0 0 16 10" aria-hidden="true"><rect width="16" height="10" fill="#006AA7"/><path d="M5 0h2v10H5zM0 4h16v2H0z" fill="#FECC00"/></svg>SV</button>
       <button type="button" data-lang="en" aria-pressed="false" lang="en"><svg class="flag" viewBox="0 0 60 30" aria-hidden="true"><clipPath id="ukclip2"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#ukclip2)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></svg>EN</button>
@@ -458,6 +527,7 @@ const STR = {
     untranslated: l => `Ej översatt än: ${l}.`,
     pickDay: "Välj dag", hardToChoose: "Svårt att bestämma sig?", whatsItGonnaBe: "Vad blir det?",
     spinAgain: "Slumpa igen", scraped: "Skrapas varje vardagsmorgon", source: "källkod",
+    layout: "Visning", layoutList: "Lista", layoutGrid: "Rutnät",
   },
   en: {
     days: ["Monday","Tuesday","Wednesday","Thursday","Friday"], short: ["Mon","Tue","Wed","Thu","Fri"], locale: "en-GB",
@@ -473,6 +543,7 @@ const STR = {
     untranslated: l => `Not translated yet: ${l}.`,
     pickDay: "Pick a day", hardToChoose: "Can't decide?", whatsItGonnaBe: "What'll it be?",
     spinAgain: "Spin again", scraped: "Scraped every weekday morning", source: "source",
+    layout: "Layout", layoutList: "List", layoutGrid: "Grid",
   },
 };
 let LANG = "sv";
@@ -1250,6 +1321,54 @@ document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click
   applyLang(); buildRail(); render(); renderFixed();
 }));
 applyLang();
+
+/* ---- layout: list / grid ---------------------------------------------------
+   The grid only takes effect from 900px (CSS); below that the switch is hidden
+   and the page is the list whatever is stored. The switch animates with a View
+   Transition where the browser has one: each card, the day heading and the
+   sections below get a name for the duration, so the browser morphs each from
+   its old box to its new one; the cards are staggered a little. Without View
+   Transitions, or with reduced motion, it simply switches. */
+let LAYOUT = "list";
+try { if (localStorage.getItem("layout") === "grid") LAYOUT = "grid"; } catch {}
+const VT_PARTS = [".masthead .wk", ".mh-right", ".railwrap", ".dayhead", ".picker", "#fixed", "#others", "#closed", "footer"];
+
+function applyLayout(){
+  document.body.classList.toggle("grid", LAYOUT === "grid");
+  document.querySelectorAll(".layout button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.layout === LAYOUT)));
+}
+
+let vtStyle = null;
+function nameParts(on){
+  const cards = [...document.querySelectorAll(".place")];
+  cards.forEach((el, i) => {
+    el.style.viewTransitionName = on ? `card-${i}` : "";
+    el.style.viewTransitionClass = on ? "card" : "";
+  });
+  VT_PARTS.forEach((sel, i) => {
+    const el = document.querySelector(sel);
+    if (el) el.style.viewTransitionName = on ? `part-${i}` : "";
+  });
+  if (on){
+    if (!vtStyle){ vtStyle = document.createElement("style"); document.head.appendChild(vtStyle); }
+    vtStyle.textContent = cards.map((_, i) =>
+      `::view-transition-group(card-${i}),::view-transition-old(card-${i}),::view-transition-new(card-${i}){animation-delay:${i * 35}ms}`
+    ).join("");
+  }
+}
+
+function setLayout(next){
+  if (next === LAYOUT) return;
+  LAYOUT = next;
+  try { localStorage.setItem("layout", LAYOUT); } catch {}
+  if (reduceMotion || !document.startViewTransition){ applyLayout(); return; }
+  nameParts(true);
+  const vt = document.startViewTransition(applyLayout);
+  vt.finished.finally(() => nameParts(false));
+}
+document.querySelectorAll(".layout button").forEach(b =>
+  b.addEventListener("click", () => setLayout(b.dataset.layout)));
+applyLayout();
 
 /* ---- boot ----------------------------------------------------------------- */
 async function boot(){
