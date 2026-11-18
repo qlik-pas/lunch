@@ -1815,11 +1815,16 @@ var WHEEL = null;
     hdrDay = -1;
     measure();
   }
-  /* open height of every card's dish list — once per build/resize, never per frame */
+  /* Open height of every card's dish list — per build, width change and font
+     load, never per frame. Cards far from the middle are display:none at that
+     moment and would measure 0 (and then never open), so each is shown for the
+     read. */
   function measure(){
     heights = cardsByDay.map(({ cards }) => cards.map(el => {
-      const det = el.querySelector(".w-detail");
-      det.style.maxHeight = "none"; const h = det.scrollHeight; det.style.maxHeight = "0px";
+      const det = el.querySelector(".w-detail"), disp = el.style.display;
+      el.style.display = "block"; det.style.maxHeight = "none";
+      const h = det.scrollHeight;
+      det.style.maxHeight = "0px"; el.style.display = disp;
       return h;
     }));
   }
@@ -2071,7 +2076,16 @@ var WHEEL = null;
       dayTarget = clampDay(active + (e.key === "ArrowRight" ? 1 : -1)); dvel = 0; mode = "daysettle"; ensureLoop();
     }
   });
-  addEventListener("resize", () => { if (!WHEEL.on) return; Wd = innerWidth; sizeSP(); measure(); draw(); });
+  /* Phones resize the height whenever the URL bar slides; only a new width can
+     change how the dishes wrap, so only that re-measures. */
+  addEventListener("resize", () => {
+    if (!WHEEL.on) return;
+    const widthChanged = innerWidth !== Wd;
+    Wd = innerWidth; sizeSP();
+    if (widthChanged) measure();
+    draw();
+  });
+  document.fonts?.ready.then(() => { if (WHEEL.on){ measure(); draw(); } });
   narrow.addEventListener?.("change", () => { if (!narrow.matches && WHEEL.on){ WHEEL.on && close(); ls("view", "wheel"); } });
   /* remembered: reopen after boot's first render */
   if (ls("view") === "wheel" && narrow.matches) setTimeout(() => open(false), 0);
