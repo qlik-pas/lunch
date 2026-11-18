@@ -336,6 +336,15 @@ with sync_playwright() as p:
     t("spin: reopened toggle shows pressed", pg.get_attribute("#wFab","aria-pressed")=="true")
     pg.click("#wFab"); pg.reload(); pg.wait_for_selector(".place"); pg.wait_for_timeout(300)
     t("spin: list remembered too", not pg.locator("#wheel").is_visible() and not pg.errs, pg.errs); pg.context.close()
+    # regression: a resize (URL bar, rotation) while far down must not leave cards that never open
+    pg=page(init="localStorage.setItem('wheel_seen','1')"); pg.click("#wFab"); pg.clock.run_for(400)
+    for _ in range(10): pg.keyboard.press("ArrowDown"); pg.clock.run_for(600)
+    pg.set_viewport_size({"width":390,"height":760}); pg.wait_for_timeout(150)
+    pg.set_viewport_size({"width":412,"height":844}); pg.wait_for_timeout(150)
+    hs=[]
+    for _ in range(10):
+        pg.keyboard.press("ArrowUp"); pg.clock.run_for(600); pg.wait_for_timeout(30); hs.append(round(pg.evaluate(openIdx)[1]))
+    t("spin: every card still opens after a resize", min(hs)>40, hs); pg.context.close()
     pg=page(w=320,reduced=True); pg.click("#wFab"); pg.clock.run_for(800); pg.wait_for_timeout(100)
     t("spin 320 reduced: opens, no overflow, no errors", pg.locator("#wheel").is_visible() and not pg.evaluate("document.documentElement.scrollWidth>innerWidth") and not pg.errs, pg.errs)
     pg.context.close()
