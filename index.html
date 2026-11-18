@@ -1756,7 +1756,7 @@ document.addEventListener("fullscreenchange", () => {
 
 /* ---- spin mode (phones) -----------------------------------------------------
    Ported from ScheduleIT (LivingIT/scheduleit), whose HANDOFF.md §5 holds the
-   tuned constants — they are kept as they are here, change them deliberately:
+   tuned constants — kept here except where FEEL below softens them:
    fling friction pow(0.24,dt); release |v|>0.8 → fling else settle at
    round(pos + v*0.28); fling→settle at |v|<0.35, seeded v*=dt (per-sec →
    per-frame, or the spring kicks); settle overdamped v+=diff*.20, v*=.60;
@@ -1783,7 +1783,15 @@ var WHEEL = null;
   const maxDay = DAYS.length - 1;
   const clampDay = v => Math.max(0, Math.min(maxDay, v));
   const mx = di => cardsByDay[di].cards.length - 1;
-  const sizeSP = () => { SP = Math.round(Math.max(92, Math.min(124, innerHeight * 0.12))); };
+  /* Feel, softened from ScheduleIT's values (which felt too quick here):
+     - SP: thumb travel per card; was ~100px, ScheduleIT uses 150. More travel =
+       slower under the thumb while still 1:1.
+     - FLING_GAIN / FLING_MAX: release velocity scaled and capped (cards/s),
+       so a hard flick glides a few cards instead of racing through the list.
+     - SETTLE_K / SETTLE_D: landing spring; ScheduleIT .20/.60 lands in ~0.32s
+       with 3.5% overshoot, .11/.66 in ~0.42s with 2.4% — softer. */
+  const FEEL = { FLING_GAIN:0.6, FLING_MAX:7, SETTLE_K:0.11, SETTLE_D:0.66 };
+  const sizeSP = () => { SP = Math.round(Math.max(104, Math.min(140, innerHeight * 0.14))); };
 
   /* ---- build ---- */
   function build(){
@@ -1924,7 +1932,7 @@ var WHEEL = null;
       checkDet();
       if (Math.abs(vvel) < 0.35){ mode = "settle"; vTarget = Math.max(0, Math.min(m, Math.round(vpos[active] + vvel * 0.4))); vvel *= 0.016; }
     } else if (mode === "settle"){
-      const diff = vTarget - vpos[active]; vvel += diff * 0.20; vvel *= 0.60; vpos[active] += vvel;
+      const diff = vTarget - vpos[active]; vvel += diff * FEEL.SETTLE_K; vvel *= FEEL.SETTLE_D; vpos[active] += vvel;
       checkDet();
       if (Math.abs(diff) < 0.002 && Math.abs(vvel) < 0.002){ vpos[active] = vTarget; checkDet(); mode = "idle"; }
     } else if (mode === "daysettle" || mode === "gotoday"){
@@ -2015,6 +2023,7 @@ var WHEEL = null;
     if (axis === "v"){
       markLearned("v");
       const m = mx(active);
+      vvel = Math.max(-FEEL.FLING_MAX, Math.min(FEEL.FLING_MAX, vvel * FEEL.FLING_GAIN));
       if (Math.abs(vvel) > 0.8) mode = "fling";
       else { vTarget = Math.max(0, Math.min(m, Math.round(vpos[active] + vvel * 0.28))); vvel *= 0.016; mode = "settle"; }
       ensureLoop();
