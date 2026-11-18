@@ -526,13 +526,20 @@
       box-shadow:0 12px 26px -10px rgba(28,27,25,.6);
       touch-action:manipulation;
     }
-    .w-fab svg{width:26px; height:26px}
+    .w-fab svg{
+      grid-area:1/1; width:26px; height:26px;
+      transition:opacity .25s ease, rotate .35s cubic-bezier(.2,.8,.2,1), scale .35s cubic-bezier(.2,.8,.2,1);
+    }
+    .w-fab .w-ico-list{opacity:0; rotate:-90deg; scale:.6}
+    .w-fab[aria-pressed="true"] .w-ico-wheel{opacity:0; rotate:90deg; scale:.6}
+    .w-fab[aria-pressed="true"] .w-ico-list{opacity:1; rotate:0deg; scale:1}
     .w-fab:focus-visible{outline:2px solid var(--ink); outline-offset:3px}
     /* room so the button never hides the last line of the page */
     body:not(.wheel-on) footer{padding-bottom:72px}
   }
   body.wheel-on{overflow:hidden}
-  body.wheel-on .w-fab{display:none}
+  /* the same button, same place, toggles back: it sits above the wheel */
+  body.wheel-on .w-fab{z-index:46}
   .wheel[hidden]{display:none}
   .wheel{
     position:fixed; inset:0; z-index:45; overflow:hidden; color:var(--ink);
@@ -682,7 +689,7 @@
     <span><span data-i18n="scraped">Skrapas varje vardagsmorgon</span> · <a href="https://github.com/qlik-pas/lunch" target="_blank" rel="noopener" data-i18n="source">källkod</a></span>
   </footer>
 
-  <button class="w-fab" id="wFab" type="button" aria-label="Snurrläge" data-i18n-aria="wheelOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M12 3.8v3M12 17.2v3M3.8 12h3M17.2 12h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+  <button class="w-fab" id="wFab" type="button" aria-pressed="false" aria-label="Snurrläge" data-i18n-aria="wheelOpen"><svg class="w-ico-wheel" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M12 3.8v3M12 17.2v3M3.8 12h3M17.2 12h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="w-ico-list" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M5 12h14M5 17h14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" fill="none"/></svg></button>
 
   <section class="wheel" id="wheel" hidden aria-label="Snurrläge" data-i18n-aria="wheelOpen">
     <div id="wStage"></div>
@@ -693,7 +700,6 @@
         <div class="w-hint" id="wHint" data-i18n="wheelHint">Dra upp och ner · svep åt sidan för annan dag</div>
       </div>
       <button class="w-btn" id="wMute" type="button" aria-pressed="false" aria-label="Ljud" data-i18n-aria="wheelSound"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 6h2.2L8 3.2v9.6L4.7 10H2.5z" fill="currentColor"/><path class="w-wave" d="M10.4 5.6a3.4 3.4 0 0 1 0 4.8M12.2 3.9a5.8 5.8 0 0 1 0 8.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/></svg></button>
-      <button class="w-btn" id="wList" type="button" aria-label="Lista" data-i18n-aria="layoutList"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 3.5h12M2 8h12M2 12.5h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg></button>
     </div>
     <button class="w-btn w-today" id="wToday" type="button" data-i18n="today">Idag</button>
   </section>
@@ -2033,7 +2039,7 @@ var WHEEL = null;
     build();
     lastDet = Math.round(vpos[active]);
     paintMute(); draw(); showHint(true); demo();
-    $("wList").focus({ preventScroll:true });
+    paintFab();
   }
   function close(){
     if (!WHEEL.on) return;
@@ -2042,14 +2048,17 @@ var WHEEL = null;
     root.hidden = true; stage.innerHTML = ""; cardsByDay = [];
     document.body.classList.remove("wheel-on");
     if (selected !== active){ selected = active; buildRail(); render(); }
-    fab.focus({ preventScroll:true });
+    paintFab();
   }
   WHEEL = {
     on:false, open, close,
     rebuild(){ stopLoop(); mode = "idle"; drag = false; dayX = clampDay(Math.round(dayX)); build(); draw(); },
   };
-  fab.addEventListener("click", () => open());
-  $("wList").addEventListener("click", close);
+  function paintFab(){
+    fab.setAttribute("aria-pressed", String(WHEEL.on));
+    fab.setAttribute("aria-label", WHEEL.on ? T().layoutList : T().wheelOpen);
+  }
+  fab.addEventListener("click", () => WHEEL.on ? close() : open());
   document.addEventListener("keydown", e => {
     if (!WHEEL.on) return;
     if (e.key === "Escape") close();
