@@ -311,7 +311,7 @@ with sync_playwright() as p:
     oi=pg.evaluate(openIdx)
     t("spin: opens on today, first place open", pg.locator("#wheel").is_visible() and pg.inner_text("#wDay").strip()=="Onsdag" and oi[0]==0 and oi[1]>40, oi)
     t("spin: one card per place with dishes", oi[2]<=len(wed) and oi[2]>=2, (oi[2],len(wed)))
-    SPv=pg.evaluate("Math.round(Math.max(92,Math.min(124,innerHeight*0.12)))")
+    SPv=pg.evaluate("Math.round(Math.max(104,Math.min(140,innerHeight*0.14)))")
     def slow_drag(x0,y0,x1,y1,n=14):   # a thumb at ~60 fps, not a teleport (that's a flick)
         pg.mouse.move(x0,y0); pg.mouse.down()
         for k in range(1,n+1): pg.clock.run_for(16); pg.mouse.move(x0+(x1-x0)*k/n, y0+(y1-y0)*k/n)

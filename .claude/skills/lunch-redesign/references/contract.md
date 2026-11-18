@@ -148,7 +148,7 @@ dishes, neighbours collapsed to name + dish count — flick for momentum with a
 detent tick (a note of the day's chord; Android also vibrates; mutable),
 overdamped landing; swipe sideways for another day; "Idag" springs back. The
 choice is remembered (`view` in localStorage) and the day carries over to the
-page on leaving. Keep its physics constants and the one-loop rule as they are;
+page on leaving. Keep its physics constants (softened ones live in `FEEL`) and the one-loop rule;
 never read layout per frame (open heights are measured once per build).
 
 ## Status indicator
