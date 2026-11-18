@@ -140,7 +140,8 @@ From 900px a three-segment switch next to SV/EN offers **Lista**, **Rutnät** an
 
 ## Spin mode (phones)
 
-Below 900px a round button bottom-right opens **spin mode** (`#wheel`), a port
+Below 900px a round toggle bottom-right (`#wFab`, same button and place in both
+states, icon swaps wheel ↔ list) switches **spin mode** (`#wheel`) on and off — a port
 of ScheduleIT's thumb "ratt" (LivingIT/scheduleit, HANDOFF.md §5–7): the day's
 full cards with dishes as a vertical wheel — the centred card open with its
 dishes, neighbours collapsed to name + dish count — flick for momentum with a
