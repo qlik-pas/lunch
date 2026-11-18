@@ -510,6 +510,99 @@
   @keyframes k-out{to{opacity:0; transform:translateX(-5%); filter:blur(8px)}}
   @keyframes k-in{from{opacity:0; transform:translateX(7%); filter:blur(8px)}}
 
+  /* ---- spin mode (phones) ---------------------------------------------------
+     A port of ScheduleIT's thumb "ratt": today's places as a wheel, the middle
+     card open with its dishes, flick to spin through them (momentum, detent
+     tick, soft landing), swipe sideways for another day. Entered from a round
+     button bottom-right on narrow screens; remembered. Positions are driven
+     from JS every frame (transform/opacity only — no per-frame layout reads). */
+  .w-fab{display:none}
+  @media (max-width:899px){
+    .w-fab{
+      display:grid; place-items:center; position:fixed; z-index:40; cursor:pointer;
+      right:calc(16px + env(safe-area-inset-right)); bottom:calc(16px + env(safe-area-inset-bottom));
+      width:56px; height:56px; border-radius:50%; border:0;
+      background:var(--ink); color:var(--bg);
+      box-shadow:0 12px 26px -10px rgba(28,27,25,.6);
+      touch-action:manipulation;
+    }
+    .w-fab svg{width:26px; height:26px}
+    .w-fab:focus-visible{outline:2px solid var(--ink); outline-offset:3px}
+    /* room so the button never hides the last line of the page */
+    body:not(.wheel-on) footer{padding-bottom:72px}
+  }
+  body.wheel-on{overflow:hidden}
+  body.wheel-on .w-fab{display:none}
+  .wheel[hidden]{display:none}
+  .wheel{
+    position:fixed; inset:0; z-index:45; overflow:hidden; color:var(--ink);
+    background:
+      radial-gradient(120vw 70vh at 50% 50%, color-mix(in srgb, var(--surface) 70%, transparent), transparent 70%),
+      var(--bg);
+    -webkit-user-select:none; user-select:none; -webkit-tap-highlight-color:transparent;
+  }
+  .w-top{
+    position:absolute; z-index:5; left:0; right:0; top:0;
+    display:flex; align-items:flex-start; gap:8px;
+    padding:calc(14px + env(safe-area-inset-top)) 16px 26px 20px;
+    background:linear-gradient(var(--bg) 62%, transparent);
+    pointer-events:none;
+  }
+  .w-top > *{pointer-events:auto}
+  .w-dayhdr{flex:1; min-width:0; pointer-events:none}
+  .w-dayrow{display:flex; align-items:baseline; gap:8px}
+  .w-chev{color:var(--muted); font-size:1.3rem; line-height:1; transition:opacity .2s}
+  .w-chev.dim{opacity:.22}
+  .w-daylabel{font-family:var(--serif); font-weight:500; font-size:1.7rem; line-height:1.1; white-space:nowrap; letter-spacing:-.01em}
+  .w-sub{color:var(--muted); font-size:13px; margin-top:3px; font-variant-numeric:tabular-nums}
+  .w-btn{
+    appearance:none; cursor:pointer; touch-action:manipulation;
+    border:1px solid var(--hair-strong); background:var(--surface); color:var(--ink);
+    min-width:44px; height:44px; padding:0 12px; border-radius:999px;
+    display:inline-flex; align-items:center; justify-content:center; gap:6px;
+    font:inherit; font-size:14px; font-weight:600;
+  }
+  .w-btn svg{width:18px; height:18px; flex:none}
+  .w-btn:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
+  .w-btn[aria-pressed="true"]{color:var(--faint)}
+  /* own stacking context: the cards' z-index stays below the header and the Idag button */
+  #wStage{position:absolute; inset:0; z-index:0; touch-action:none}
+  .w-day{position:absolute; inset:0; will-change:transform,opacity; transform-origin:center center}
+  .w-wrap{
+    --hue:40;
+    position:absolute; left:0; right:0; top:50%; margin:0 auto;
+    width:calc(100% - 32px); max-width:480px;
+    will-change:transform,opacity; transform-origin:center center;
+  }
+  .w-card{
+    background:var(--surface); border:1px solid var(--hair); border-radius:18px;
+    padding:12px 16px; box-shadow:0 1px 2px rgba(28,27,25,.05);
+  }
+  .w-head{display:flex; align-items:center; gap:12px; min-height:40px}
+  .w-head .shield{flex:none}
+  .w-name{font-family:var(--serif); font-weight:500; font-size:1.3rem; line-height:1.15; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .w-count{color:var(--faint); font-size:12px; white-space:nowrap; font-variant-numeric:tabular-nums}
+  .w-detail{overflow:hidden; max-height:0; opacity:0}
+  .w-detail .dishes{margin:6px 0 2px}
+  .w-detail .dishes li{font-size:15px}
+  .w-empty .w-name{font-style:italic; color:var(--muted); white-space:normal}
+  .w-today{
+    position:absolute; z-index:5; left:50%; translate:-50% 0;
+    bottom:calc(22px + env(safe-area-inset-bottom));
+    background:var(--ink); color:var(--bg); border-color:var(--ink); padding:0 22px;
+    box-shadow:0 10px 24px -10px rgba(28,27,25,.55);
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+  }
+  .w-today.show{opacity:1; pointer-events:auto}
+  .w-hint{
+    color:var(--muted); font-size:12.5px; margin-top:8px; pointer-events:none;
+    max-height:0; opacity:0; transition:opacity .5s ease, max-height .5s ease;
+  }
+  .w-hint.show{opacity:.9; max-height:3em}
+  @media (prefers-color-scheme: dark){
+    .w-card{box-shadow:0 1px 2px rgba(0,0,0,.3)}
+  }
+
   @keyframes rise{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
   @media (prefers-reduced-motion: reduce){
     .place{animation:none}
@@ -589,6 +682,22 @@
     <span><span data-i18n="scraped">Skrapas varje vardagsmorgon</span> · <a href="https://github.com/qlik-pas/lunch" target="_blank" rel="noopener" data-i18n="source">källkod</a></span>
   </footer>
 
+  <button class="w-fab" id="wFab" type="button" aria-label="Snurrläge" data-i18n-aria="wheelOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M12 3.8v3M12 17.2v3M3.8 12h3M17.2 12h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+
+  <section class="wheel" id="wheel" hidden aria-label="Snurrläge" data-i18n-aria="wheelOpen">
+    <div id="wStage"></div>
+    <div class="w-top">
+      <div class="w-dayhdr" aria-live="polite">
+        <div class="w-dayrow"><span class="w-chev" id="wChL" aria-hidden="true">‹</span><span class="w-daylabel" id="wDay"></span><span class="w-chev" id="wChR" aria-hidden="true">›</span></div>
+        <div class="w-sub" id="wSub"></div>
+        <div class="w-hint" id="wHint" data-i18n="wheelHint">Dra upp och ner · svep åt sidan för annan dag</div>
+      </div>
+      <button class="w-btn" id="wMute" type="button" aria-pressed="false" aria-label="Ljud" data-i18n-aria="wheelSound"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 6h2.2L8 3.2v9.6L4.7 10H2.5z" fill="currentColor"/><path class="w-wave" d="M10.4 5.6a3.4 3.4 0 0 1 0 4.8M12.2 3.9a5.8 5.8 0 0 1 0 8.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/></svg></button>
+      <button class="w-btn" id="wList" type="button" aria-label="Lista" data-i18n-aria="layoutList"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 3.5h12M2 8h12M2 12.5h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg></button>
+    </div>
+    <button class="w-btn w-today" id="wToday" type="button" data-i18n="today">Idag</button>
+  </section>
+
   <section class="kiosk" id="kiosk" hidden aria-label="TV-läge" data-i18n-aria="layoutKiosk">
     <div class="k-top">
       <span class="k-day" id="kDay"></span><span class="k-date" id="kDate"></span>
@@ -638,6 +747,8 @@ const STR = {
     spinAgain: "Slumpa igen", scraped: "Skrapas varje vardagsmorgon", source: "källkod",
     layout: "Visning", layoutList: "Lista", layoutGrid: "Rutnät", layoutKiosk: "TV-läge",
     kioskExit: "Avsluta TV-läge", kioskNext: n => `Sedan: ${n}`,
+    wheelOpen: "Snurrläge", wheelSound: "Ljud", wheelHint: "Dra upp och ner · svep åt sidan för annan dag",
+    dishCount: n => `${n} ${n === 1 ? "rätt" : "rätter"}`,
   },
   en: {
     days: ["Monday","Tuesday","Wednesday","Thursday","Friday"], short: ["Mon","Tue","Wed","Thu","Fri"], locale: "en-GB",
@@ -655,6 +766,8 @@ const STR = {
     spinAgain: "Spin again", scraped: "Scraped every weekday morning", source: "source",
     layout: "Layout", layoutList: "List", layoutGrid: "Grid", layoutKiosk: "TV mode",
     kioskExit: "Leave TV mode", kioskNext: n => `Next: ${n}`,
+    wheelOpen: "Spin mode", wheelSound: "Sound", wheelHint: "Drag up and down · swipe sideways for another day",
+    dishCount: n => `${n} ${n === 1 ? "dish" : "dishes"}`,
   },
 };
 let LANG = "sv";
@@ -1012,6 +1125,7 @@ function render(){
   document.getElementById("closedList").innerHTML = closed.map(item).join("");
   document.getElementById("closed").hidden = closed.length === 0;
   document.getElementById("closedLabel").textContent = T().closed(closed.length);
+  if (WHEEL && WHEEL.on) WHEEL.rebuild();   /* new data while spinning */
 }
 
 let statusKey = "loading", checkedIso = null;   // remembered so a language switch can redraw them
@@ -1633,6 +1747,326 @@ document.addEventListener("keydown", e => {
 document.addEventListener("fullscreenchange", () => {
   if (!document.fullscreenElement && K.on && K.fs) exitKiosk();
 });
+
+/* ---- spin mode (phones) -----------------------------------------------------
+   Ported from ScheduleIT (LivingIT/scheduleit), whose HANDOFF.md §5 holds the
+   tuned constants — they are kept as they are here, change them deliberately:
+   fling friction pow(0.24,dt); release |v|>0.8 → fling else settle at
+   round(pos + v*0.28); fling→settle at |v|<0.35, seeded v*=dt (per-sec →
+   per-frame, or the spring kicks); settle overdamped v+=diff*.20, v*=.60;
+   days SPX = W*0.90 (same in draw and drag), daysettle v+=diff*.16, v*=.62;
+   axis lock at 8px with a 140ms/26px grace window. ONE rAF loop, one mode at a
+   time: idle | drag | fling | settle | daysettle | gotoday.
+   What differs: a card is a place (name; dishes open when centred) and the
+   open card pushes its neighbours apart by its open height, measured once per
+   build — never per frame. */
+var WHEEL = null;
+(() => {
+  const root = $("wheel"), stage = $("wStage"), fab = $("wFab");
+  const hint = $("wHint"), todayBtn = $("wToday"), muteBtn = $("wMute");
+  const narrow = window.matchMedia("(max-width: 899px)");
+  const ls = (k, v) => { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch {} return null; };
+
+  let cardsByDay = [], heights = [];
+  let vpos = DAYS.map(() => 0), dayX = 0, active = 0, vvel = 0, dvel = 0, Wd = innerWidth, SP = 100;
+  let drag = false, axis = "none", axisT = 0, axisLock = false;
+  let sX = 0, sY = 0, sVpos = 0, sDayX = 0, lX = 0, lY = 0, lT = 0;
+  let raf = null, mode = "idle", lastT = 0, running = false;
+  let vTarget = 0, dayTarget = 0, lastDet = 0, hdrDay = -1;
+  let didV = false, didH = false, learned = ls("wheel_learned") === "1", muted = ls("wheel_mute") === "1";
+  const maxDay = DAYS.length - 1;
+  const clampDay = v => Math.max(0, Math.min(maxDay, v));
+  const mx = di => cardsByDay[di].cards.length - 1;
+  const sizeSP = () => { SP = Math.round(Math.max(92, Math.min(124, innerHeight * 0.12))); };
+
+  /* ---- build ---- */
+  function build(){
+    stage.innerHTML = ""; cardsByDay = [];
+    DAYS.forEach((day) => {
+      const list = WEEK.restaurants
+        .filter(r => classify(r).cat === "place")
+        .map(r => ({ r, dishes: shownDishes(r, day).filter(x => String(x).trim()) }))
+        .filter(p => p.dishes.length);
+      const dayEl = document.createElement("div"); dayEl.className = "w-day";
+      const cards = (list.length ? list : [null]).map(p => {
+        const el = document.createElement("div"); el.className = "w-wrap";
+        if (!p){
+          el.innerHTML = `<div class="w-card w-empty"><div class="w-head"><span class="w-name">${esc(T().noDishFound)}</span></div><div class="w-detail"></div></div>`;
+        } else {
+          const ini = esc([...p.r.name][0] || "•");
+          el.style.setProperty("--hue", hueFor(p.r.name));
+          el.innerHTML =
+            `<div class="w-card"><div class="w-head"><span class="shield" aria-hidden="true">${ini}</span>` +
+            `<span class="w-name">${esc(p.r.name)}</span><span class="w-count">${T().dishCount(p.dishes.length)}</span></div>` +
+            `<div class="w-detail"><ul class="dishes">${p.dishes.map(dishItem).join("")}</ul></div></div>`;
+        }
+        dayEl.appendChild(el); return el;
+      });
+      stage.appendChild(dayEl);
+      cardsByDay.push({ dayEl, cards });
+    });
+    vpos = vpos.map((v, di) => Math.max(0, Math.min(mx(di), Math.round(v))));
+    hdrDay = -1;
+    measure();
+  }
+  /* open height of every card's dish list — once per build/resize, never per frame */
+  function measure(){
+    heights = cardsByDay.map(({ cards }) => cards.map(el => {
+      const det = el.querySelector(".w-detail");
+      det.style.maxHeight = "none"; const h = det.scrollHeight; det.style.maxHeight = "0px";
+      return h;
+    }));
+  }
+
+  /* ---- render ---- */
+  function renderDay(di){
+    const { cards } = cardsByDay[di], hs = heights[di], vp = vpos[di];
+    const gate = Math.max(0, 1 - Math.abs(di - dayX) * 1.8);
+    const lo = Math.floor(vp), open = [];
+    for (const j of [lo, lo + 1]){
+      if (j < 0 || j >= cards.length) continue;
+      const c = Math.max(0, 1 - Math.abs(j - vp));
+      if (c > 0) open.push([j, c * hs[j]]);
+    }
+    for (let i = 0; i < cards.length; i++){
+      const d = i - vp, ad = Math.abs(d), el = cards[i];
+      if (ad > 3.6){ el.style.display = "none"; continue; }
+      el.style.display = "block";
+      const c = Math.max(0, 1 - ad), e = c * c, eb = e * gate;
+      let off = d * SP;
+      for (const [j, x] of open) if (j !== i) off += (i > j ? x : -x) / 2;
+      const sc = Math.max(0.6, 1 - ad * 0.12);
+      el.style.transform = `translateY(calc(-50% + ${off.toFixed(2)}px)) scale(${sc.toFixed(4)})`;
+      el.style.opacity = Math.max(0, 1 - ad * 0.32).toFixed(3);
+      el.style.zIndex = String(100 - Math.round(ad * 10));
+      const card = el.firstElementChild, det = card.lastElementChild;
+      det.style.maxHeight = (c * hs[i]).toFixed(1) + "px"; det.style.opacity = c.toFixed(3);
+      /* half-open: fade the cut edge instead of slicing a line of text */
+      const mask = c > 0 && c < 0.999 ? "linear-gradient(#000 calc(100% - 28px), transparent)" : "none";
+      if (det.style.maskImage !== mask){ det.style.maskImage = mask; det.style.webkitMaskImage = mask; }
+      card.style.borderColor = `color-mix(in srgb, hsl(var(--hue) 55% 52%) ${Math.round(eb * 100)}%, var(--hair))`;
+      card.style.boxShadow = `0 1px 2px rgba(28,27,25,.05), 0 14px 30px -12px hsl(var(--hue) 55% 45% / ${(0.45 * eb).toFixed(3)})`;
+    }
+  }
+  function draw(){
+    const SPX = Wd * 0.90;
+    for (let di = 0; di < cardsByDay.length; di++){
+      const rel = di - dayX, ad = Math.abs(rel), el = cardsByDay[di].dayEl;
+      if (ad > 1.7){ el.style.visibility = "hidden"; continue; }
+      el.style.visibility = "visible";
+      el.style.transform = `translateX(${(rel * SPX).toFixed(2)}px) scale(${Math.max(0.7, 1 - ad * 0.12).toFixed(4)})`;
+      el.style.opacity = Math.max(0, 1 - ad * 0.42).toFixed(3);
+      el.style.zIndex = String(50 - Math.round(ad * 10));
+      renderDay(di);
+    }
+    const di0 = clampDay(Math.round(dayX)), ti = todayIndex();
+    if (di0 !== hdrDay){
+      hdrDay = di0;
+      $("wDay").textContent = T().days[di0];
+      $("wSub").textContent = (ti === di0 ? T().today + " · " : "") + (WEEK.dates?.[di0] ? fmtDate(WEEK.dates[di0]) : "");
+      $("wChL").classList.toggle("dim", di0 <= 0);
+      $("wChR").classList.toggle("dim", di0 >= maxDay);
+    }
+    todayBtn.classList.toggle("show", ti !== null && (di0 !== ti || Math.abs(dayX - ti) > 0.02));
+  }
+
+  /* ---- sound + haptics: a random note of the day's chord per detent ---- */
+  let ac = null;
+  const CHORD = { C:[523.25,659.25,783.99], G:[392,493.88,587.33], D:[587.33,739.99,880], Am:[440,523.25,659.25] };
+  const PROG = ["C","G","D","Am"];
+  const detFreq = () => { const c = CHORD[PROG[active % 4]]; return c[(Math.random() * c.length) | 0]; };
+  function tick(str, freq){
+    if (navigator.vibrate){ try { navigator.vibrate(9); } catch {} }
+    if (muted) return;
+    try {
+      if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)();
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.type = "triangle"; o.frequency.value = freq || 540;
+      g.gain.setValueAtTime(0.0001, ac.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.06 * str, ac.currentTime + 0.004);
+      g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + 0.05);
+      o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.06);
+    } catch {}
+  }
+  function checkDet(){
+    const r = Math.round(vpos[active]);
+    if (r !== lastDet){ tick(Math.min(1, Math.abs(vvel) * 0.6 + 0.4), detFreq()); lastDet = r; }
+  }
+  function paintMute(){
+    muteBtn.setAttribute("aria-pressed", String(muted));
+    muteBtn.querySelector(".w-wave").style.opacity = muted ? 0 : 1;
+  }
+  muteBtn.addEventListener("click", () => { muted = !muted; ls("wheel_mute", muted ? "1" : "0"); paintMute(); });
+
+  /* ---- the one animation loop ---- */
+  const rubberV = (p, m) => p < 0 ? p * 0.35 : (p > m ? m + (p - m) * 0.35 : p);
+  const rubberH = p => p < 0 ? p * 0.35 : (p > maxDay ? maxDay + (p - maxDay) * 0.35 : p);
+  function ensureLoop(){ if (!running){ running = true; lastT = performance.now(); raf = requestAnimationFrame(frame); } }
+  function stopLoop(){ if (raf){ cancelAnimationFrame(raf); raf = null; } running = false; }
+  function frame(now){
+    const dt = Math.min(0.05, Math.max(0, now - lastT) / 1000); lastT = now;
+    if (mode === "fling"){
+      const m = mx(active);
+      vpos[active] += vvel * dt; vvel *= Math.pow(0.24, dt);
+      if (vpos[active] < -0.4){ vpos[active] = -0.4; vvel = 0; }
+      if (vpos[active] > m + 0.4){ vpos[active] = m + 0.4; vvel = 0; }
+      checkDet();
+      if (Math.abs(vvel) < 0.35){ mode = "settle"; vTarget = Math.max(0, Math.min(m, Math.round(vpos[active] + vvel * 0.4))); vvel *= 0.016; }
+    } else if (mode === "settle"){
+      const diff = vTarget - vpos[active]; vvel += diff * 0.20; vvel *= 0.60; vpos[active] += vvel;
+      checkDet();
+      if (Math.abs(diff) < 0.002 && Math.abs(vvel) < 0.002){ vpos[active] = vTarget; checkDet(); mode = "idle"; }
+    } else if (mode === "daysettle" || mode === "gotoday"){
+      const k = mode === "gotoday" ? 0.30 : 0.16;
+      const diff = dayTarget - dayX; dvel += diff * k; dvel *= 0.62; dayX += dvel;
+      if (Math.abs(diff) < 0.001 && Math.abs(dvel) < 0.001){
+        dayX = dayTarget; const nd = clampDay(Math.round(dayX));
+        if (nd !== active){ active = nd; lastDet = Math.round(vpos[active]); tick(0.7, CHORD[PROG[active % 4]][0]); }
+        mode = "idle";
+      }
+    }
+    draw();
+    if (mode === "idle" || mode === "drag"){ running = false; raf = null; return; }
+    raf = requestAnimationFrame(frame);
+  }
+
+  /* ---- teaching: hint until both gestures are done once; a one-time demo ---- */
+  function markLearned(ax){
+    if (ax === "v") didV = true; else didH = true;
+    if (didV && didH && !learned){ learned = true; ls("wheel_learned", "1"); }
+  }
+  const showHint = on => hint.classList.toggle("show", on && !learned);
+  function dayPeek(amt){
+    if (drag || mode !== "idle") return;
+    const bd = active < maxDay ? 1 : -1;
+    dayX = active + bd * amt; dayTarget = active; dvel = 0; mode = "daysettle"; ensureLoop();
+  }
+  function vBob(){
+    if (drag || mode !== "idle") return;
+    const base = Math.round(vpos[active]), m = mx(active); if (m < 1) return;
+    vpos[active] = base + (base < m ? 0.5 : -0.5); vTarget = base; vvel = 0; mode = "settle"; ensureLoop();
+  }
+  let touched = false;
+  function demo(){
+    if (reduceMotion || ls("wheel_seen") === "1") return;
+    ls("wheel_seen", "1");
+    setTimeout(() => { if (!touched && WHEEL.on) dayPeek(0.32); }, 500);
+    setTimeout(() => { if (!touched && WHEEL.on) dayPeek(0.15); }, 1120);
+    setTimeout(() => { if (!touched && WHEEL.on) vBob(); }, 1900);
+  }
+
+  /* ---- gestures ---- */
+  stage.addEventListener("pointerdown", e => {
+    touched = true;
+    if (ac && ac.state === "suspended") ac.resume();
+    stopLoop();
+    dayX = clampDay(Math.round(dayX)); active = clampDay(Math.round(dayX));
+    drag = true; mode = "drag"; axis = "none"; axisLock = false; axisT = 0;
+    try { stage.setPointerCapture(e.pointerId); } catch {}
+    sX = lX = e.clientX; sY = lY = e.clientY; sVpos = vpos[active]; sDayX = dayX;
+    lT = performance.now(); vvel = 0; dvel = 0;
+    lastDet = Math.round(vpos[active]);
+  });
+  stage.addEventListener("pointermove", e => {
+    if (!drag) return;
+    let dx = e.clientX - sX, dy = e.clientY - sY;
+    if (axis === "none"){
+      if (Math.abs(dx) > 8 || Math.abs(dy) > 8){ axis = Math.abs(dx) > Math.abs(dy) ? "h" : "v"; axisT = performance.now(); }
+      else return;
+    }
+    if (!axisLock){
+      const along = axis === "h" ? Math.abs(dx) : Math.abs(dy), across = axis === "h" ? Math.abs(dy) : Math.abs(dx);
+      if (along > 26 || performance.now() - axisT > 140) axisLock = true;
+      else if (across > along * 1.7 && across > 12){
+        axis = axis === "h" ? "v" : "h";
+        if (axis === "h") vpos[active] = sVpos; else dayX = sDayX;
+        sX = e.clientX; sY = e.clientY; dx = 0; dy = 0;
+        draw();
+      }
+    }
+    const n = performance.now(), tdt = n - lT, SPX = Wd * 0.90;
+    if (axis === "v"){
+      vpos[active] = rubberV(sVpos - (e.clientY - sY) / SP, mx(active));
+      if (tdt > 0) vvel = 0.7 * vvel + 0.3 * (-(e.clientY - lY) / SP) / (tdt / 1000);
+      checkDet();
+    } else {
+      dayX = rubberH(sDayX - (e.clientX - sX) / SPX);
+      if (tdt > 0) dvel = 0.7 * dvel + 0.3 * (-(e.clientX - lX) / SPX) / (tdt / 1000);
+    }
+    lX = e.clientX; lY = e.clientY; lT = n; draw();
+  });
+  function end(){
+    if (!drag) return; drag = false;
+    /* A still thumb sends no moves, so the last velocity would survive a pause:
+       drag, hold, let go → it flew off. Held still >100ms means "put it here".
+       (Not in ScheduleIT; same bug there.) */
+    if (performance.now() - lT > 100){ vvel = 0; dvel = 0; }
+    if (axis === "v"){
+      markLearned("v");
+      const m = mx(active);
+      if (Math.abs(vvel) > 0.8) mode = "fling";
+      else { vTarget = Math.max(0, Math.min(m, Math.round(vpos[active] + vvel * 0.28))); vvel *= 0.016; mode = "settle"; }
+      ensureLoop();
+    } else if (axis === "h"){
+      markLearned("h");
+      const base = active; let t = Math.round(dayX + Math.max(-0.6, Math.min(0.6, dvel * 0.2)));
+      t = Math.max(base - 1, Math.min(base + 1, t)); dayTarget = clampDay(t); dvel = 0; mode = "daysettle"; ensureLoop();
+    } else { mode = "idle"; draw(); }
+    if (learned) showHint(false);
+  }
+  stage.addEventListener("pointerup", end);
+  stage.addEventListener("pointercancel", end);
+  todayBtn.addEventListener("click", () => {
+    const ti = todayIndex(); if (ti === null) return;
+    stopLoop(); drag = false; dvel = 0; dayTarget = ti; mode = "gotoday"; ensureLoop();
+  });
+
+  /* ---- open / close ---- */
+  function open(remember = true){
+    if (WHEEL.on) return;
+    WHEEL.on = true;
+    if (remember) ls("view", "wheel");
+    document.body.classList.add("wheel-on");
+    root.hidden = false;
+    Wd = innerWidth; sizeSP();
+    active = clampDay(selected); dayX = active; dvel = vvel = 0; mode = "idle";
+    build();
+    lastDet = Math.round(vpos[active]);
+    paintMute(); draw(); showHint(true); demo();
+    $("wList").focus({ preventScroll:true });
+  }
+  function close(){
+    if (!WHEEL.on) return;
+    WHEEL.on = false; stopLoop(); drag = false; mode = "idle";
+    ls("view", "list");
+    root.hidden = true; stage.innerHTML = ""; cardsByDay = [];
+    document.body.classList.remove("wheel-on");
+    if (selected !== active){ selected = active; buildRail(); render(); }
+    fab.focus({ preventScroll:true });
+  }
+  WHEEL = {
+    on:false, open, close,
+    rebuild(){ stopLoop(); mode = "idle"; drag = false; dayX = clampDay(Math.round(dayX)); build(); draw(); },
+  };
+  fab.addEventListener("click", () => open());
+  $("wList").addEventListener("click", close);
+  document.addEventListener("keydown", e => {
+    if (!WHEEL.on) return;
+    if (e.key === "Escape") close();
+    else if (e.key === "ArrowDown" || e.key === "ArrowUp"){
+      e.preventDefault(); stopLoop();
+      vTarget = Math.max(0, Math.min(mx(active), Math.round(vpos[active]) + (e.key === "ArrowDown" ? 1 : -1)));
+      vvel = 0; mode = "settle"; ensureLoop();
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowRight"){
+      e.preventDefault(); stopLoop();
+      dayTarget = clampDay(active + (e.key === "ArrowRight" ? 1 : -1)); dvel = 0; mode = "daysettle"; ensureLoop();
+    }
+  });
+  addEventListener("resize", () => { if (!WHEEL.on) return; Wd = innerWidth; sizeSP(); measure(); draw(); });
+  narrow.addEventListener?.("change", () => { if (!narrow.matches && WHEEL.on){ WHEEL.on && close(); ls("view", "wheel"); } });
+  /* remembered: reopen after boot's first render */
+  if (ls("view") === "wheel" && narrow.matches) setTimeout(() => open(false), 0);
+})();
 
 /* ---- boot ----------------------------------------------------------------- */
 async function boot(){

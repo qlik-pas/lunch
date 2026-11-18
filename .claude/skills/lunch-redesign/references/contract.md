@@ -138,6 +138,18 @@ From 900px a three-segment switch next to SV/EN offers **Lista**, **Rutnät** an
   (or leaving full screen) exits. It re-reads lt.json every 10 minutes and
   follows the weekday. Cursor and ✕ hide after 3 s idle.
 
+## Spin mode (phones)
+
+Below 900px a round button bottom-right opens **spin mode** (`#wheel`), a port
+of ScheduleIT's thumb "ratt" (LivingIT/scheduleit, HANDOFF.md §5–7): the day's
+full cards with dishes as a vertical wheel — the centred card open with its
+dishes, neighbours collapsed to name + dish count — flick for momentum with a
+detent tick (a note of the day's chord; Android also vibrates; mutable),
+overdamped landing; swipe sideways for another day; "Idag" springs back. The
+choice is remembered (`view` in localStorage) and the day carries over to the
+page on leaving. Keep its physics constants and the one-loop rule as they are;
+never read layout per frame (open heights are measured once per build).
+
 ## Status indicator
 
 Three states, currently a coloured dot + label in the header:
