@@ -8,7 +8,7 @@
     "2026-11-19",
     "2026-11-20"
   ],
-  "generated": "2026-11-18T09:36:00+00:00",
+  "generated": "2026-11-18T15:28:13+00:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -443,84 +443,84 @@
       "url": "https://www.troppo.se/lunch",
       "menus": {
         "Måndag": [
-          "Tom Kha Kai Coconut soup, chicken, mixed mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)",
-          "Gaeng Khua Saparos Creamy coconut red curry, pork tenderloin, pineapple, kaffir lime, thai basil Complimentary jasmine rice. (Central Thai)",
-          "Vegetariskt: Tom Kha Hed (VEG) Coconut soup, steamed cabbage, mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)"
+          "Tom Kha Kai",
+          "Gaeng Khua Saparos",
+          "Vegetariskt: Tom Kha Hed (VEG)"
         ],
         "Tisdag": [
-          "Tom Kha Kai Coconut soup, chicken, mixed mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)",
-          "Gaeng Khua Saparos Creamy coconut red curry, pork tenderloin, pineapple, kaffir lime, thai basil Complimentary jasmine rice. (Central Thai)",
-          "Vegetariskt: Tom Kha Hed (VEG) Coconut soup, steamed cabbage, mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)"
+          "Tom Kha Kai",
+          "Gaeng Khua Saparos",
+          "Vegetariskt: Tom Kha Hed (VEG)"
         ],
         "Onsdag": [
-          "Tom Kha Kai Coconut soup, chicken, mixed mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)",
-          "Gaeng Khua Saparos Creamy coconut red curry, pork tenderloin, pineapple, kaffir lime, thai basil Complimentary jasmine rice. (Central Thai)",
-          "Vegetariskt: Tom Kha Hed (VEG) Coconut soup, steamed cabbage, mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)"
+          "Tom Kha Kai",
+          "Gaeng Khua Saparos",
+          "Vegetariskt: Tom Kha Hed (VEG)"
         ],
         "Torsdag": [
-          "Tom Kha Kai Coconut soup, chicken, mixed mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)",
-          "Gaeng Khua Saparos Creamy coconut red curry, pork tenderloin, pineapple, kaffir lime, thai basil Complimentary jasmine rice. (Central Thai)",
-          "Vegetariskt: Tom Kha Hed (VEG) Coconut soup, steamed cabbage, mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)"
+          "Tom Kha Kai",
+          "Gaeng Khua Saparos",
+          "Vegetariskt: Tom Kha Hed (VEG)"
         ],
         "Fredag": [
-          "Tom Kha Kai Coconut soup, chicken, mixed mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)",
-          "Gaeng Khua Saparos Creamy coconut red curry, pork tenderloin, pineapple, kaffir lime, thai basil Complimentary jasmine rice. (Central Thai)",
-          "Vegetariskt: Tom Kha Hed (VEG) Coconut soup, steamed cabbage, mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)"
+          "Tom Kha Kai",
+          "Gaeng Khua Saparos",
+          "Vegetariskt: Tom Kha Hed (VEG)"
         ]
       },
       "weekly": true,
       "en": {
         "Måndag": [
-          "Tom Kha Kai chicken soup with mushrooms & rice",
-          "Pork tenderloin red curry with pineapple & rice",
-          "Vegetarian: Tom Kha mushroom soup with cabbage & rice"
+          "Tom Kha Kai",
+          "Gaeng Khua Saparos",
+          "Vegetarian: Tom Kha Hed"
         ],
         "Tisdag": [
-          "Tom Kha Kai chicken soup with mushrooms & rice",
-          "Pork tenderloin red curry with pineapple & rice",
-          "Vegetarian: Tom Kha mushroom soup with cabbage & rice"
+          "Tom Kha Kai",
+          "Gaeng Khua Saparos",
+          "Vegetarian: Tom Kha Hed"
         ],
         "Onsdag": [
-          "Tom Kha Kai chicken soup with mushrooms & rice",
-          "Pork tenderloin red curry with pineapple & rice",
-          "Vegetarian: Tom Kha mushroom soup with cabbage & rice"
+          "Tom Kha Kai",
+          "Gaeng Khua Saparos",
+          "Vegetarian: Tom Kha Hed"
         ],
         "Torsdag": [
-          "Tom Kha Kai chicken soup with mushrooms & rice",
-          "Pork tenderloin red curry with pineapple & rice",
-          "Vegetarian: Tom Kha mushroom soup with cabbage & rice"
+          "Tom Kha Kai",
+          "Gaeng Khua Saparos",
+          "Vegetarian: Tom Kha Hed"
         ],
         "Fredag": [
-          "Tom Kha Kai chicken soup with mushrooms & rice",
-          "Pork tenderloin red curry with pineapple & rice",
-          "Vegetarian: Tom Kha mushroom soup with cabbage & rice"
+          "Tom Kha Kai",
+          "Gaeng Khua Saparos",
+          "Vegetarian: Tom Kha Hed"
         ]
       },
       "en_full": {
         "Måndag": [
-          "Tom Kha Kai Coconut soup, chicken, mixed mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)",
-          "Gaeng Khua Saparos Creamy coconut red curry, pork tenderloin, pineapple, kaffir lime, thai basil Complimentary jasmine rice. (Central Thai)",
-          "Vegetarian: Tom Kha Hed (VEG) Coconut soup, steamed cabbage, mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)"
+          "Tom Kha Kai",
+          "Gaeng Khua Saparos",
+          "Vegetarian: Tom Kha Hed (VEG)"
         ],
         "Tisdag": [
-          "Tom Kha Kai Coconut soup, chicken, mixed mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)",
-          "Gaeng Khua Saparos Creamy coconut red curry, pork tenderloin, pineapple, kaffir lime, thai basil Complimentary jasmine rice. (Central Thai)",
-          "Vegetarian: Tom Kha Hed (VEG) Coconut soup, steamed cabbage, mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)"
+          "Tom Kha Kai",
+          "Gaeng Khua Saparos",
+          "Vegetarian: Tom Kha Hed (VEG)"
         ],
         "Onsdag": [
-          "Tom Kha Kai Coconut soup, chicken, mixed mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)",
-          "Gaeng Khua Saparos Creamy coconut red curry, pork tenderloin, pineapple, kaffir lime, thai basil Complimentary jasmine rice. (Central Thai)",
-          "Vegetarian: Tom Kha Hed (VEG) Coconut soup, steamed cabbage, mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)"
+          "Tom Kha Kai",
+          "Gaeng Khua Saparos",
+          "Vegetarian: Tom Kha Hed (VEG)"
         ],
         "Torsdag": [
-          "Tom Kha Kai Coconut soup, chicken, mixed mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)",
-          "Gaeng Khua Saparos Creamy coconut red curry, pork tenderloin, pineapple, kaffir lime, thai basil Complimentary jasmine rice. (Central Thai)",
-          "Vegetarian: Tom Kha Hed (VEG) Coconut soup, steamed cabbage, mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)"
+          "Tom Kha Kai",
+          "Gaeng Khua Saparos",
+          "Vegetarian: Tom Kha Hed (VEG)"
         ],
         "Fredag": [
-          "Tom Kha Kai Coconut soup, chicken, mixed mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)",
-          "Gaeng Khua Saparos Creamy coconut red curry, pork tenderloin, pineapple, kaffir lime, thai basil Complimentary jasmine rice. (Central Thai)",
-          "Vegetarian: Tom Kha Hed (VEG) Coconut soup, steamed cabbage, mushrooms, galangal, lemongrass, turmeric, cilantro Complimentary jasmine rice. (Central Thai)"
+          "Tom Kha Kai",
+          "Gaeng Khua Saparos",
+          "Vegetarian: Tom Kha Hed (VEG)"
         ]
       }
     },
