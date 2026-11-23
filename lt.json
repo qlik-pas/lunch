@@ -8,7 +8,7 @@
     "2026-11-26",
     "2026-11-27"
   ],
-  "generated": "2026-11-23T09:20:23+00:00",
+  "generated": "2026-11-23T09:34:22+00:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -373,68 +373,68 @@
       "url": "https://www.kantinlund.se/",
       "menus": {
         "Måndag": [
-          "Chipotlerostad kyckling – örtaioli – syrad kål – friterad tortilla – rostad majs – potatis",
-          "Vegetariskt: Rostad bakad spetskål – pumpapuré – frön – röd jalapeño – fetaost – brysselkål – potatis"
+          "Rostat kyckling – sweetchilimajo – gurka – röd chili – groddar – kycklingsky – sesam – koriander – ris",
+          "Vegetariskt: Potatis & purjolökssoppa – pickles – rostade frön – smetana – ört"
         ],
         "Tisdag": [
-          "Sotad laxfilé – chilibeurre blanc – cashewnötter – lime – böngroddar – gurka – fänkål – potatis – sesam",
-          "Vegetariskt: Rostad bakad spetskål – pumpapuré – frön – röd jalapeño – fetaost – brysselkål – potatis"
+          "Ramen – räkor – nudlar – ägg – chili – pakchoi – morot – koriander",
+          "Vegetariskt: Potatis & purjolökssoppa – pickles – rostade frön – smetana – ört"
         ],
         "Onsdag": [
-          "Nattbakad gris – morot- & misopuré – friterad grönkål – röd chili – rostad morot – potatis",
-          "Vegetariskt: Rostad bakad spetskål – pumpapuré – frön – röd jalapeño – fetaost – brysselkål – potatis"
+          "Nattbakad fläsksida – potatismos – cidersås – rostad kål – pickles – örter",
+          "Vegetariskt: Potatis & purjolökssoppa – pickles – rostade frön – smetana – ört"
         ],
         "Torsdag": [
-          "råbiffstorsdag Oxtartar – jalapeñomajo – bakad paprika – picklad jalapeño & lök – friterad tortilla – koriander",
-          "Vegetariskt: Rostad bakad spetskål – pumpapuré – frön – röd jalapeño – fetaost – brysselkål – potatis"
+          "råbiffstorsdag Oxtartar – sojamajo – sesamknäcke – syrad kålrabbi – jordärtskocka – saltrostade jordnötter – färsk jalapeño – mâche",
+          "Vegetariskt: Potatis & purjolökssoppa – pickles – rostade frön – smetana – ört"
         ],
         "Fredag": [
-          "Skirtsteak – klyftpotatis – chilimajo – rostade haricot verts – skysås – pickles – örter",
-          "Vegetariskt: Rostad bakad spetskål – pumpapuré – frön – röd jalapeño – fetaost – brysselkål – potatis"
+          "Helstekt fläskfile – choronmajo – rostad potatis – bakad tomat – skysås – pickles – örter",
+          "Vegetariskt: Potatis & purjolökssoppa – pickles – rostade frön – smetana – ört"
         ]
       },
       "en": {
         "Måndag": [
-          "Chipotle-roasted chicken – herb aioli – pickled cabbage – tortilla – corn – potato",
-          "Vegetarian: Roasted baked pointed cabbage – pumpkin purée – seeds – jalapeño – feta – brussels sprouts – potato"
+          "Roasted chicken with sweet chili mayo & rice",
+          "Vegetarian: Potato & leek soup with seeds & smetana"
         ],
         "Tisdag": [
-          "Blackened salmon – chili beurre blanc – cashews – lime – bean sprouts – cucumber – potato",
-          "Vegetarian: Roasted baked pointed cabbage – pumpkin purée – seeds – jalapeño – feta – brussels sprouts – potato"
+          "Ramen with shrimp, noodles, egg & chili",
+          "Vegetarian: Potato & leek soup with seeds & smetana"
         ],
         "Onsdag": [
-          "Night-baked pork – carrot & miso purée – fried kale – chili – roasted carrot – potato",
-          "Vegetarian: Roasted baked pointed cabbage – pumpkin purée – seeds – jalapeño – feta – brussels sprouts – potato"
+          "Slow-baked pork belly with mash & cider jus",
+          "Vegetarian: Potato & leek soup with seeds & smetana"
         ],
         "Torsdag": [
-          "Steak tartare – jalapeño mayo – baked bell pepper – pickled jalapeño & onion – tortilla – cilantro",
-          "Vegetarian: Roasted baked pointed cabbage – pumpkin purée – seeds – jalapeño – feta – brussels sprouts – potato"
+          "Beef tartar with soy mayo & crispbread",
+          "Vegetarian: Potato & leek soup with seeds & smetana"
         ],
         "Fredag": [
-          "Skirt steak – potato wedges – chili mayo – haricot verts – gravy – pickles – herbs",
-          "Vegetarian: Roasted baked pointed cabbage – pumpkin purée – seeds – jalapeño – feta – brussels sprouts – potato"
+          "Roast pork tenderloin with choron mayo & roasted potatoes",
+          "Vegetarian: Potato & leek soup with seeds & smetana"
         ]
       },
       "en_full": {
         "Måndag": [
-          "Chipotle-roasted chicken – herb aioli – soured cabbage – fried tortilla – roasted corn – potato",
-          "Vegetarian: Roasted baked pointed cabbage – pumpkin purée – seeds – red jalapeno – feta cheese – Brussels sprouts – potato"
+          "Roasted chicken – sweet chili mayo – cucumber – red chili – sprouts – chicken jus – sesame – coriander – rice",
+          "Vegetarian: Potato & leek soup – pickles – roasted seeds – smetana – herbs"
         ],
         "Tisdag": [
-          "Blackened salmon fillet – chili beurre blanc – cashews – lime – bean sprouts – cucumber – fennel – potato – sesame",
-          "Vegetarian: Roasted baked pointed cabbage – pumpkin purée – seeds – red jalapeno – feta cheese – Brussels sprouts – potato"
+          "Ramen – shrimp – noodles – egg – chili – pak choi – carrot – coriander",
+          "Vegetarian: Potato & leek soup – pickles – roasted seeds – smetana – herbs"
         ],
         "Onsdag": [
-          "Night-baked pork – carrot & miso purée – fried kale – red chili – roasted carrot – potato",
-          "Vegetarian: Roasted baked pointed cabbage – pumpkin purée – seeds – red jalapeno – feta cheese – Brussels sprouts – potato"
+          "Slow-baked pork belly – mashed potatoes – cider sauce – roasted cabbage – pickles – herbs",
+          "Vegetarian: Potato & leek soup – pickles – roasted seeds – smetana – herbs"
         ],
         "Torsdag": [
-          "steak tartare Thursday Ox tartare – jalapeno mayo – baked bell pepper – pickled jalapeno & onion – fried tortilla – coriander",
-          "Vegetarian: Roasted baked pointed cabbage – pumpkin purée – seeds – red jalapeno – feta cheese – Brussels sprouts – potato"
+          "steak tartare Thursday Beef tartare – soy mayo – sesame crispbread – pickled kohlrabi – Jerusalem artichoke – salt-roasted peanuts – fresh jalapeño – mache",
+          "Vegetarian: Potato & leek soup – pickles – roasted seeds – smetana – herbs"
         ],
         "Fredag": [
-          "Skirt steak – wedge potatoes – chili mayo – roasted haricot verts – gravy – pickles – herbs",
-          "Vegetarian: Roasted baked pointed cabbage – pumpkin purée – seeds – red jalapeno – feta cheese – Brussels sprouts – potato"
+          "Roast pork tenderloin – choron mayo – roasted potatoes – baked tomato – jus – pickles – herbs",
+          "Vegetarian: Potato & leek soup – pickles – roasted seeds – smetana – herbs"
         ]
       }
     },
@@ -951,6 +951,7 @@
     }
   ],
   "errors": [
-    "Troppo: parser found 0 dishes — menu read by Gemini instead, fix the parser"
+    "Troppo: parser found 0 dishes — menu read by Gemini instead, fix the parser",
+    "Matstudio Kungsmarken: HTTPSConnectionPool(host='www.matstudiokungsmarken.se', port=443): Max retries exceeded with url: /lunch/ (Caused by NewConnectionError(\"HTTPSConnection(host='www.matstudiokungsmarken.se', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\")) (kept previous)"
   ]
 }
