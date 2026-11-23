@@ -8,7 +8,7 @@
     "2026-11-26",
     "2026-11-27"
   ],
-  "generated": "2026-11-23T08:55:33+00:00",
+  "generated": "2026-11-23T09:20:23+00:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -784,20 +784,20 @@
       "url": "https://mersmak.me/vara-stallen/bryggan/",
       "menus": {
         "Måndag": [
-          "Quorn stroganoff med ris, saltgurka, persilja och syrad grädde",
-          "Örtbakad fläskkarré med senapspicklade rotfrukter, kokt potatis & plommonsky"
+          "Vegetarisk gulasch med kokt ris, saltgurka, persilja och syrad grädde",
+          "Sprödbakad kummelfilé med skarpsås, kokt potatis, citron & dillsyrad fänkål."
         ],
         "Tisdag": [
           "Rotfruktsplätt med stuvad spenat, kokt potatis, ägg & solrosfrön",
-          "Kycklingklubba med morot & röda linser, currybräserad lök, koriander & basmatiris"
+          "Helstekt fläskfilé med grönpepparsås, rosmarinrostad potatis & bakade rotfrukter"
         ],
         "Onsdag": [
           "Spenat-ricottatortelloni med tomatsås, rostade grönsaker, kronärtsskocka & riven mozzarella",
-          "Sprödbakad kummelfilé med skarpsås, kokt potatis, citron & dillsyrad fänkål"
+          "Pulled pork med polenta, tomat-bönragu, jalapenos och gräddfil"
         ],
         "Torsdag": [
-          "Lins-blomkålscurry med yoghurt, quinoa, bakad kål och picklad pumpa",
-          "Helstekt fläskfilé med grönpepparsås, rosmarinrostad potatis samt tomatsallad med fetaost & rödlök"
+          "Spicy hot pot med jackfruit, yoghurt, quinoa, bakad kål och sojabönor",
+          "Kycklingfilé med morot & röda linser, currybräserad lök, koriander & basmatiris"
         ],
         "Fredag": [
           "Potatistortilla med kumminbakad spetskål, paprikacréme & marinerade kikärtor",
@@ -806,46 +806,46 @@
       },
       "en": {
         "Måndag": [
-          "Quorn stroganoff with rice, pickles, parsley & sour cream",
-          "Herb-baked pork collar with mustard root vegetables & plum gravy"
+          "Vegetarian: Gulasch with rice & sour cream",
+          "Crispy hake fillet with sharp sauce & potatoes"
         ],
         "Tisdag": [
-          "Root vegetable patty with creamed spinach, potatoes & eggs",
-          "Chicken leg with carrot, red lentils, curry onion & basmati rice"
+          "Root vegetable pancake with stewed spinach & egg",
+          "Roast pork tenderloin with green pepper sauce & potatoes"
         ],
         "Onsdag": [
-          "Spinach-ricotta tortelloni with tomato sauce, artichoke & mozzarella",
-          "Crispy-baked hake fillet with sharp sauce, potatoes & dill fennel"
+          "Spinach & ricotta tortelloni with tomato sauce & mozzarella",
+          "Pulled pork with polenta, bean ragu & jalapenos"
         ],
         "Torsdag": [
-          "Lentil cauliflower curry with yogurt, quinoa, cabbage & pumpkin",
-          "Roast pork tenderloin with green pepper sauce & feta tomato salad"
+          "Spicy hot pot with jackfruit, yoghurt & quinoa",
+          "Chicken fillet with lentils, curry onions & basmati rice"
         ],
         "Fredag": [
-          "Potato tortilla with caraway-baked cabbage & chickpea paprika cream",
-          "Wallenbergare with browned butter, lingonberries & potato purée"
+          "Potato tortilla with pointed cabbage & paprika cream",
+          "Wallenbergare with browned butter, lingonberries & mash"
         ]
       },
       "en_full": {
         "Måndag": [
-          "Quorn stroganoff with rice, dill pickle, parsley and soured cream",
-          "Herb-baked pork neck with mustard-pickled root vegetables, boiled potatoes & plum jus"
+          "Vegetarian goulash with boiled rice, pickled cucumber, parsley and soured cream",
+          "Crisp-baked hake fillet with mustard sauce, boiled potatotes, lemon & dill-pickled fennel."
         ],
         "Tisdag": [
-          "Root vegetable patty with creamed spinach, boiled potatoes, egg & sunflower seeds",
-          "Chicken leg with carrot & red lentils, curry-braised onion, coriander & basmati rice"
+          "Root vegetable fritter with creamed spinach, boiled potatoes, egg & sunflower seeds",
+          "Roast pork tenderloin with green pepper sauce, rosemary-roasted potatoes & baked root vegetables"
         ],
         "Onsdag": [
           "Spinach and ricotta tortelloni with tomato sauce, roasted vegetables, artichoke & grated mozzarella",
-          "Crispy-baked hake fillet with sharp sauce, boiled potatoes, lemon & dill-pickled fennel"
+          "Pulled pork with polenta, tomato-bean ragout, jalapenos and soured cream"
         ],
         "Torsdag": [
-          "Lentil and cauliflower curry with yogurt, quinoa, baked cabbage and pickled pumpkin",
-          "Roast pork tenderloin with green pepper sauce, rosemary-roasted potatoes and tomato salad with feta cheese & red onion"
+          "Spicy hot pot with jackfruit, yoghurt, quinoa, baked cabbage and soybeans",
+          "Chicken fillet with carrot & red lentils, curry-braised onion, coriander & basmati rice"
         ],
         "Fredag": [
-          "Potato tortilla with cumin-baked pointed cabbage, bell pepper crème & marinated chickpeas",
-          "Wallenbergare (veal patties) with drawn butter, lingonberries, green peas, potato purée and parsley"
+          "Potato tortilla with cumin-baked pointed cabbage, bell pepper cream & marinated chickpeas",
+          "Wallenbergare (veal patties) with clarified butter, lingonberries, green peas, potato purée and parsley"
         ]
       }
     },
