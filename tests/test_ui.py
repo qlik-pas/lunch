@@ -209,6 +209,9 @@ with sync_playwright() as p:
         return pg.evaluate("""([w,d])=>{WEEK.week=w; selected=d; const t=utbudText().text.split('\\n'); const i=t.findIndex(l=>l.includes('Laziza:')); return t[i+1]}""",[week,dayidx])
     t("laziza: even week Wednesday", laz(44,2)=="CRISPY CHICKEN!", laz(44,2))
     t("laziza: odd week Wednesday normal", laz(43,2)!="CRISPY CHICKEN!")
+    lazPage=lambda week,d: pg.evaluate("""([w,d])=>{WEEK.week=w; selected=d; render(); const li=[...document.querySelectorAll('#fixedList li')].find(l=>l.textContent.includes('Laziza')); return li.querySelector('.static-text').textContent}""",[week,d])
+    t("laziza on page: even week Wednesday", lazPage(48,2)=="CRISPY CHICKEN!", lazPage(48,2))
+    t("laziza on page: Tuesday and odd Wednesday normal", lazPage(48,1)!="CRISPY CHICKEN!" and lazPage(47,2)!="CRISPY CHICKEN!")
     t("laziza: even week Thursday normal", laz(44,3)!="CRISPY CHICKEN!")
     # no menu yet
     r=pg.evaluate("""()=>{WEEK.week=43; selected=2; WEEK.restaurants[0].menus['Onsdag']=[]; const t=utbudText().text.split('\\n'); const i=t.findIndex(l=>l.includes('Bricks:')); return t[i+1]}""")
