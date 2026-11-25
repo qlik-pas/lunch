@@ -998,6 +998,11 @@ let WEEK = {
    (Places that turn out to have a dish of the day belong in scraper.py instead —
    Troppo and Mat och Harmoni started here and moved.) */
 const mapsUrl = q => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
+/* Laziza's running joke: crispy chicken every other Wednesday (even ISO weeks).
+   One rule for every place Laziza shows up: the list, the reel and the copied post. */
+const fixedBlurb = (p, day = selected) =>
+  p.name === "Laziza" && day === 2 && WEEK.week % 2 === 0 ? "CRISPY CHICKEN!" : p.blurb;
+
 const FIXED_PLACES = [
   { name: "Aiko sushi",          blurb: "Sushi, poke bowls & wok-fried udon.",
     url: "https://www.aikosushi.se/lunch" },
@@ -1131,6 +1136,7 @@ function render(){
   document.getElementById("closedList").innerHTML = closed.map(item).join("");
   document.getElementById("closed").hidden = closed.length === 0;
   document.getElementById("closedLabel").textContent = T().closed(closed.length);
+  renderFixed();
   if (WHEEL && WHEEL.on) WHEEL.rebuild();   /* new data while spinning */
 }
 
@@ -1200,7 +1206,7 @@ function todaysPickPool(){
     });
   });
   // The fixed-menu places are on the wheel too — same every day, one entry each.
-  FIXED_PLACES.forEach(p => pool.push({ name: p.name, url: p.url, hue: hueFor(p.name), dish: p.blurb }));
+  FIXED_PLACES.forEach(p => pool.push({ name: p.name, url: p.url, hue: hueFor(p.name), dish: fixedBlurb(p) }));
   return pool;
 }
 
@@ -1452,9 +1458,7 @@ function utbudText(){
     if (fellBack) untranslated.push((SLACK[r.name] || [, r.name])[1]);
     places.push({ name: r.name, url: r.url, items });
   });
-  /* Laziza's running joke: every Wednesday in an even ISO week. */
-  const crispy = p => p.name === "Laziza" && selected === 2 && WEEK.week % 2 === 0;
-  const fixed = FIXED_PLACES.map(p => ({ name: p.name, url: p.url, items: crispy(p) ? ["CRISPY CHICKEN!"] : p.blurb.split(" · ") }));
+  const fixed = FIXED_PLACES.map(p => ({ name: p.name, url: p.url, items: fixedBlurb(p).split(" · ") }));
 
   /* Scraped places in page order (scraper.py's SOURCES); the standing-menu places
      follow, alphabetical by label. Built twice:
@@ -1527,7 +1531,7 @@ document.getElementById("shareBtn").addEventListener("click", () => {
   });
 });
 
-/* Static, so rendered once rather than on every day switch. */
+/* Re-rendered with each day (from render()): Laziza's blurb depends on the day. */
 function renderFixed(){
   document.getElementById("fixedLabel").textContent = T().fixed(FIXED_PLACES.length);
   document.getElementById("fixedList").innerHTML = FIXED_PLACES.map(p => {
@@ -1536,7 +1540,7 @@ function renderFixed(){
       : esc(p.name);
     return `<li style="--hue:${hueFor(p.name)}"><span class="shield" aria-hidden="true">${esc([...p.name][0])}</span>` +
       `<span class="ftext"><span class="rname">${name}</span>` +
-      `<span class="static-text">${esc(p.blurb)}</span></span></li>`;
+      `<span class="static-text">${esc(fixedBlurb(p))}</span></span></li>`;
   }).join("");
 }
 renderFixed();
