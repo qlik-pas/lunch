@@ -8,7 +8,7 @@
     "2026-11-26",
     "2026-11-27"
   ],
-  "generated": "2026-11-25T17:02:24+00:00",
+  "generated": "2026-11-25T20:29:52+00:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -40,6 +40,64 @@
           "Friterade vårrullar med stekt ris, grönsaker, bakat ägg, böngroddar och koriander",
           "Fläskpannkaka med bacon, lingon, kål och persilja",
           "Bricks lasagne på nötfärs med bechamelsås, lagrad ost, chili, basilika och tomat/gurksallad"
+        ]
+      },
+      "en": {
+        "Måndag": [
+          "Potato & leek soup with roasted cauliflower & dessert",
+          "Parsley beef patties with pepper sauce & mash",
+          "Crispy shredded beef with rice & oyster sauce"
+        ],
+        "Tisdag": [
+          "Vegetable curry with coconut milk & rice",
+          "Danish roast pork with red cabbage & cream sauce",
+          "Pizza with mozzarella, tomato, chili, anchovies & olives"
+        ],
+        "Onsdag": [
+          "Beetroot risotto with pecorino & pickled red onion",
+          "Fried chicken with cauliflower puree & roasted potatoes",
+          "Salmon poke bowl with sushi rice & chili mayonnaise",
+          "Pizza with mozzarella, tomato, chili, anchovies & olives"
+        ],
+        "Torsdag": [
+          "Indian vegetable korma with rice & naan",
+          "Pulled pork quesadillas with cheese & salsa",
+          "Pizza with mozzarella, tomato, chili, anchovies & olives",
+          "Bonus: apple pie with cream"
+        ],
+        "Fredag": [
+          "Fried spring rolls with fried rice & egg",
+          "Pork pancake with bacon & lingonberries",
+          "Beef lasagne with bechamel & aged cheese"
+        ]
+      },
+      "en_full": {
+        "Måndag": [
+          "Potato and leek soup with roasted cauliflower, almonds, cress, potato chips and small dessert",
+          "Parsley rissoles with pepper sauce, pressed cucumber, lingonberries and mashed potatoes",
+          "Crispy shredded beef with rice, oyster sauce, chili, garlic, ginger, browned onion, bell pepper and sesame"
+        ],
+        "Tisdag": [
+          "Vegetable curry with coconut milk, red chili, rice, roasted coconut and coriander",
+          "Danish roast pork with red cabbage, fried potatoes, applesauce, curly parsley and cream sauce",
+          "Mozzarella, tomato sauce, chili, anchovies, olives, garlic & oregano"
+        ],
+        "Onsdag": [
+          "Beetroot risotto with roasted beets, pecorino, rosemary oil and pickled red onion",
+          "Fried chicken with cauliflower puree, roasted chicken jus, almonds, tarragon oil and thyme-roasted potatoes",
+          "Poke bowl with salmon, sushi rice, chili mayonnaise, peanuts, cucumber, wakame, ginger, pickles and bean sprouts",
+          "Mozzarella, tomato sauce, chili, anchovies, olives, garlic & oregano"
+        ],
+        "Torsdag": [
+          "Indian vegetarian korma with vegetables, rice, garam masala, cream, almonds and naan bread",
+          "Quesadillas with pulled pork, beans, bell pepper, onion, cheese, jalapeño mayonnaise and salsa",
+          "Mozzarella, tomato sauce, chili, anchovies, olives, garlic & oregano",
+          "Bonus: apple pie with cream"
+        ],
+        "Fredag": [
+          "Fried spring rolls with fried rice, vegetables, baked egg, bean sprouts and coriander",
+          "Pork pancake with bacon, lingonberries, cabbage and parsley",
+          "Bricks lasagna with minced beef, béchamel sauce, aged cheese, chili, basil and tomato/cucumber salad"
         ]
       }
     },
@@ -385,32 +443,86 @@
       "url": "https://www.troppo.se/lunch",
       "menus": {
         "Måndag": [
-          "Tom Yum Kai Coconut cream, chicken, kaffir, galangal, lemongrass, chili, onion, tomatoes, mushrooms, cilantro Complimentary jasmine rice.",
-          "Pad Prik Nuea Stir-fried beef, oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice.",
-          "Vegetariskt: Pad Prik Jea Stir-fried vegan \"chicken\" (soy), vegan oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice."
+          "Tom Yum Kai",
+          "Pad Prik Nuea",
+          "Vegetariskt: Pad Prik Jea"
         ],
         "Tisdag": [
-          "Tom Yum Kai Coconut cream, chicken, kaffir, galangal, lemongrass, chili, onion, tomatoes, mushrooms, cilantro Complimentary jasmine rice.",
-          "Pad Prik Nuea Stir-fried beef, oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice.",
-          "Vegetariskt: Pad Prik Jea Stir-fried vegan \"chicken\" (soy), vegan oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice."
+          "Tom Yum Kai",
+          "Pad Prik Nuea",
+          "Vegetariskt: Pad Prik Jea"
         ],
         "Onsdag": [
-          "Tom Yum Kai Coconut cream, chicken, kaffir, galangal, lemongrass, chili, onion, tomatoes, mushrooms, cilantro Complimentary jasmine rice.",
-          "Pad Prik Nuea Stir-fried beef, oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice.",
-          "Vegetariskt: Pad Prik Jea Stir-fried vegan \"chicken\" (soy), vegan oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice."
+          "Tom Yum Kai",
+          "Pad Prik Nuea",
+          "Vegetariskt: Pad Prik Jea"
         ],
         "Torsdag": [
-          "Tom Yum Kai Coconut cream, chicken, kaffir, galangal, lemongrass, chili, onion, tomatoes, mushrooms, cilantro Complimentary jasmine rice.",
-          "Pad Prik Nuea Stir-fried beef, oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice.",
-          "Vegetariskt: Pad Prik Jea Stir-fried vegan \"chicken\" (soy), vegan oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice."
+          "Tom Yum Kai",
+          "Pad Prik Nuea",
+          "Vegetariskt: Pad Prik Jea"
         ],
         "Fredag": [
-          "Tom Yum Kai Coconut cream, chicken, kaffir, galangal, lemongrass, chili, onion, tomatoes, mushrooms, cilantro Complimentary jasmine rice.",
-          "Pad Prik Nuea Stir-fried beef, oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice.",
-          "Vegetariskt: Pad Prik Jea Stir-fried vegan \"chicken\" (soy), vegan oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice."
+          "Tom Yum Kai",
+          "Pad Prik Nuea",
+          "Vegetariskt: Pad Prik Jea"
         ]
       },
-      "weekly": true
+      "weekly": true,
+      "en": {
+        "Måndag": [
+          "Tom Yum Kai",
+          "Pad Prik Nuea",
+          "Vegetarian: Pad Prik Jea"
+        ],
+        "Tisdag": [
+          "Tom Yum Kai",
+          "Pad Prik Nuea",
+          "Vegetarian: Pad Prik Jea"
+        ],
+        "Onsdag": [
+          "Tom Yum Kai",
+          "Pad Prik Nuea",
+          "Vegetarian: Pad Prik Jea"
+        ],
+        "Torsdag": [
+          "Tom Yum Kai",
+          "Pad Prik Nuea",
+          "Vegetarian: Pad Prik Jea"
+        ],
+        "Fredag": [
+          "Tom Yum Kai",
+          "Pad Prik Nuea",
+          "Vegetarian: Pad Prik Jea"
+        ]
+      },
+      "en_full": {
+        "Måndag": [
+          "Tom Yum Kai",
+          "Pad Prik Nuea",
+          "Vegetarian: Pad Prik Jea"
+        ],
+        "Tisdag": [
+          "Tom Yum Kai",
+          "Pad Prik Nuea",
+          "Vegetarian: Pad Prik Jea"
+        ],
+        "Onsdag": [
+          "Tom Yum Kai",
+          "Pad Prik Nuea",
+          "Vegetarian: Pad Prik Jea"
+        ],
+        "Torsdag": [
+          "Tom Yum Kai",
+          "Pad Prik Nuea",
+          "Vegetarian: Pad Prik Jea"
+        ],
+        "Fredag": [
+          "Tom Yum Kai",
+          "Pad Prik Nuea",
+          "Vegetarian: Pad Prik Jea"
+        ]
+      }
     },
     {
       "name": "Matstudio Kungsmarken",
