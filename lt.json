@@ -8,7 +8,7 @@
     "2026-11-26",
     "2026-11-27"
   ],
-  "generated": "2026-11-27T09:20:21+00:00",
+  "generated": "2026-11-27T09:39:21+00:00",
   "restaurants": [
     {
       "name": "Bricks Eatery",
@@ -443,84 +443,84 @@
       "url": "https://www.troppo.se/lunch",
       "menus": {
         "Måndag": [
-          "Tom Yum Kai",
-          "Pad Prik Nuea",
-          "Vegetariskt: Pad Prik Jea"
+          "Tom Yum Kai Coconut cream, chicken, kaffir, galangal, lemongrass, chili, onion, tomatoes, mushrooms, cilantro Complimentary jasmine rice. (Thai)",
+          "Pad Prik Nuea Stir-fried beef, oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)",
+          "Vegetariskt: Pad Prik Jea Stir-fried vegan \"chicken\" (soy), vegan oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)"
         ],
         "Tisdag": [
-          "Tom Yum Kai",
-          "Pad Prik Nuea",
-          "Vegetariskt: Pad Prik Jea"
+          "Tom Yum Kai Coconut cream, chicken, kaffir, galangal, lemongrass, chili, onion, tomatoes, mushrooms, cilantro Complimentary jasmine rice. (Thai)",
+          "Pad Prik Nuea Stir-fried beef, oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)",
+          "Vegetariskt: Pad Prik Jea Stir-fried vegan \"chicken\" (soy), vegan oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)"
         ],
         "Onsdag": [
-          "Tom Yum Kai",
-          "Pad Prik Nuea",
-          "Vegetariskt: Pad Prik Jea"
+          "Tom Yum Kai Coconut cream, chicken, kaffir, galangal, lemongrass, chili, onion, tomatoes, mushrooms, cilantro Complimentary jasmine rice. (Thai)",
+          "Pad Prik Nuea Stir-fried beef, oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)",
+          "Vegetariskt: Pad Prik Jea Stir-fried vegan \"chicken\" (soy), vegan oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)"
         ],
         "Torsdag": [
-          "Tom Yum Kai",
-          "Pad Prik Nuea",
-          "Vegetariskt: Pad Prik Jea"
+          "Tom Yum Kai Coconut cream, chicken, kaffir, galangal, lemongrass, chili, onion, tomatoes, mushrooms, cilantro Complimentary jasmine rice. (Thai)",
+          "Pad Prik Nuea Stir-fried beef, oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)",
+          "Vegetariskt: Pad Prik Jea Stir-fried vegan \"chicken\" (soy), vegan oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)"
         ],
         "Fredag": [
-          "Tom Yum Kai",
-          "Pad Prik Nuea",
-          "Vegetariskt: Pad Prik Jea"
+          "Tom Yum Kai Coconut cream, chicken, kaffir, galangal, lemongrass, chili, onion, tomatoes, mushrooms, cilantro Complimentary jasmine rice. (Thai)",
+          "Pad Prik Nuea Stir-fried beef, oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)",
+          "Vegetariskt: Pad Prik Jea Stir-fried vegan \"chicken\" (soy), vegan oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)"
         ]
       },
       "weekly": true,
       "en": {
         "Måndag": [
-          "Tom yum kai soup",
-          "Pad prik nuea",
-          "Vegetarian: Pad prik jea"
+          "Tom Yum Kai chicken soup with jasmine rice",
+          "Pad Prik Nuea stir-fried beef with jasmine rice",
+          "Vegetarian: Pad Prik Jea vegan chicken with jasmine rice"
         ],
         "Tisdag": [
-          "Tom yum kai soup",
-          "Pad prik nuea",
-          "Vegetarian: Pad prik jea"
+          "Tom Yum Kai chicken soup with jasmine rice",
+          "Pad Prik Nuea stir-fried beef with jasmine rice",
+          "Vegetarian: Pad Prik Jea vegan chicken with jasmine rice"
         ],
         "Onsdag": [
-          "Tom yum kai soup",
-          "Pad prik nuea",
-          "Vegetarian: Pad prik jea"
+          "Tom Yum Kai chicken soup with jasmine rice",
+          "Pad Prik Nuea stir-fried beef with jasmine rice",
+          "Vegetarian: Pad Prik Jea vegan chicken with jasmine rice"
         ],
         "Torsdag": [
-          "Tom yum kai soup",
-          "Pad prik nuea",
-          "Vegetarian: Pad prik jea"
+          "Tom Yum Kai chicken soup with jasmine rice",
+          "Pad Prik Nuea stir-fried beef with jasmine rice",
+          "Vegetarian: Pad Prik Jea vegan chicken with jasmine rice"
         ],
         "Fredag": [
-          "Tom yum kai soup",
-          "Pad prik nuea",
-          "Vegetarian: Pad prik jea"
+          "Tom Yum Kai chicken soup with jasmine rice",
+          "Pad Prik Nuea stir-fried beef with jasmine rice",
+          "Vegetarian: Pad Prik Jea vegan chicken with jasmine rice"
         ]
       },
       "en_full": {
         "Måndag": [
-          "Tom Yum Kai",
-          "Pad Prik Nuea",
-          "Vegetarian: Pad Prik Jea"
+          "Tom Yum Kai Coconut cream, chicken, kaffir, galangal, lemongrass, chili, onion, tomatoes, mushrooms, cilantro Complimentary jasmine rice. (Thai)",
+          "Pad Prik Nuea Stir-fried beef, oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)",
+          "Vegetarian: Pad Prik Jea Stir-fried vegan \"chicken\" (soy), vegan oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)"
         ],
         "Tisdag": [
-          "Tom Yum Kai",
-          "Pad Prik Nuea",
-          "Vegetarian: Pad Prik Jea"
+          "Tom Yum Kai Coconut cream, chicken, kaffir, galangal, lemongrass, chili, onion, tomatoes, mushrooms, cilantro Complimentary jasmine rice. (Thai)",
+          "Pad Prik Nuea Stir-fried beef, oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)",
+          "Vegetarian: Pad Prik Jea Stir-fried vegan \"chicken\" (soy), vegan oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)"
         ],
         "Onsdag": [
-          "Tom Yum Kai",
-          "Pad Prik Nuea",
-          "Vegetarian: Pad Prik Jea"
+          "Tom Yum Kai Coconut cream, chicken, kaffir, galangal, lemongrass, chili, onion, tomatoes, mushrooms, cilantro Complimentary jasmine rice. (Thai)",
+          "Pad Prik Nuea Stir-fried beef, oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)",
+          "Vegetarian: Pad Prik Jea Stir-fried vegan \"chicken\" (soy), vegan oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)"
         ],
         "Torsdag": [
-          "Tom Yum Kai",
-          "Pad Prik Nuea",
-          "Vegetarian: Pad Prik Jea"
+          "Tom Yum Kai Coconut cream, chicken, kaffir, galangal, lemongrass, chili, onion, tomatoes, mushrooms, cilantro Complimentary jasmine rice. (Thai)",
+          "Pad Prik Nuea Stir-fried beef, oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)",
+          "Vegetarian: Pad Prik Jea Stir-fried vegan \"chicken\" (soy), vegan oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)"
         ],
         "Fredag": [
-          "Tom Yum Kai",
-          "Pad Prik Nuea",
-          "Vegetarian: Pad Prik Jea"
+          "Tom Yum Kai Coconut cream, chicken, kaffir, galangal, lemongrass, chili, onion, tomatoes, mushrooms, cilantro Complimentary jasmine rice. (Thai)",
+          "Pad Prik Nuea Stir-fried beef, oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)",
+          "Vegetarian: Pad Prik Jea Stir-fried vegan \"chicken\" (soy), vegan oyster sauce, garlic, broccoli, cauliflower, tomatoes, onion, spring onion, mushrooms, Complimentary jasmine rice. (Thai-Troppo)"
         ]
       }
     },
@@ -951,6 +951,9 @@
     }
   ],
   "errors": [
-    "Troppo: parser found 0 dishes — menu read by Gemini instead, fix the parser"
+    "Bricks Eatery: parsed 0 dishes (Gemini fallback: Gemini found no menu on the page) (kept previous)",
+    "Restaurang Edison: parsed 0 dishes (Gemini fallback: Gemini found no menu on the page) (kept previous)",
+    "Troppo: parser found 0 dishes — menu read by Gemini instead, fix the parser",
+    "Inspira: parsed 0 dishes (Gemini fallback: Gemini found no menu on the page) (kept previous)"
   ]
 }
